@@ -1,1 +1,0 @@
-# Szko-a-Podstawowa-Im-Mari-Sk-odowskiej-nr-55
