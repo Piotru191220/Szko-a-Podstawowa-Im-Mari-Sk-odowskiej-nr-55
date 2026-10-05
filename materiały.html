@@ -9,6 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -17,61 +21,139 @@
         }
 
         header {
-            background: #1769e0;
+            background: linear-gradient(135deg, #1769e0, #4c8ff5);
             color: white;
-            padding: 20px;
+            padding: 45px 20px;
             text-align: center;
         }
 
+        header h1 {
+            margin: 0 0 10px;
+            font-size: 38px;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 17px;
+        }
+
         main {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 40px auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
-        .box {
-            background: white;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-
-        .material {
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            padding: 15px 0;
-            border-bottom: 1px solid #ddd;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
-        .material:last-child {
-            border-bottom: none;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 10px 15px;
-            background: #1769e0;
-            color: white;
+        .back {
             text-decoration: none;
-            border-radius: 8px;
+            background: white;
+            color: #1769e0;
+            padding: 11px 17px;
+            border-radius: 9px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
         }
 
         .logout {
             background: #d93025;
-            border: none;
-            padding: 10px 15px;
             color: white;
-            border-radius: 8px;
+            border: none;
+            padding: 11px 17px;
+            border-radius: 9px;
             cursor: pointer;
             font-size: 15px;
         }
 
-        #message {
+        .welcome {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.07);
+        }
+
+        .welcome h2 {
+            margin-top: 0;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .category {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.07);
+            transition: 0.2s;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .category-icon {
+            font-size: 42px;
+        }
+
+        .category h3 {
+            margin: 15px 0 10px;
+            font-size: 21px;
+        }
+
+        .category p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .materials-list {
+            margin-top: 18px;
+        }
+
+        .material {
+            display: block;
+            padding: 10px 12px;
+            margin-top: 8px;
+            background: #f4f7fb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1769e0;
+        }
+
+        .material:hover {
+            background: #e8f0ff;
+        }
+
+        footer {
             text-align: center;
-            margin-top: 30px;
+            padding: 35px 20px;
+            color: #777;
+        }
+
+        @media (max-width: 800px) {
+            .categories {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            header h1 {
+                font-size: 30px;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -80,57 +162,118 @@
 
 <header>
     <h1>📚 Materiały</h1>
-    <p>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</p>
+    <p>Strefa dla uczniów i rodziców</p>
 </header>
 
 <main>
 
-    <div class="box">
-
-        <h2>Materiały dla uczniów</h2>
-
-        <div class="material">
-            <span>📄 Matematyka – materiały</span>
-            <a class="button" href="#">Otwórz</a>
-        </div>
-
-        <div class="material">
-            <span>📄 Język polski – materiały</span>
-            <a class="button" href="#">Otwórz</a>
-        </div>
-
-        <div class="material">
-            <span>📄 Przyroda – materiały</span>
-            <a class="button" href="#">Otwórz</a>
-        </div>
-
-    </div>
-
-    <div class="box">
-
-        <h2>Twoje konto</h2>
-
-        <p id="userEmail"></p>
+    <div class="top-bar">
+        <a class="back" href="index.html">
+            ← Strona główna
+        </a>
 
         <button class="logout" id="logoutButton">
             🚪 Wyloguj
         </button>
+    </div>
+
+    <div class="welcome">
+        <h2>Witaj! 👋</h2>
+        <p id="userEmail">Sprawdzanie konta...</p>
+    </div>
+
+    <div class="categories">
+
+        <div class="category">
+            <div class="category-icon">📐</div>
+            <h3>Matematyka</h3>
+            <p>Materiały, zadania i dodatkowe ćwiczenia.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
+
+
+        <div class="category">
+            <div class="category-icon">📖</div>
+            <h3>Język polski</h3>
+            <p>Lektury, ćwiczenia i materiały dodatkowe.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
+
+
+        <div class="category">
+            <div class="category-icon">🇬🇧</div>
+            <h3>Język angielski</h3>
+            <p>Słówka, ćwiczenia i materiały do nauki.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
+
+
+        <div class="category">
+            <div class="category-icon">🧪</div>
+            <h3>Przyroda</h3>
+            <p>Materiały edukacyjne i ciekawostki.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
+
+
+        <div class="category">
+            <div class="category-icon">💻</div>
+            <h3>Informatyka</h3>
+            <p>Ćwiczenia i materiały związane z informatyką.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
+
+
+        <div class="category">
+            <div class="category-icon">📚</div>
+            <h3>Inne</h3>
+            <p>Pozostałe materiały szkolne.</p>
+
+            <div class="materials-list">
+                <a class="material" href="#">
+                    📄 Materiały do pobrania
+                </a>
+            </div>
+        </div>
 
     </div>
 
-    <p id="message"></p>
-
-    <br>
-
-    <a class="button" href="index.html">
-        ← Wróć na stronę główną
-    </a>
-
 </main>
+
+<footer>
+    © 2026 Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+</footer>
+
 
 <script>
 
 const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+
 const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 
 const supabaseClient = supabase.createClient(
@@ -139,7 +282,8 @@ const supabaseClient = supabase.createClient(
 );
 
 
-// Sprawdzenie logowania
+// Sprawdzenie użytkownika
+
 async function checkUser() {
 
     const { data, error } = await supabaseClient.auth.getUser();
@@ -159,19 +303,10 @@ checkUser();
 
 
 // Wylogowanie
+
 document.getElementById("logoutButton").addEventListener("click", async function() {
 
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error) {
-
-        document.getElementById("message").textContent =
-            "Nie udało się wylogować.";
-
-        document.getElementById("message").style.color = "red";
-
-        return;
-    }
+    await supabaseClient.auth.signOut();
 
     window.location.href = "index.html";
 
