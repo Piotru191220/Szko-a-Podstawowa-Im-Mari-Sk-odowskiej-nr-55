@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Panel administratora</title>
+    <title>Panel administratora | Szkoła Podstawowa nr 55</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -17,6 +17,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f7fb;
+            color: #222;
         }
 
         header {
@@ -24,6 +25,10 @@
             color: white;
             text-align: center;
             padding: 40px 20px;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
         }
 
         main {
@@ -37,6 +42,12 @@
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
         }
 
         input,
@@ -75,6 +86,14 @@
         #message {
             margin-top: 20px;
             text-align: center;
+            font-weight: bold;
+        }
+
+        .file-info {
+            margin-top: -8px;
+            margin-bottom: 18px;
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -87,47 +106,22 @@
 </header>
 
 <main>
-
     <div class="box">
 
-        <h2>Dodaj materiał</h2>
+        <h2>➕ Dodaj materiał</h2>
 
-        <label>
-            Przedmiot
-        </label>
+        <label for="subject">Przedmiot</label>
 
         <select id="subject">
-
-            <option value="Matematyka">
-                📐 Matematyka
-            </option>
-
-            <option value="Język polski">
-                📖 Język polski
-            </option>
-
-            <option value="Język angielski">
-                🇬🇧 Język angielski
-            </option>
-
-            <option value="Przyroda">
-                🧪 Przyroda
-            </option>
-
-            <option value="Informatyka">
-                💻 Informatyka
-            </option>
-
-            <option value="Inne">
-                📚 Inne
-            </option>
-
+            <option value="Matematyka">📐 Matematyka</option>
+            <option value="Język polski">📖 Język polski</option>
+            <option value="Język angielski">🇬🇧 Język angielski</option>
+            <option value="Przyroda">🧪 Przyroda</option>
+            <option value="Informatyka">💻 Informatyka</option>
+            <option value="Inne">📚 Inne</option>
         </select>
 
-
-        <label>
-            Nazwa materiału
-        </label>
+        <label for="title">Nazwa materiału</label>
 
         <input
             type="text"
@@ -135,10 +129,7 @@
             placeholder="np. Zadania z ułamków"
         >
 
-
-        <label>
-            Plik
-        </label>
+        <label for="file">Plik</label>
 
         <input
             type="file"
@@ -146,6 +137,9 @@
             accept=".pdf,.doc,.docx,.ppt,.pptx"
         >
 
+        <div class="file-info">
+            Dozwolone formaty: PDF, DOC, DOCX, PPT, PPTX
+        </div>
 
         <button id="addButton">
             ➕ Dodaj materiał
@@ -158,26 +152,23 @@
         </a>
 
     </div>
-
 </main>
-
 
 <script>
 
-const SUPABASE_URL =
-    "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 
-const SUPABASE_KEY =
-    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-// Sprawdzamy, czy użytkownik jest zalogowany
+// ================================
+// SPRAWDZANIE ADMINISTRATORA
+// ================================
 
 async function checkUser() {
 
@@ -186,19 +177,14 @@ async function checkUser() {
 
     if (error || !data.user) {
 
-        window.location.href =
-            "logowanie.html";
+        window.location.href = "logowanie.html";
 
         return;
     }
 
-    // Sprawdzamy administratora
+    const adminEmail = data.user.email;
 
-    const adminEmail =
-        data.user.email;
-
-    const allowedEmail =
-        "pi.pu2@op.pl";
+    const allowedEmail = "pi.pu2@op.pl";
 
     if (adminEmail !== allowedEmail) {
 
@@ -225,122 +211,125 @@ async function checkUser() {
 checkUser();
 
 
-// Dodawanie materiału
+// ================================
+// DODAWANIE MATERIAŁU
+// ================================
 
 document
-.getElementById("addButton")
-.addEventListener("click", async function() {
+    .getElementById("addButton")
+    .addEventListener("click", async function() {
 
-    const message =
-        document.getElementById("message");
+        const message =
+            document.getElementById("message");
 
-    const subject =
-        document.getElementById("subject").value;
+        const subject =
+            document.getElementById("subject").value;
 
-    const title =
-        document.getElementById("title").value.trim();
+        const title =
+            document.getElementById("title").value.trim();
 
-    const file =
-        document.getElementById("file").files[0];
-
-
-    if (!title || !file) {
-
-        message.textContent =
-            "Uzupełnij nazwę i wybierz plik.";
-
-        message.style.color = "red";
-
-        return;
-    }
+        const file =
+            document.getElementById("file").files[0];
 
 
-    message.textContent =
-        "Przesyłanie pliku...";
+        // Sprawdzenie danych
 
-    message.style.color = "black";
+        if (!title || !file) {
 
+            message.textContent =
+                "Uzupełnij nazwę i wybierz plik.";
 
-    const fileName =
-        Date.now() + "_" + file.name;
+            message.style.color = "red";
 
-
-    const filePath =
-        fileName;
-
-
-    // Wysyłanie pliku do Storage
-
-    const { error: uploadError } =
-        await supabaseClient
-        .storage
-        .from("materials")
-        .upload(filePath, file);
+            return;
+        }
 
 
-    if (uploadError) {
+        // Informacja
 
         message.textContent =
-            uploadError.message;
+            "⏳ Przesyłanie pliku...";
 
-        message.style.color = "red";
-
-        return;
-    }
+        message.style.color = "black";
 
 
-    // Pobranie adresu pliku
+        // Unikalna nazwa pliku
 
-    const { data: urlData } =
-        supabaseClient
-        .storage
-        .from("materials")
-        .getPublicUrl(filePath);
+        const fileName =
+            Date.now() + "_" + file.name;
 
 
-    const fileUrl =
-        urlData.publicUrl;
+        const filePath = fileName;
 
 
-    // Zapis materiału w bazie
+        // ================================
+        // WYSŁANIE PLIKU DO STORAGE
+        // ================================
 
-    const { error: databaseError } =
-        await supabaseClient
-        .from("materials")
-        .insert({
-
-            title: title,
-
-            subject: subject,
-
-            file_url: fileUrl
-
-        });
+        const { error: uploadError } =
+            await supabaseClient
+                .storage
+                .from("materials")
+                .upload(filePath, file);
 
 
-    if (databaseError) {
+        if (uploadError) {
+
+            message.textContent =
+                "❌ Błąd przesyłania: " +
+                uploadError.message;
+
+            message.style.color = "red";
+
+            return;
+        }
+
+
+        // ================================
+        // ZAPIS DO BAZY
+        // ================================
+
+        const { error: databaseError } =
+            await supabaseClient
+                .from("materials")
+                .insert({
+
+                    title: title,
+
+                    subject: subject,
+
+                    file_url: filePath
+
+                });
+
+
+        if (databaseError) {
+
+            message.textContent =
+                "❌ Błąd bazy danych: " +
+                databaseError.message;
+
+            message.style.color = "red";
+
+            return;
+        }
+
+
+        // ================================
+        // SUKCES
+        // ================================
 
         message.textContent =
-            databaseError.message;
+            "✅ Materiał został dodany!";
 
-        message.style.color = "red";
-
-        return;
-    }
+        message.style.color = "green";
 
 
-    message.textContent =
-        "✅ Materiał został dodany!";
+        document.getElementById("title").value = "";
 
-    message.style.color =
-        "green";
+        document.getElementById("file").value = "";
 
-
-    document.getElementById("title").value = "";
-
-    document.getElementById("file").value = "";
-
-});
+    });
 
 </script>
 
