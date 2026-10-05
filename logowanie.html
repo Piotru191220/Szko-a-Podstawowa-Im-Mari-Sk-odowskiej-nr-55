@@ -21,5 +21,17 @@
 
 <a href="index.html">← Wróć na stronę główną</a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "TU_WKLEJ_API_URL";
+const SUPABASE_KEY = "TU_WKLEJ_PUBLISHABLE_KEY";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+    
 </body>
 </html>
