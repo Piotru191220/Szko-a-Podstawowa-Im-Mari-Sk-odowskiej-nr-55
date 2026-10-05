@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Materiały | Szkoła Podstawowa nr 55</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -122,16 +127,27 @@
 
         .material {
             display: block;
-            padding: 10px 12px;
+            padding: 12px;
             margin-top: 8px;
             background: #f4f7fb;
             border-radius: 8px;
             text-decoration: none;
             color: #1769e0;
+            transition: 0.2s;
         }
 
         .material:hover {
             background: #e8f0ff;
+        }
+
+        .empty {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .loading {
+            color: #1769e0;
+            font-size: 14px;
         }
 
         footer {
@@ -141,12 +157,15 @@
         }
 
         @media (max-width: 800px) {
+
             .categories {
                 grid-template-columns: 1fr 1fr;
             }
+
         }
 
         @media (max-width: 550px) {
+
             header h1 {
                 font-size: 30px;
             }
@@ -154,165 +173,504 @@
             .categories {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
 
 <body>
 
+
 <header>
+
     <h1>📚 Materiały</h1>
-    <p>Strefa dla uczniów i rodziców</p>
+
+    <p>
+        Strefa dla uczniów i rodziców
+    </p>
+
 </header>
+
 
 <main>
 
+
     <div class="top-bar">
-        <a class="back" href="index.html">
+
+        <a class="back"
+           href="index.html">
+
             ← Strona główna
+
         </a>
 
-        <button class="logout" id="logoutButton">
+
+        <button class="logout"
+                id="logoutButton">
+
             🚪 Wyloguj
+
         </button>
+
     </div>
 
+
     <div class="welcome">
-        <h2>Witaj! 👋</h2>
-        <p id="userEmail">Sprawdzanie konta...</p>
+
+        <h2>
+            Witaj! 👋
+        </h2>
+
+        <p id="userEmail">
+            Sprawdzanie konta...
+        </p>
+
     </div>
+
 
     <div class="categories">
 
-        <div class="category">
-            <div class="category-icon">📐</div>
-            <h3>Matematyka</h3>
-            <p>Materiały, zadania i dodatkowe ćwiczenia.</p>
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <!-- MATEMATYKA -->
+
+        <div class="category">
+
+            <div class="category-icon">
+                📐
             </div>
+
+            <h3>
+                Matematyka
+            </h3>
+
+            <p>
+                Materiały, zadania i dodatkowe ćwiczenia.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Matematyka">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
 
 
-        <div class="category">
-            <div class="category-icon">📖</div>
-            <h3>Język polski</h3>
-            <p>Lektury, ćwiczenia i materiały dodatkowe.</p>
+        <!-- POLSKI -->
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <div class="category">
+
+            <div class="category-icon">
+                📖
             </div>
+
+            <h3>
+                Język polski
+            </h3>
+
+            <p>
+                Lektury, ćwiczenia i materiały dodatkowe.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Język polski">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
 
 
-        <div class="category">
-            <div class="category-icon">🇬🇧</div>
-            <h3>Język angielski</h3>
-            <p>Słówka, ćwiczenia i materiały do nauki.</p>
+        <!-- ANGIELSKI -->
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <div class="category">
+
+            <div class="category-icon">
+                🇬🇧
             </div>
+
+            <h3>
+                Język angielski
+            </h3>
+
+            <p>
+                Słówka, ćwiczenia i materiały do nauki.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Język angielski">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
 
 
-        <div class="category">
-            <div class="category-icon">🧪</div>
-            <h3>Przyroda</h3>
-            <p>Materiały edukacyjne i ciekawostki.</p>
+        <!-- PRZYRODA -->
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <div class="category">
+
+            <div class="category-icon">
+                🧪
             </div>
+
+            <h3>
+                Przyroda
+            </h3>
+
+            <p>
+                Materiały edukacyjne i ciekawostki.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Przyroda">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
 
 
-        <div class="category">
-            <div class="category-icon">💻</div>
-            <h3>Informatyka</h3>
-            <p>Ćwiczenia i materiały związane z informatyką.</p>
+        <!-- INFORMATYKA -->
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <div class="category">
+
+            <div class="category-icon">
+                💻
             </div>
+
+            <h3>
+                Informatyka
+            </h3>
+
+            <p>
+                Ćwiczenia i materiały związane z informatyką.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Informatyka">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
 
 
-        <div class="category">
-            <div class="category-icon">📚</div>
-            <h3>Inne</h3>
-            <p>Pozostałe materiały szkolne.</p>
+        <!-- INNE -->
 
-            <div class="materials-list">
-                <a class="material" href="#">
-                    📄 Materiały do pobrania
-                </a>
+        <div class="category">
+
+            <div class="category-icon">
+                📚
             </div>
+
+            <h3>
+                Inne
+            </h3>
+
+            <p>
+                Pozostałe materiały szkolne.
+            </p>
+
+            <div
+                class="materials-list"
+                id="Inne">
+
+                <div class="loading">
+                    Ładowanie...
+                </div>
+
+            </div>
+
         </div>
+
 
     </div>
 
 </main>
 
+
 <footer>
-    © 2026 Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+
+    © 2026 Szkoła Podstawowa nr 55
+    im. Marii Skłodowskiej
+
 </footer>
 
 
 <script>
 
-const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
 
 
-// Sprawdzenie użytkownika
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// =====================================
+// SPRAWDZANIE LOGOWANIA
+// =====================================
 
 async function checkUser() {
 
-    const { data, error } = await supabaseClient.auth.getUser();
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
 
     if (error || !data.user) {
 
-        window.location.href = "logowanie.html";
+        window.location.href =
+            "logowanie.html";
+
+        return false;
+
+    }
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        "Zalogowano jako: " +
+        data.user.email;
+
+
+    return true;
+
+}
+
+
+// =====================================
+// POBIERANIE MATERIAŁÓW
+// =====================================
+
+async function loadMaterials() {
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        document.querySelectorAll(
+            ".materials-list"
+        ).forEach(element => {
+
+            element.innerHTML =
+                '<div class="empty">Nie udało się załadować materiałów.</div>';
+
+        });
+
         return;
 
     }
 
-    document.getElementById("userEmail").textContent =
-        "Zalogowano jako: " + data.user.email;
+
+    // Wyczyść wszystkie kategorie
+
+    document.querySelectorAll(
+        ".materials-list"
+    ).forEach(element => {
+
+        element.innerHTML = "";
+
+    });
+
+
+    // Jeżeli nie ma materiałów
+
+    if (!data || data.length === 0) {
+
+        document.querySelectorAll(
+            ".materials-list"
+        ).forEach(element => {
+
+            element.innerHTML =
+                '<div class="empty">Brak materiałów.</div>';
+
+        });
+
+        return;
+
+    }
+
+
+    // =====================================
+    // TWORZENIE LINKÓW
+    // =====================================
+
+    for (const material of data) {
+
+
+        const category =
+            document.getElementById(
+                material.subject
+            );
+
+
+        if (!category) {
+            continue;
+        }
+
+
+        // Tworzenie tymczasowego,
+        // bezpiecznego linku
+
+        const { data: signedData, error: signedError } =
+            await supabaseClient
+                .storage
+                .from("materials")
+                .createSignedUrl(
+                    material.file_url,
+                    3600
+                );
+
+
+        if (signedError) {
+
+            console.error(
+                "Błąd linku:",
+                signedError
+            );
+
+            continue;
+
+        }
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.className =
+            "material";
+
+
+        link.href =
+            signedData.signedUrl;
+
+
+        link.target =
+            "_blank";
+
+
+        link.rel =
+            "noopener noreferrer";
+
+
+        link.textContent =
+            "📄 " + material.title;
+
+
+        category.appendChild(link);
+
+    }
+
+
+    // =====================================
+    // PUSTE KATEGORIE
+    // =====================================
+
+    document.querySelectorAll(
+        ".materials-list"
+    ).forEach(element => {
+
+        if (element.children.length === 0) {
+
+            element.innerHTML =
+                '<div class="empty">Brak materiałów.</div>';
+
+        }
+
+    });
+
 }
 
-checkUser();
+
+// =====================================
+// START
+// =====================================
+
+async function start() {
+
+    const loggedIn =
+        await checkUser();
 
 
-// Wylogowanie
+    if (loggedIn) {
 
-document.getElementById("logoutButton").addEventListener("click", async function() {
+        await loadMaterials();
 
-    await supabaseClient.auth.signOut();
+    }
 
-    window.location.href = "index.html";
+}
 
-});
+
+start();
+
+
+// =====================================
+// WYLOGOWANIE
+// =====================================
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async function() {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
 
 </script>
 
+
 </body>
+
 </html>
