@@ -305,7 +305,16 @@ const supabaseClient =
 // SPRAWDZENIE ADMINISTRATORA
 // =====================================
 
-async function checkUser() {
+console.log("ADMIN: Supabase uruchomiony");
+console.log("ADMIN: URL =", SUPABASE_URL);
+
+const { data: sessionTest, error: sessionError } =
+    await supabaseClient.auth.getSession();
+
+console.log("ADMIN: sesja =", sessionTest);
+console.log("ADMIN: błąd sesji =", sessionError);
+    
+    async function checkUser() {
 
     const { data: { session } } =
         await supabaseClient.auth.getSession();
