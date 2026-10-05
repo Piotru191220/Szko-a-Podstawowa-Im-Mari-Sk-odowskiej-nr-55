@@ -47,9 +47,10 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         password: password
     });
 
-    if (error) {
-        message.textContent = "Nieprawidłowy e-mail lub hasło.";
-        message.style.color = "red";
+if (error) {
+    message.textContent = error.message;
+    message.style.color = "red";
+}
     } else {
         message.textContent = "Zalogowano pomyślnie!";
         message.style.color = "green";
