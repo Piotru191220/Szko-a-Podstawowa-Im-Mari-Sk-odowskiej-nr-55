@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</title>
-    <meta name="description" content="Oficjalna strona Szkoły Podstawowej nr 55 im. Marii Skłodowskiej.">
+    <meta name="description" content="Szkoła Podstawowa nr 55 im. Marii Skłodowskiej">
 
     <style>
         * {
@@ -26,7 +26,7 @@
             line-height: 1.6;
         }
 
-        /* ===== NAWIGACJA ===== */
+        /* ===== MENU ===== */
 
         nav {
             position: fixed;
@@ -34,15 +34,15 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255,255,255,0.96);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 20px rgba(0,0,0,0.08);
         }
 
         .nav-container {
             max-width: 1200px;
-            margin: auto;
             min-height: 72px;
+            margin: auto;
             padding: 0 25px;
             display: flex;
             align-items: center;
@@ -53,53 +53,66 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 800;
             color: #173b75;
             text-decoration: none;
+            font-weight: 800;
         }
 
         .logo-icon {
             width: 45px;
             height: 45px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #2367d1, #5d9cff);
+            background: linear-gradient(135deg,#2367d1,#5d9cff);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 21px;
-            box-shadow: 0 5px 15px rgba(35,103,209,0.25);
+            font-size: 20px;
         }
 
         .logo-text {
-            max-width: 230px;
             line-height: 1.15;
+            max-width: 230px;
         }
 
         .logo-text small {
             display: block;
             color: #697386;
             font-size: 11px;
-            font-weight: 500;
             margin-top: 3px;
         }
 
         .menu {
             display: flex;
-            gap: 28px;
+            align-items: center;
+            gap: 22px;
             list-style: none;
         }
 
         .menu a {
-            text-decoration: none;
             color: #30394d;
+            text-decoration: none;
             font-size: 14px;
             font-weight: 600;
-            transition: 0.25s;
         }
 
         .menu a:hover {
             color: #2367d1;
+        }
+
+        /* E-DZIENNIK W MENU */
+
+        .menu .login-button {
+            background: #2367d1;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(35,103,209,0.25);
+        }
+
+        .menu .login-button:hover {
+            color: white;
+            background: #1958b9;
         }
 
         /* ===== HERO ===== */
@@ -107,18 +120,20 @@
         .hero {
             min-height: 700px;
             padding: 150px 25px 90px;
+            display: flex;
+            align-items: center;
+
             background:
                 radial-gradient(circle at 85% 20%, rgba(87,157,255,0.25), transparent 30%),
                 radial-gradient(circle at 15% 70%, rgba(113,220,205,0.20), transparent 30%),
-                linear-gradient(135deg, #eef5ff, #f8fbff);
-            display: flex;
-            align-items: center;
+                linear-gradient(135deg,#eef5ff,#f8fbff);
         }
 
         .hero-container {
-            max-width: 1200px;
             width: 100%;
+            max-width: 1200px;
             margin: auto;
+
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
             gap: 60px;
@@ -129,889 +144,12 @@
             display: inline-block;
             padding: 8px 15px;
             border-radius: 30px;
-            background: #ffffff;
+            background: white;
             color: #2367d1;
             font-size: 13px;
             font-weight: 700;
             margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(31,64,104,0.08);
         }
 
         h1 {
-            font-size: clamp(42px, 6vw, 72px);
-            line-height: 1.05;
-            color: #102c58;
-            margin-bottom: 25px;
-            letter-spacing: -2px;
-        }
-
-        h1 span {
-            color: #2367d1;
-        }
-
-        .hero p {
-            max-width: 650px;
-            font-size: 19px;
-            color: #5b6679;
-            margin-bottom: 32px;
-        }
-
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 13px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 13px 22px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: 0.25s;
-        }
-
-        .btn-primary {
-            background: #2367d1;
-            color: white;
-            box-shadow: 0 8px 20px rgba(35,103,209,0.25);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            background: #1958b9;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #2367d1;
-            border: 1px solid #dce6f5;
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(31,64,104,0.08);
-        }
-
-        .hero-card {
-            position: relative;
-            min-height: 360px;
-            border-radius: 30px;
-            padding: 35px;
-            background: linear-gradient(145deg, #2367d1, #173b75);
-            color: white;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(23,59,117,0.25);
-        }
-
-        .hero-card::before {
-            content: "";
-            position: absolute;
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            top: -70px;
-            right: -50px;
-        }
-
-        .hero-card::after {
-            content: "";
-            position: absolute;
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.07);
-            bottom: -70px;
-            left: -50px;
-        }
-
-        .atom {
-            font-size: 75px;
-            margin-bottom: 25px;
-        }
-
-        .hero-card h2 {
-            font-size: 30px;
-            margin-bottom: 12px;
-        }
-
-        .hero-card p {
-            color: rgba(255,255,255,0.82);
-            font-size: 15px;
-        }
-
-        /* ===== SEKCJE ===== */
-
-        section {
-            padding: 90px 25px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title span {
-            color: #2367d1;
-            font-weight: 800;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .section-title h2 {
-            font-size: 40px;
-            color: #102c58;
-            margin-top: 8px;
-        }
-
-        .section-title p {
-            max-width: 650px;
-            margin: 12px auto 0;
-            color: #697386;
-        }
-
-        /* ===== AKTUALNOŚCI ===== */
-
-        .news {
-            background: white;
-        }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .news-card {
-            background: #f8faff;
-            border: 1px solid #e8eef8;
-            border-radius: 18px;
-            padding: 28px;
-            transition: 0.25s;
-        }
-
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(24,55,100,0.09);
-        }
-
-        .news-date {
-            color: #2367d1;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .news-card h3 {
-            color: #172f57;
-            margin: 12px 0;
-            font-size: 20px;
-        }
-
-        .news-card p {
-            color: #687387;
-            font-size: 14px;
-        }
-
-        .read-more {
-            display: inline-block;
-            margin-top: 18px;
-            color: #2367d1;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        /* ===== O SZKOLE ===== */
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-size: 40px;
-            color: #102c58;
-            margin-bottom: 20px;
-        }
-
-        .about-text p {
-            color: #647086;
-            margin-bottom: 15px;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .feature {
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            border: 1px solid #e7edf6;
-        }
-
-        .feature strong {
-            display: block;
-            color: #173b75;
-            margin-bottom: 4px;
-        }
-
-        .feature span {
-            color: #758095;
-            font-size: 13px;
-        }
-
-        .about-box {
-            min-height: 430px;
-            border-radius: 25px;
-            background: linear-gradient(145deg, #dceaff, #eef8ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .about-box .big-icon {
-            font-size: 100px;
-            margin-bottom: 20px;
-        }
-
-        .about-box h3 {
-            font-size: 25px;
-            color: #173b75;
-        }
-
-        .about-box p {
-            color: #657189;
-            margin-top: 8px;
-        }
-
-        /* ===== INFORMACJE ===== */
-
-        .info {
-            background: #f0f5fb;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .info-card {
-            background: white;
-            padding: 30px 22px;
-            border-radius: 18px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(24,55,100,0.05);
-        }
-
-        .info-icon {
-            width: 55px;
-            height: 55px;
-            margin: 0 auto 15px;
-            border-radius: 15px;
-            background: #e8f1ff;
-            color: #2367d1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-        }
-
-        .info-card h3 {
-            color: #173b75;
-            margin-bottom: 8px;
-            font-size: 17px;
-        }
-
-        .info-card p {
-            color: #718096;
-            font-size: 13px;
-        }
-
-        /* ===== KONTAKT ===== */
-
-        .contact {
-            background: white;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .contact-card {
-            padding: 35px;
-            border-radius: 20px;
-            background: #f7faff;
-            border: 1px solid #e4ebf6;
-        }
-
-        .contact-card h3 {
-            color: #173b75;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .contact-row {
-            margin-bottom: 17px;
-        }
-
-        .contact-row strong {
-            display: block;
-            color: #33415c;
-            font-size: 13px;
-            margin-bottom: 3px;
-        }
-
-        .contact-row span {
-            color: #68758b;
-            font-size: 14px;
-        }
-
-        .map {
-            min-height: 100%;
-            border-radius: 20px;
-            background:
-                linear-gradient(rgba(35,103,209,0.08), rgba(35,103,209,0.08)),
-                repeating-linear-gradient(
-                    45deg,
-                    #eaf1fa,
-                    #eaf1fa 10px,
-                    #f4f7fb 10px,
-                    #f4f7fb 20px
-                );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #58708f;
-            padding: 30px;
-        }
-
-        .map strong {
-            display: block;
-            color: #173b75;
-            font-size: 20px;
-            margin-bottom: 7px;
-        }
-
-        /* ===== STOPKA ===== */
-
-        footer {
-            background: #102c58;
-            color: white;
-            padding: 45px 25px;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        footer h3 {
-            margin-bottom: 8px;
-        }
-
-        footer p {
-            color: rgba(255,255,255,0.65);
-            font-size: 13px;
-        }
-
-        .footer-right {
-            text-align: right;
-        }
-
-        /* ===== RESPONSIVE ===== */
-
-        @media (max-width: 900px) {
-            .menu {
-                gap: 13px;
-            }
-
-            .menu a {
-                font-size: 12px;
-            }
-
-            .hero-container,
-            .about-grid,
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .news-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .hero-card {
-                min-height: 300px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .nav-container {
-                min-height: 65px;
-            }
-
-            .logo-text {
-                font-size: 12px;
-                max-width: 160px;
-            }
-
-            .logo-text small {
-                font-size: 9px;
-            }
-
-            .menu {
-                display: none;
-            }
-
-            .hero {
-                padding-top: 120px;
-            }
-
-            h1 {
-                letter-spacing: -1px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            section {
-                padding: 65px 20px;
-            }
-
-            .section-title h2,
-            .about-text h2 {
-                font-size: 31px;
-            }
-
-            .news-grid,
-            .info-grid,
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-container {
-                flex-direction: column;
-            }
-
-            .footer-right {
-                text-align: left;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- ===== MENU ===== -->
-
-<nav>
-    <div class="nav-container">
-
-        <a href="#start" class="logo">
-            <div class="logo-icon">MS</div>
-
-            <div class="logo-text">
-                Szkoła Podstawowa nr 55
-                <small>im. Marii Skłodowskiej</small>
-            </div>
-        </a>
-
-        <ul class="menu">
-            <li><a href="#start">Start</a></li>
-            <li><a href="#aktualnosci">Aktualności</a></li>
-            <li><a href="#szkola">O szkole</a></li>
-            <li><a href="#informacje">Informacje</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
-        </ul>
-
-    </div>
-</nav>
-
-
-<!-- ===== HERO ===== -->
-
-<header class="hero" id="start">
-
-    <div class="hero-container">
-
-        <div>
-            <div class="badge">Witamy na stronie szkoły</div>
-
-            <h1>
-                Razem tworzymy<br>
-                <span>przyszłość.</span>
-            </h1>
-
-            <p>
-                Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
-                to miejsce, w którym wiedza, ciekawość świata
-                i rozwój uczniów idą ze sobą w parze.
-            </p>
-
-            <div class="buttons">
-                <a href="#aktualnosci" class="btn btn-primary">
-                    Aktualności
-                </a>
-
-                <a href="#kontakt" class="btn btn-secondary">
-                    Kontakt ze szkołą
-                </a>
-            </div>
-        </div>
-
-
-        <div class="hero-card">
-
-            <div class="atom">⚛️</div>
-
-            <h2>Odkrywamy świat nauki</h2>
-
-            <p>
-                Inspirujemy uczniów do zadawania pytań,
-                eksperymentowania i rozwijania swoich pasji.
-            </p>
-
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- ===== AKTUALNOŚCI ===== -->
-
-<section class="news" id="aktualnosci">
-
-    <div class="container">
-
-        <div class="section-title">
-            <span>Co nowego?</span>
-            <h2>Aktualności</h2>
-
-            <p>
-                Najważniejsze informacje i wydarzenia
-                z życia naszej szkoły.
-            </p>
-        </div>
-
-
-        <div class="news-grid">
-
-            <article class="news-card">
-                <div class="news-date">Aktualność</div>
-
-                <h3>Rozpoczęcie roku szkolnego</h3>
-
-                <p>
-                    Witamy wszystkich uczniów po wakacyjnej przerwie.
-                    Życzymy Wam wielu sukcesów, ciekawych lekcji
-                    i wspaniałych chwil spędzonych razem!
-                </p>
-
-                <span class="read-more">Czytaj więcej →</span>
-            </article>
-
-
-            <article class="news-card">
-                <div class="news-date">Wydarzenie</div>
-
-                <h3>Dzień Nauki w naszej szkole</h3>
-
-                <p>
-                    Przed nami wyjątkowy dzień pełen eksperymentów,
-                    doświadczeń i ciekawostek naukowych.
-                </p>
-
-                <span class="read-more">Czytaj więcej →</span>
-            </article>
-
-
-            <article class="news-card">
-                <div class="news-date">Informacja</div>
-
-                <h3>Koła zainteresowań</h3>
-
-                <p>
-                    Uczniowie mogą rozwijać swoje pasje podczas
-                    zajęć dodatkowych i kół zainteresowań.
-                </p>
-
-                <span class="read-more">Czytaj więcej →</span>
-            </article>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== O SZKOLE ===== -->
-
-<section id="szkola">
-
-    <div class="container">
-
-        <div class="about-grid">
-
-            <div class="about-text">
-
-                <h2>Szkoła, która inspiruje</h2>
-
-                <p>
-                    Nasza szkoła jest miejscem, w którym każdy uczeń
-                    może rozwijać swoje zainteresowania, odkrywać nowe
-                    talenty i zdobywać wiedzę potrzebną w przyszłości.
-                </p>
-
-                <p>
-                    Stawiamy na bezpieczeństwo, wzajemny szacunek,
-                    współpracę oraz nowoczesne podejście do edukacji.
-                </p>
-
-
-                <div class="features">
-
-                    <div class="feature">
-                        <strong>📚 Nauka</strong>
-                        <span>Rozwijamy wiedzę i umiejętności.</span>
-                    </div>
-
-                    <div class="feature">
-                        <strong>🔬 Nauka przez doświadczenie</strong>
-                        <span>Eksperymentujemy i odkrywamy.</span>
-                    </div>
-
-                    <div class="feature">
-                        <strong>🎨 Kreatywność</strong>
-                        <span>Wspieramy talenty i pasje.</span>
-                    </div>
-
-                    <div class="feature">
-                        <strong>🤝 Współpraca</strong>
-                        <span>Uczymy się działać razem.</span>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="about-box">
-
-                <div>
-                    <div class="big-icon">🎓</div>
-
-                    <h3>Wiedza • Pasja • Przyszłość</h3>
-
-                    <p>
-                        Każdy dzień to nowa okazja do nauki
-                        i odkrywania świata.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== INFORMACJE ===== -->
-
-<section class="info" id="informacje">
-
-    <div class="container">
-
-        <div class="section-title">
-            <span>Dla uczniów i rodziców</span>
-            <h2>Najważniejsze informacje</h2>
-
-            <p>
-                Wszystko, czego potrzebujesz w jednym miejscu.
-            </p>
-        </div>
-
-
-        <div class="info-grid">
-
-            <div class="info-card">
-                <div class="info-icon">📅</div>
-                <h3>Kalendarz</h3>
-                <p>
-                    Sprawdź najważniejsze daty i wydarzenia
-                    w roku szkolnym.
-                </p>
-            </div>
-
-
-            <div class="info-card">
-                <div class="info-icon">📖</div>
-                <h3>Dokumenty</h3>
-                <p>
-                    Statut, regulaminy i najważniejsze
-                    dokumenty szkoły.
-                </p>
-            </div>
-
-
-            <div class="info-card">
-                <div class="info-icon">👨‍🏫</div>
-                <h3>Dla uczniów</h3>
-                <p>
-                    Informacje dotyczące zajęć,
-                    konkursów i wydarzeń.
-                </p>
-            </div>
-
-
-            <div class="info-card">
-                <div class="info-icon">👨‍👩‍👧</div>
-                <h3>Dla rodziców</h3>
-                <p>
-                    Ważne informacje i komunikaty
-                    dla rodziców.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== KONTAKT ===== -->
-
-<section class="contact" id="kontakt">
-
-    <div class="container">
-
-        <div class="section-title">
-            <span>Skontaktuj się z nami</span>
-            <h2>Kontakt</h2>
-
-            <p>
-                Zapraszamy do kontaktu z sekretariatem szkoły.
-            </p>
-        </div>
-
-
-        <div class="contact-grid">
-
-            <div class="contact-card">
-
-                <h3>Szkoła Podstawowa nr 55</h3>
-
-                <!--
-                    Wstaw tutaj prawdziwe dane szkoły.
-                -->
-
-                <div class="contact-row">
-                    <strong>📍 Adres</strong>
-                    <span>Tu wpisz adres szkoły</span>
-                </div>
-
-                <div class="contact-row">
-                    <strong>☎ Telefon</strong>
-                    <span>Tu wpisz numer telefonu</span>
-                </div>
-
-                <div class="contact-row">
-                    <strong>✉ E-mail</strong>
-                    <span>Tu wpisz adres e-mail</span>
-                </div>
-
-                <div class="contact-row">
-                    <strong>🕐 Sekretariat</strong>
-                    <span>Tu wpisz godziny pracy sekretariatu</span>
-                </div>
-
-            </div>
-
-
-            <div class="map">
-
-                <div>
-                    <div style="font-size:55px;">📍</div>
-
-                    <strong>Znajdź nas</strong>
-
-                    <p>
-                        Po uzupełnieniu adresu możesz tutaj
-                        dodać mapę Google Maps.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== STOPKA ===== -->
-
-<footer>
-
-    <div class="footer-container">
-
-        <div>
-            <h3>Szkoła Podstawowa nr 55</h3>
-
-            <p>
-                im. Marii Skłodowskiej
-            </p>
-        </div>
-
-
-        <div class="footer-right">
-
-            <p>
-                © 2026 Szkoła Podstawowa nr 55
-            </p>
-
-            <p>
-                Wszystkie prawa zastrzeżone.
-            </p>
-
-        </div>
-
-    </div>
-
-</footer>
-
-</body>
-</html>
 ```
