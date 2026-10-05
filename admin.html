@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel administratora</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1769e0, #4c8ff5);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #1769e0;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1257bd;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #1769e0;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>👨‍💼 Panel administratora</h1>
+    <p>Dodawanie materiałów szkolnych</p>
+</header>
+
+<main>
+
+    <div class="box">
+
+        <h2>Dodaj materiał</h2>
+
+        <label>
+            Przedmiot
+        </label>
+
+        <select id="subject">
+
+            <option value="Matematyka">
+                📐 Matematyka
+            </option>
+
+            <option value="Język polski">
+                📖 Język polski
+            </option>
+
+            <option value="Język angielski">
+                🇬🇧 Język angielski
+            </option>
+
+            <option value="Przyroda">
+                🧪 Przyroda
+            </option>
+
+            <option value="Informatyka">
+                💻 Informatyka
+            </option>
+
+            <option value="Inne">
+                📚 Inne
+            </option>
+
+        </select>
+
+
+        <label>
+            Nazwa materiału
+        </label>
+
+        <input
+            type="text"
+            id="title"
+            placeholder="np. Zadania z ułamków"
+        >
+
+
+        <label>
+            Plik
+        </label>
+
+        <input
+            type="file"
+            id="file"
+            accept=".pdf,.doc,.docx,.ppt,.pptx"
+        >
+
+
+        <button id="addButton">
+            ➕ Dodaj materiał
+        </button>
+
+        <p id="message"></p>
+
+        <a class="back" href="index.html">
+            ← Wróć na stronę główną
+        </a>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// Sprawdzamy, czy użytkownik jest zalogowany
+
+async function checkUser() {
+
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        window.location.href =
+            "logowanie.html";
+
+        return;
+    }
+
+    // Sprawdzamy administratora
+
+    const adminEmail =
+        data.user.email;
+
+    const allowedEmail =
+        "pi.pu2@op.pl";
+
+    if (adminEmail !== allowedEmail) {
+
+        document.body.innerHTML = `
+            <h1 style="text-align:center;margin-top:100px;">
+                🚫 Brak dostępu
+            </h1>
+
+            <p style="text-align:center;">
+                Ta strona jest tylko dla administratora.
+            </p>
+
+            <p style="text-align:center;">
+                <a href="index.html">
+                    Wróć na stronę główną
+                </a>
+            </p>
+        `;
+
+        return;
+    }
+}
+
+checkUser();
+
+
+// Dodawanie materiału
+
+document
+.getElementById("addButton")
+.addEventListener("click", async function() {
+
+    const message =
+        document.getElementById("message");
+
+    const subject =
+        document.getElementById("subject").value;
+
+    const title =
+        document.getElementById("title").value.trim();
+
+    const file =
+        document.getElementById("file").files[0];
+
+
+    if (!title || !file) {
+
+        message.textContent =
+            "Uzupełnij nazwę i wybierz plik.";
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    message.textContent =
+        "Przesyłanie pliku...";
+
+    message.style.color = "black";
+
+
+    const fileName =
+        Date.now() + "_" + file.name;
+
+
+    const filePath =
+        fileName;
+
+
+    // Wysyłanie pliku do Storage
+
+    const { error: uploadError } =
+        await supabaseClient
+        .storage
+        .from("materials")
+        .upload(filePath, file);
+
+
+    if (uploadError) {
+
+        message.textContent =
+            uploadError.message;
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    // Pobranie adresu pliku
+
+    const { data: urlData } =
+        supabaseClient
+        .storage
+        .from("materials")
+        .getPublicUrl(filePath);
+
+
+    const fileUrl =
+        urlData.publicUrl;
+
+
+    // Zapis materiału w bazie
+
+    const { error: databaseError } =
+        await supabaseClient
+        .from("materials")
+        .insert({
+
+            title: title,
+
+            subject: subject,
+
+            file_url: fileUrl
+
+        });
+
+
+    if (databaseError) {
+
+        message.textContent =
+            databaseError.message;
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    message.textContent =
+        "✅ Materiał został dodany!";
+
+    message.style.color =
+        "green";
+
+
+    document.getElementById("title").value = "";
+
+    document.getElementById("file").value = "";
+
+});
+
+</script>
+
+</body>
+</html>
