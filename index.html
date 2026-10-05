@@ -1526,11 +1526,24 @@ async function checkLogin() {
 
     const { data } = await supabaseClient.auth.getUser();
 
-    if (data.user) {
+if (data.user) {
 
-        document.getElementById("loginMenu").style.display = "none";
-        document.getElementById("materialsMenu").style.display = "block";
-        document.getElementById("logoutMenu").style.display = "block";
+    document.getElementById("loginMenu").style.display = "none";
+    document.getElementById("materialsMenu").style.display = "block";
+    document.getElementById("logoutMenu").style.display = "block";
+
+    if (data.user.email === "pi.pu2@op.pl") {
+        document.getElementById("adminMenu").style.display = "block";
+    }
+
+} else {
+
+    document.getElementById("loginMenu").style.display = "block";
+    document.getElementById("materialsMenu").style.display = "none";
+    document.getElementById("logoutMenu").style.display = "none";
+    document.getElementById("adminMenu").style.display = "none";
+
+}
 
     } else {
 
