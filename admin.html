@@ -307,17 +307,46 @@ const supabaseClient =
 
 async function checkUser() {
 
-    const { data, error } =
-        await supabaseClient.auth.getUser();
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
 
+    if (!session || !session.user) {
 
-    if (error || !data.user) {
-
-        window.location.href =
-            "logowanie.html";
+        window.location.href = "logowanie.html";
 
         return false;
     }
+
+    const adminEmail = session.user.email;
+
+    const allowedEmail =
+        "TWÓJ_EMAIL_ADMINA";
+
+    if (adminEmail !== allowedEmail) {
+
+        document.body.innerHTML = `
+
+            <h1 style="text-align:center;margin-top:100px;">
+                🚫 Brak dostępu
+            </h1>
+
+            <p style="text-align:center;">
+                Ta strona jest tylko dla administratora.
+            </p>
+
+            <p style="text-align:center;">
+                <a href="index.html">
+                    Wróć na stronę główną
+                </a>
+            </p>
+
+        `;
+
+        return false;
+    }
+
+    return true;
+}
 
 
     const adminEmail =
