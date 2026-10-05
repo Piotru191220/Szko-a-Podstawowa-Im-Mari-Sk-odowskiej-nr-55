@@ -824,9 +824,21 @@ footer a{
     <li><a href="#galeria">Galeria</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
 
-<li>
+<li id="loginMenu">
     <a class="login" href="logowanie.html">
         🔐 Logowanie
+    </a>
+</li>
+
+<li id="materialsMenu" style="display: none;">
+    <a href="materiały.html">
+        📚 Materiały
+    </a>
+</li>
+
+<li id="logoutMenu" style="display: none;">
+    <a href="#" id="logoutButton">
+        🚪 Wyloguj
     </a>
 </li>
 
@@ -1491,6 +1503,50 @@ document
     .forEach(element => observer.observe(element));
 
 
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function checkLogin() {
+
+    const { data } = await supabaseClient.auth.getUser();
+
+    if (data.user) {
+
+        document.getElementById("loginMenu").style.display = "none";
+        document.getElementById("materialsMenu").style.display = "block";
+        document.getElementById("logoutMenu").style.display = "block";
+
+    } else {
+
+        document.getElementById("loginMenu").style.display = "block";
+        document.getElementById("materialsMenu").style.display = "none";
+        document.getElementById("logoutMenu").style.display = "none";
+
+    }
+}
+
+checkLogin();
+
+
+document.getElementById("logoutButton").addEventListener("click", async function(event) {
+
+    event.preventDefault();
+
+    await supabaseClient.auth.signOut();
+
+    window.location.reload();
+
+});
 </script>
 
 </body>
