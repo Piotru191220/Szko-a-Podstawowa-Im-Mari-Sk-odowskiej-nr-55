@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Panel administratora | Szkoła Podstawowa nr 55</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -32,7 +37,7 @@
         }
 
         main {
-            max-width: 700px;
+            max-width: 850px;
             margin: 40px auto;
             padding: 20px;
         }
@@ -42,6 +47,7 @@
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
         }
 
         label {
@@ -61,7 +67,7 @@
             font-size: 16px;
         }
 
-        button {
+        .add-button {
             width: 100%;
             padding: 13px;
             border: none;
@@ -72,15 +78,8 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .add-button:hover {
             background: #1257bd;
-        }
-
-        .back {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #1769e0;
         }
 
         #message {
@@ -89,39 +88,140 @@
             font-weight: bold;
         }
 
-        .file-info {
-            margin-top: -8px;
-            margin-bottom: 18px;
-            color: #666;
-            font-size: 14px;
+        .material-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            background: #f4f7fb;
+            border-radius: 10px;
         }
+
+        .material-info {
+            flex: 1;
+        }
+
+        .material-title {
+            font-weight: bold;
+            color: #1769e0;
+        }
+
+        .material-subject {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .delete-button {
+            border: none;
+            background: #d93025;
+            color: white;
+            padding: 9px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .delete-button:hover {
+            background: #b9231b;
+        }
+
+        .empty {
+            color: #777;
+            padding: 10px 0;
+        }
+
+        .loading {
+            color: #1769e0;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 5px;
+            text-decoration: none;
+            color: #1769e0;
+        }
+
+        @media (max-width: 600px) {
+
+            .material-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .delete-button {
+                width: 100%;
+            }
+
+        }
+
     </style>
+
 </head>
 
 <body>
 
+
 <header>
+
     <h1>👨‍💼 Panel administratora</h1>
-    <p>Dodawanie materiałów szkolnych</p>
+
+    <p>
+        Dodawanie i zarządzanie materiałami
+    </p>
+
 </header>
 
+
 <main>
+
+
+    <!-- DODAWANIE -->
+
     <div class="box">
 
         <h2>➕ Dodaj materiał</h2>
 
-        <label for="subject">Przedmiot</label>
+
+        <label for="subject">
+            Przedmiot
+        </label>
 
         <select id="subject">
-            <option value="Matematyka">📐 Matematyka</option>
-            <option value="Język polski">📖 Język polski</option>
-            <option value="Język angielski">🇬🇧 Język angielski</option>
-            <option value="Przyroda">🧪 Przyroda</option>
-            <option value="Informatyka">💻 Informatyka</option>
-            <option value="Inne">📚 Inne</option>
+
+            <option value="Matematyka">
+                📐 Matematyka
+            </option>
+
+            <option value="Język polski">
+                📖 Język polski
+            </option>
+
+            <option value="Język angielski">
+                🇬🇧 Język angielski
+            </option>
+
+            <option value="Przyroda">
+                🧪 Przyroda
+            </option>
+
+            <option value="Informatyka">
+                💻 Informatyka
+            </option>
+
+            <option value="Inne">
+                📚 Inne
+            </option>
+
         </select>
 
-        <label for="title">Nazwa materiału</label>
+
+        <label for="title">
+            Nazwa materiału
+        </label>
 
         <input
             type="text"
@@ -129,7 +229,10 @@
             placeholder="np. Zadania z ułamków"
         >
 
-        <label for="file">Plik</label>
+
+        <label for="file">
+            Plik
+        </label>
 
         <input
             type="file"
@@ -137,58 +240,98 @@
             accept=".pdf,.doc,.docx,.ppt,.pptx"
         >
 
-        <div class="file-info">
-            Dozwolone formaty: PDF, DOC, DOCX, PPT, PPTX
-        </div>
 
-        <button id="addButton">
+        <button
+            class="add-button"
+            id="addButton">
+
             ➕ Dodaj materiał
+
         </button>
+
 
         <p id="message"></p>
 
-        <a class="back" href="index.html">
-            ← Wróć na stronę główną
-        </a>
+    </div>
+
+
+    <!-- LISTA MATERIAŁÓW -->
+
+    <div class="box">
+
+        <h2>📚 Wszystkie materiały</h2>
+
+        <div id="materialsList">
+
+            <div class="loading">
+                Ładowanie materiałów...
+            </div>
+
+        </div>
 
     </div>
+
+
+    <a class="back"
+       href="index.html">
+
+        ← Wróć na stronę główną
+
+    </a>
+
+
 </main>
+
 
 <script>
 
-const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
 
 
-// ================================
-// SPRAWDZANIE ADMINISTRATORA
-// ================================
+const SUPABASE_KEY =
+    "TWÓJ_OBECNY_PUBLISHABLE_KEY";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// =====================================
+// SPRAWDZENIE ADMINISTRATORA
+// =====================================
 
 async function checkUser() {
 
     const { data, error } =
         await supabaseClient.auth.getUser();
 
+
     if (error || !data.user) {
 
-        window.location.href = "logowanie.html";
+        window.location.href =
+            "logowanie.html";
 
-        return;
+        return false;
     }
 
-    const adminEmail = data.user.email;
 
-    const allowedEmail = "pi.pu2@op.pl";
+    const adminEmail =
+        data.user.email;
+
+
+    const allowedEmail =
+        "TWÓJ_EMAIL_ADMINA";
+
 
     if (adminEmail !== allowedEmail) {
 
         document.body.innerHTML = `
+
             <h1 style="text-align:center;margin-top:100px;">
                 🚫 Brak dostępu
             </h1>
@@ -202,136 +345,398 @@ async function checkUser() {
                     Wróć na stronę główną
                 </a>
             </p>
+
         `;
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+// =====================================
+// POBIERANIE LISTY MATERIAŁÓW
+// =====================================
+
+async function loadMaterials() {
+
+    const list =
+        document.getElementById(
+            "materialsList"
+        );
+
+
+    list.innerHTML =
+        '<div class="loading">Ładowanie materiałów...</div>';
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            '<div class="empty">❌ Nie udało się pobrać materiałów.</div>';
 
         return;
     }
-}
-
-checkUser();
 
 
-// ================================
-// DODAWANIE MATERIAŁU
-// ================================
+    if (!data || data.length === 0) {
 
-document
-    .getElementById("addButton")
-    .addEventListener("click", async function() {
+        list.innerHTML =
+            '<div class="empty">Brak materiałów.</div>';
 
-        const message =
-            document.getElementById("message");
+        return;
+    }
 
-        const subject =
-            document.getElementById("subject").value;
+
+    list.innerHTML = "";
+
+
+    data.forEach(material => {
+
+        const item =
+            document.createElement("div");
+
+
+        item.className =
+            "material-item";
+
+
+        const info =
+            document.createElement("div");
+
+
+        info.className =
+            "material-info";
+
 
         const title =
-            document.getElementById("title").value.trim();
-
-        const file =
-            document.getElementById("file").files[0];
+            document.createElement("div");
 
 
-        // Sprawdzenie danych
-
-        if (!title || !file) {
-
-            message.textContent =
-                "Uzupełnij nazwę i wybierz plik.";
-
-            message.style.color = "red";
-
-            return;
-        }
+        title.className =
+            "material-title";
 
 
-        // Informacja
-
-        message.textContent =
-            "⏳ Przesyłanie pliku...";
-
-        message.style.color = "black";
+        title.textContent =
+            "📄 " + material.title;
 
 
-        // Unikalna nazwa pliku
-
-        const fileName =
-            Date.now() + "_" + file.name;
+        const subject =
+            document.createElement("div");
 
 
-        const filePath = fileName;
+        subject.className =
+            "material-subject";
 
 
-        // ================================
-        // WYSŁANIE PLIKU DO STORAGE
-        // ================================
-
-        const { error: uploadError } =
-            await supabaseClient
-                .storage
-                .from("materials")
-                .upload(filePath, file);
+        subject.textContent =
+            "Przedmiot: " +
+            material.subject;
 
 
-        if (uploadError) {
+        info.appendChild(title);
 
-            message.textContent =
-                "❌ Błąd przesyłania: " +
-                uploadError.message;
-
-            message.style.color = "red";
-
-            return;
-        }
+        info.appendChild(subject);
 
 
-        // ================================
-        // ZAPIS DO BAZY
-        // ================================
-
-        const { error: databaseError } =
-            await supabaseClient
-                .from("materials")
-                .insert({
-
-                    title: title,
-
-                    subject: subject,
-
-                    file_url: filePath
-
-                });
+        const deleteButton =
+            document.createElement("button");
 
 
-        if (databaseError) {
-
-            message.textContent =
-                "❌ Błąd bazy danych: " +
-                databaseError.message;
-
-            message.style.color = "red";
-
-            return;
-        }
+        deleteButton.className =
+            "delete-button";
 
 
-        // ================================
-        // SUKCES
-        // ================================
-
-        message.textContent =
-            "✅ Materiał został dodany!";
-
-        message.style.color = "green";
+        deleteButton.textContent =
+            "🗑️ Usuń";
 
 
-        document.getElementById("title").value = "";
+        deleteButton.addEventListener(
+            "click",
+            function() {
 
-        document.getElementById("file").value = "";
+                deleteMaterial(
+                    material.id,
+                    material.file_url,
+                    material.title
+                );
+
+            }
+        );
+
+
+        item.appendChild(info);
+
+        item.appendChild(deleteButton);
+
+
+        list.appendChild(item);
 
     });
 
+}
+
+
+// =====================================
+// USUWANIE MATERIAŁU
+// =====================================
+
+async function deleteMaterial(
+    id,
+    filePath,
+    title
+) {
+
+
+    const confirmed =
+        confirm(
+            'Czy na pewno chcesz usunąć materiał "' +
+            title +
+            '"?'
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    // Usunięcie pliku ze Storage
+
+    const { error: storageError } =
+        await supabaseClient
+            .storage
+            .from("materials")
+            .remove([
+                filePath
+            ]);
+
+
+    if (storageError) {
+
+        alert(
+            "❌ Nie udało się usunąć pliku:\n" +
+            storageError.message
+        );
+
+        return;
+    }
+
+
+    // Usunięcie wpisu z tabeli
+
+    const { error: databaseError } =
+        await supabaseClient
+            .from("materials")
+            .delete()
+            .eq("id", id);
+
+
+    if (databaseError) {
+
+        alert(
+            "❌ Nie udało się usunąć wpisu:\n" +
+            databaseError.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "✅ Materiał został usunięty."
+    );
+
+
+    // Odświeżenie listy
+
+    loadMaterials();
+
+}
+
+
+// =====================================
+// DODAWANIE MATERIAŁU
+// =====================================
+
+document
+    .getElementById("addButton")
+    .addEventListener(
+        "click",
+        async function() {
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            const subject =
+                document.getElementById(
+                    "subject"
+                ).value;
+
+
+            const title =
+                document.getElementById(
+                    "title"
+                ).value.trim();
+
+
+            const file =
+                document.getElementById(
+                    "file"
+                ).files[0];
+
+
+            if (!title || !file) {
+
+                message.textContent =
+                    "Uzupełnij nazwę i wybierz plik.";
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            message.textContent =
+                "⏳ Przesyłanie pliku...";
+
+            message.style.color =
+                "black";
+
+
+            const fileName =
+                Date.now() +
+                "_" +
+                file.name;
+
+
+            const filePath =
+                fileName;
+
+
+            // Upload
+
+            const { error: uploadError } =
+                await supabaseClient
+                    .storage
+                    .from("materials")
+                    .upload(
+                        filePath,
+                        file
+                    );
+
+
+            if (uploadError) {
+
+                message.textContent =
+                    "❌ Błąd przesyłania: " +
+                    uploadError.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            // Baza
+
+            const { error: databaseError } =
+                await supabaseClient
+                    .from("materials")
+                    .insert({
+
+                        title: title,
+
+                        subject: subject,
+
+                        file_url: filePath
+
+                    });
+
+
+            if (databaseError) {
+
+                message.textContent =
+                    "❌ Błąd bazy danych: " +
+                    databaseError.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            message.textContent =
+                "✅ Materiał został dodany!";
+
+            message.style.color =
+                "green";
+
+
+            document.getElementById(
+                "title"
+            ).value = "";
+
+
+            document.getElementById(
+                "file"
+            ).value = "";
+
+
+            // Odświeżenie listy
+
+            loadMaterials();
+
+        }
+    );
+
+
+// =====================================
+// START
+// =====================================
+
+async function start() {
+
+    const isAdmin =
+        await checkUser();
+
+
+    if (!isAdmin) {
+        return;
+    }
+
+
+    loadMaterials();
+
+}
+
+
+start();
+
+
 </script>
 
+
 </body>
+
 </html>
