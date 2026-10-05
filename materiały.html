@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Materiały | Szkoła Podstawowa nr 55</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #1769e0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .material {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .material:last-child {
+            border-bottom: none;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #1769e0;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .logout {
+            background: #d93025;
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Materiały</h1>
+    <p>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</p>
+</header>
+
+<main>
+
+    <div class="box">
+
+        <h2>Materiały dla uczniów</h2>
+
+        <div class="material">
+            <span>📄 Matematyka – materiały</span>
+            <a class="button" href="#">Otwórz</a>
+        </div>
+
+        <div class="material">
+            <span>📄 Język polski – materiały</span>
+            <a class="button" href="#">Otwórz</a>
+        </div>
+
+        <div class="material">
+            <span>📄 Przyroda – materiały</span>
+            <a class="button" href="#">Otwórz</a>
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <h2>Twoje konto</h2>
+
+        <p id="userEmail"></p>
+
+        <button class="logout" id="logoutButton">
+            🚪 Wyloguj
+        </button>
+
+    </div>
+
+    <p id="message"></p>
+
+    <br>
+
+    <a class="button" href="index.html">
+        ← Wróć na stronę główną
+    </a>
+
+</main>
+
+<script>
+
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// Sprawdzenie logowania
+async function checkUser() {
+
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        window.location.href = "logowanie.html";
+        return;
+
+    }
+
+    document.getElementById("userEmail").textContent =
+        "Zalogowano jako: " + data.user.email;
+}
+
+checkUser();
+
+
+// Wylogowanie
+document.getElementById("logoutButton").addEventListener("click", async function() {
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+
+        document.getElementById("message").textContent =
+            "Nie udało się wylogować.";
+
+        document.getElementById("message").style.color = "red";
+
+        return;
+    }
+
+    window.location.href = "index.html";
+
+});
+
+</script>
+
+</body>
+</html>
