@@ -1511,7 +1511,7 @@ document
 
 </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
@@ -1524,38 +1524,41 @@ const supabaseClient = supabase.createClient(
 
 async function checkLogin() {
 
-    const { data } = await supabaseClient.auth.getUser();
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
 
-if (data.user) {
+    const loginMenu = document.getElementById("loginMenu");
+    const materialsMenu = document.getElementById("materialsMenu");
+    const logoutMenu = document.getElementById("logoutMenu");
+    const adminMenu = document.getElementById("adminMenu");
 
-    document.getElementById("loginMenu").style.display = "none";
-    document.getElementById("materialsMenu").style.display = "block";
-    document.getElementById("logoutMenu").style.display = "block";
+    if (session && session.user) {
 
-    if (data.user.email === "pi.pu2@op.pl") {
-        document.getElementById("adminMenu").style.display = "block";
-    }
+        loginMenu.style.display = "none";
+        materialsMenu.style.display = "block";
+        logoutMenu.style.display = "block";
 
-} else {
-
-    document.getElementById("loginMenu").style.display = "block";
-    document.getElementById("materialsMenu").style.display = "none";
-    document.getElementById("logoutMenu").style.display = "none";
-    document.getElementById("adminMenu").style.display = "none";
-
-}
+        if (session.user.email === "pi.pu2@op.pl") {
+            adminMenu.style.display = "block";
+        } else {
+            adminMenu.style.display = "none";
+        }
 
     } else {
 
-        document.getElementById("loginMenu").style.display = "block";
-        document.getElementById("materialsMenu").style.display = "none";
-        document.getElementById("logoutMenu").style.display = "none";
+        loginMenu.style.display = "block";
+        materialsMenu.style.display = "none";
+        logoutMenu.style.display = "none";
+        adminMenu.style.display = "none";
 
     }
 }
 
 checkLogin();
 
+supabaseClient.auth.onAuthStateChange(() => {
+    checkLogin();
+});
 
 document.getElementById("logoutButton").addEventListener("click", async function(event) {
 
@@ -1563,7 +1566,7 @@ document.getElementById("logoutButton").addEventListener("click", async function
 
     await supabaseClient.auth.signOut();
 
-    window.location.reload();
+    window.location.href = "index.html";
 
 });
 </script>
