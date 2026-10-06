@@ -1,249 +1,342 @@
+```html
 <!DOCTYPE html>
 <html lang="pl">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>Panel administratora</title>
+<title>Panel administratora | Szkoła Podstawowa nr 55</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
+<style>
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            margin: 0;
-            padding: 30px;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+}
 
-        h1 {
-            margin-top: 0;
-            text-align: center;
-        }
+/* =========================
+   HEADER
+========================= */
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+header {
+    background: linear-gradient(135deg, #1769e0, #4c8ff5);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
+header h1 {
+    margin: 0 0 10px;
+}
 
-        input,
-        select {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+/* =========================
+   MAIN
+========================= */
 
-        button {
-            border: none;
-            border-radius: 8px;
-            padding: 12px 18px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+main {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 20px;
+}
 
-        #addButton {
-            background: #1769e0;
-            color: white;
-            width: 100%;
-        }
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
 
-        #addButton:hover {
-            background: #0d55bd;
-        }
+/* =========================
+   FORMULARZ
+========================= */
 
-        #message {
-            margin-top: 15px;
-            font-weight: bold;
-        }
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
 
-        .materials {
-            margin-top: 35px;
-        }
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
 
-        .material-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: #f7f7f7;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-        }
+/* =========================
+   PRZYCISK DODAWANIA
+========================= */
 
-        .material-info {
-            flex: 1;
-        }
+.add-button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #1769e0;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        .material-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+.add-button:hover {
+    background: #1257bd;
+}
 
-        .material-subject {
-            color: #666;
-        }
+/* =========================
+   KOMUNIKAT
+========================= */
 
-        .delete-button {
-            background: #dc3545;
-            color: white;
-        }
+#message {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
 
-        .delete-button:hover {
-            background: #b02a37;
-        }
+/* =========================
+   MATERIAŁY
+========================= */
 
-        .loading,
-        .empty {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
+.material-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    margin-top: 10px;
+    background: #f4f7fb;
+    border-radius: 10px;
+}
 
-    </style>
+.material-info {
+    flex: 1;
+}
+
+.material-title {
+    font-weight: bold;
+    color: #1769e0;
+}
+
+.material-subject {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* =========================
+   USUWANIE
+========================= */
+
+.delete-button {
+    border: none;
+    background: #d93025;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.delete-button:hover {
+    background: #b9231b;
+}
+
+/* =========================
+   POWRÓT NA STRONĘ
+========================= */
+
+.back-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: #1769e0;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    background: #1257bd;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   INNE
+========================= */
+
+.empty {
+    color: #777;
+    padding: 10px 0;
+}
+
+.loading {
+    color: #1769e0;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .material-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .delete-button {
+        width: 100%;
+    }
+
+    main {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .box {
+        padding: 20px;
+    }
+
+}
+
+</style>
 
 </head>
 
 
 <body>
 
-<div class="container">
 
-    <h1>🔐 Panel administratora</h1>
+<!-- =========================
+     NAGŁÓWEK
+========================= -->
 
+<header>
 
-    <!-- DODAWANIE MATERIAŁU -->
+    <h1>👨‍💼 Panel administratora</h1>
 
-    <h2>Dodaj materiał</h2>
+    <p>
+        Dodawanie i zarządzanie materiałami
+    </p>
 
-    <div class="form-group">
-
-        <label for="subject">
-            Przedmiot
-        </label>
-
-        <select id="subject">
-
-            <option value="Matematyka">
-                Matematyka
-            </option>
-
-            <option value="Język polski">
-                Język polski
-            </option>
-
-            <option value="Język angielski">
-                Język angielski
-            </option>
-
-            <option value="Historia">
-                Historia
-            </option>
-
-            <option value="Biologia">
-                Biologia
-            </option>
-
-            <option value="Chemia">
-                Chemia
-            </option>
-
-            <option value="Fizyka">
-                Fizyka
-            </option>
-
-            <option value="Geografia">
-                Geografia
-            </option>
-
-            <option value="Informatyka">
-                Informatyka
-            </option>
-
-            <option value="Inne">
-                Inne
-            </option>
-
-        </select>
-
-    </div>
+</header>
 
 
-    <div class="form-group">
-
-        <label for="title">
-            Nazwa materiału
-        </label>
-
-        <input
-            type="text"
-            id="title"
-            placeholder="Np. Zadania z matematyki"
-        >
-
-    </div>
+<main>
 
 
-    <div class="form-group">
+<!-- =========================
+     DODAWANIE MATERIAŁU
+========================= -->
 
-        <label for="file">
-            Plik
-        </label>
+<div class="box">
 
-        <input
-            type="file"
-            id="file"
-        >
-
-    </div>
+    <h2>➕ Dodaj materiał</h2>
 
 
-    <button id="addButton">
+    <label for="subject">
+        Przedmiot
+    </label>
+
+    <select id="subject">
+
+        <option value="Matematyka">
+            📐 Matematyka
+        </option>
+
+        <option value="Język polski">
+            📖 Język polski
+        </option>
+
+        <option value="Język angielski">
+            🇬🇧 Język angielski
+        </option>
+
+        <option value="Przyroda">
+            🧪 Przyroda
+        </option>
+
+        <option value="Informatyka">
+            💻 Informatyka
+        </option>
+
+        <option value="Inne">
+            📚 Inne
+        </option>
+
+    </select>
+
+
+    <label for="title">
+        Nazwa materiału
+    </label>
+
+    <input
+        type="text"
+        id="title"
+        placeholder="np. Zadania z ułamków"
+    >
+
+
+    <label for="file">
+        Plik
+    </label>
+
+    <input
+        type="file"
+        id="file"
+        accept=".pdf,.doc,.docx,.ppt,.pptx"
+    >
+
+
+    <button
+        class="add-button"
+        id="addButton">
+
         ➕ Dodaj materiał
+
     </button>
 
 
     <p id="message"></p>
 
+</div>
 
-    <!-- LISTA MATERIAŁÓW -->
 
-    <div class="materials">
+<!-- =========================
+     LISTA MATERIAŁÓW
+========================= -->
 
-        <h2>📚 Dodane materiały</h2>
+<div class="box">
 
-        <div id="materialsList">
+    <h2>📚 Wszystkie materiały</h2>
 
-            <div class="loading">
-                Ładowanie materiałów...
-            </div>
+    <div id="materialsList">
 
+        <div class="loading">
+            Ładowanie materiałów...
         </div>
 
     </div>
@@ -251,11 +344,30 @@
 </div>
 
 
+<!-- =========================
+     POWRÓT NA STRONĘ GŁÓWNĄ
+========================= -->
+
+<div class="box">
+
+    <a
+        href="index.html"
+        class="back-button"
+    >
+        ← Powrót na stronę główną
+    </a>
+
+</div>
+
+
+</main>
+
+
 <script>
 
-// ======================================================
-// SUPABASE
-// ======================================================
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
     "https://vqilsuvpinnfmngrczlj.supabase.co";
@@ -270,50 +382,63 @@ const supabaseClient =
     );
 
 
-// ======================================================
-// EMAIL ADMINISTRATORA
-// ======================================================
-//
-// TUTAJ WPISZ SWÓJ PRAWDZIWY EMAIL
-// taki sam, jak konto używane do logowania.
-//
-// PRZYKŁAD:
-// const allowedEmail = "jan.kowalski@gmail.com";
-//
-// ======================================================
+/* =========================
+   ADMIN
+========================= */
 
-const allowedEmail =
-    "pi.pu2@op.pl";
+const ADMIN_EMAIL = "pi.pu2@op.pl";
 
 
-// ======================================================
-// SPRAWDZENIE UŻYTKOWNIKA
-// ======================================================
+/* =========================
+   SPRAWDZENIE LOGOWANIA
+========================= */
 
 async function checkUser() {
 
     const {
-        data: { user },
+        data,
         error
-    } =
-        await supabaseClient.auth.getUser();
+    } = await supabaseClient.auth.getSession();
 
 
-    console.log(
-        "Zalogowany użytkownik:",
-        user
-    );
+    if (error) {
+
+        console.error(
+            "Błąd sesji:",
+            error
+        );
+
+        document.body.innerHTML = `
+            <h1 style="
+                text-align:center;
+                margin-top:100px;
+            ">
+                ❌ Błąd logowania
+            </h1>
+
+            <p style="
+                text-align:center;
+            ">
+                Nie udało się sprawdzić sesji.
+            </p>
+
+            <p style="
+                text-align:center;
+            ">
+                <a href="logowanie.html">
+                    Wróć do logowania
+                </a>
+            </p>
+        `;
+
+        return false;
+    }
 
 
-    console.log(
-        "Błąd logowania:",
-        error
-    );
+    const session = data.session;
 
 
-    // Brak użytkownika
-
-    if (error || !user) {
+    if (!session || !session.user) {
 
         window.location.href =
             "logowanie.html";
@@ -322,75 +447,34 @@ async function checkUser() {
     }
 
 
-    // Sprawdzenie emaila
-
-    const userEmail =
-        (user.email || "")
-            .trim()
-            .toLowerCase();
+    const email =
+        session.user.email;
 
 
-    const adminEmail =
-        allowedEmail
-            .trim()
-            .toLowerCase();
-
-
-    console.log(
-        "Email użytkownika:",
-        userEmail
-    );
-
-
-    console.log(
-        "Dozwolony email:",
-        adminEmail
-    );
-
-
-    // Brak dostępu
-
-    if (
-        !userEmail ||
-        userEmail !== adminEmail
-    ) {
+    if (email !== ADMIN_EMAIL) {
 
         document.body.innerHTML = `
 
-            <div style="
-                max-width:600px;
-                margin:100px auto;
-                padding:30px;
+            <h1 style="
                 text-align:center;
-                font-family:Arial,sans-serif;
-                background:white;
-                border-radius:15px;
-                box-shadow:0 5px 20px rgba(0,0,0,0.1);
+                margin-top:100px;
             ">
+                🚫 Brak dostępu
+            </h1>
 
-                <h1>
-                    🚫 Brak dostępu
-                </h1>
+            <p style="
+                text-align:center;
+            ">
+                Ta strona jest tylko dla administratora.
+            </p>
 
-                <p>
-                    To konto nie ma uprawnień administratora.
-                </p>
-
-                <p>
-                    Zalogowane konto:
-                </p>
-
-                <strong>
-                    ${user.email || "brak adresu"}
-                </strong>
-
-                <br><br>
-
+            <p style="
+                text-align:center;
+            ">
                 <a href="index.html">
-                    ← Wróć na stronę główną
+                    ← Powrót na stronę główną
                 </a>
-
-            </div>
+            </p>
 
         `;
 
@@ -398,18 +482,13 @@ async function checkUser() {
     }
 
 
-    console.log(
-        "✅ Administrator został rozpoznany."
-    );
-
-
     return true;
 }
 
 
-// ======================================================
-// POBIERANIE MATERIAŁÓW
-// ======================================================
+/* =========================
+   POBIERANIE MATERIAŁÓW
+========================= */
 
 async function loadMaterials() {
 
@@ -419,18 +498,12 @@ async function loadMaterials() {
         );
 
 
-    if (!list) {
-
-        console.error(
-            "Nie znaleziono elementu #materialsList"
-        );
-
-        return;
-    }
-
-
     list.innerHTML =
-        '<div class="loading">Ładowanie materiałów...</div>';
+        `
+        <div class="loading">
+            Ładowanie materiałów...
+        </div>
+        `;
 
 
     const {
@@ -448,45 +521,34 @@ async function loadMaterials() {
             );
 
 
-    // Błąd pobierania
-
     if (error) {
 
         console.error(
-            "Błąd pobierania materiałów:",
+            "Błąd pobierania:",
             error
         );
 
-
-        list.innerHTML = `
-
+        list.innerHTML =
+            `
             <div class="empty">
-
                 ❌ Nie udało się pobrać materiałów.
-
                 <br>
-
-                <small>
-                    ${error.message}
-                </small>
-
+                ${error.message}
             </div>
-
-        `;
+            `;
 
         return;
     }
 
 
-    // Brak materiałów
-
-    if (
-        !data ||
-        data.length === 0
-    ) {
+    if (!data || data.length === 0) {
 
         list.innerHTML =
-            '<div class="empty">Brak materiałów.</div>';
+            `
+            <div class="empty">
+                Brak materiałów.
+            </div>
+            `;
 
         return;
     }
@@ -495,8 +557,6 @@ async function loadMaterials() {
     list.innerHTML = "";
 
 
-    // Tworzenie listy
-
     data.forEach(
         material => {
 
@@ -504,7 +564,6 @@ async function loadMaterials() {
                 document.createElement(
                     "div"
                 );
-
 
             item.className =
                 "material-item";
@@ -515,7 +574,6 @@ async function loadMaterials() {
                     "div"
                 );
 
-
             info.className =
                 "material-info";
 
@@ -525,17 +583,12 @@ async function loadMaterials() {
                     "div"
                 );
 
-
             title.className =
                 "material-title";
 
-
             title.textContent =
                 "📄 " +
-                (
-                    material.title ||
-                    "Bez nazwy"
-                );
+                material.title;
 
 
             const subject =
@@ -543,27 +596,17 @@ async function loadMaterials() {
                     "div"
                 );
 
-
             subject.className =
                 "material-subject";
 
-
             subject.textContent =
                 "Przedmiot: " +
-                (
-                    material.subject ||
-                    "Nie podano"
-                );
+                material.subject;
 
 
-            info.appendChild(
-                title
-            );
+            info.appendChild(title);
 
-
-            info.appendChild(
-                subject
-            );
+            info.appendChild(subject);
 
 
             const deleteButton =
@@ -571,10 +614,8 @@ async function loadMaterials() {
                     "button"
                 );
 
-
             deleteButton.className =
                 "delete-button";
-
 
             deleteButton.textContent =
                 "🗑️ Usuń";
@@ -582,7 +623,7 @@ async function loadMaterials() {
 
             deleteButton.addEventListener(
                 "click",
-                function () {
+                () => {
 
                     deleteMaterial(
                         material.id,
@@ -594,122 +635,104 @@ async function loadMaterials() {
             );
 
 
-            item.appendChild(
-                info
-            );
-
+            item.appendChild(info);
 
             item.appendChild(
                 deleteButton
             );
 
 
-            list.appendChild(
-                item
-            );
+            list.appendChild(item);
 
         }
     );
+
 }
 
 
-// ======================================================
-// USUWANIE MATERIAŁU
-// ======================================================
+/* =========================
+   USUWANIE MATERIAŁU
+========================= */
 
-async function deleteMaterial(id, filePath, title) {
+async function deleteMaterial(
+    id,
+    filePath,
+    title
+) {
 
-    const confirmed = confirm(
-        'Czy na pewno chcesz usunąć materiał "' +
-        title +
-        '"?'
-    );
+    const confirmed =
+        confirm(
+            'Czy na pewno chcesz usunąć materiał "' +
+            title +
+            '"?'
+        );
+
 
     if (!confirmed) {
         return;
     }
 
-    console.log("USUWANIE:");
-    console.log("ID:", id);
-    console.log("FILE:", filePath);
 
-
-    // ==========================================
-    // 1. USUNIĘCIE PLIKU ZE STORAGE
-    // ==========================================
+    /* USUNIĘCIE PLIKU */
 
     if (filePath) {
 
-        const { data: storageData, error: storageError } =
+        const {
+            error: storageError
+        } =
             await supabaseClient
                 .storage
                 .from("materials")
-                .remove([filePath]);
+                .remove([
+                    filePath
+                ]);
 
-        console.log("Storage:", storageData);
-        console.log("Storage error:", storageError);
 
         if (storageError) {
 
             alert(
-                "❌ Błąd usuwania pliku:\n\n" +
+                "❌ Nie udało się usunąć pliku:\n" +
                 storageError.message
+            );
+
+            console.error(
+                storageError
             );
 
             return;
         }
+
     }
 
 
-    // ==========================================
-    // 2. USUNIĘCIE REKORDU Z TABELI
-    // ==========================================
+    /* USUNIĘCIE REKORDU */
 
-    const { data: deletedData, error: databaseError } =
+    const {
+        error: databaseError
+    } =
         await supabaseClient
             .from("materials")
             .delete()
-            .eq("id", id)
-            .select();
-
-    console.log("Usunięty rekord:", deletedData);
-    console.log("Database error:", databaseError);
+            .eq(
+                "id",
+                id
+            );
 
 
     if (databaseError) {
 
         alert(
-            "❌ Błąd usuwania materiału z bazy:\n\n" +
+            "❌ Nie udało się usunąć materiału:\n" +
             databaseError.message
         );
 
-        return;
-    }
-
-
-    // ==========================================
-    // 3. SPRAWDZENIE CZY REKORD FAKTYCZNIE ZNIKNĄŁ
-    // ==========================================
-
-    if (!deletedData || deletedData.length === 0) {
-
-        alert(
-            "❌ Materiał NIE został usunięty z bazy.\n\n" +
-            "Najprawdopodobniej tabela materials ma " +
-            "blokadę RLS dla DELETE."
-        );
-
         console.error(
-            "DELETE zwrócił 0 rekordów."
+            databaseError
         );
 
         return;
     }
 
-
-    // ==========================================
-    // 4. SUKCES
-    // ==========================================
 
     alert(
         "✅ Materiał został usunięty."
@@ -717,292 +740,228 @@ async function deleteMaterial(id, filePath, title) {
 
 
     await loadMaterials();
-}
 
-// ======================================================
-// DODAWANIE MATERIAŁU
-// ======================================================
-
-async function addMaterial() {
-
-    const message =
-        document.getElementById(
-            "message"
-        );
-
-
-    const subject =
-        document.getElementById(
-            "subject"
-        ).value;
-
-
-    const title =
-        document.getElementById(
-            "title"
-        )
-        .value
-        .trim();
-
-
-    const fileInput =
-        document.getElementById(
-            "file"
-        );
-
-
-    const file =
-        fileInput.files[0];
-
-
-    // --------------------------------------------------
-    // SPRAWDZENIE NAZWY
-    // --------------------------------------------------
-
-    if (!title) {
-
-        message.textContent =
-            "❌ Wpisz nazwę materiału.";
-
-        message.style.color =
-            "red";
-
-        return;
-    }
-
-
-    // --------------------------------------------------
-    // SPRAWDZENIE PLIKU
-    // --------------------------------------------------
-
-    if (!file) {
-
-        message.textContent =
-            "❌ Wybierz plik.";
-
-        message.style.color =
-            "red";
-
-        return;
-    }
-
-
-    // --------------------------------------------------
-    // KOMUNIKAT
-    // --------------------------------------------------
-
-    message.textContent =
-        "⏳ Przesyłanie pliku...";
-
-    message.style.color =
-        "#1769e0";
-
-
-    // --------------------------------------------------
-    // BEZPIECZNA NAZWA PLIKU
-    // --------------------------------------------------
-
-    const safeName =
-        file.name.replace(
-            /[^a-zA-Z0-9._-]/g,
-            "_"
-        );
-
-
-    const filePath =
-        Date.now() +
-        "_" +
-        safeName;
-
-
-    console.log(
-        "Przesyłanie pliku:",
-        filePath
-    );
-
-
-    // --------------------------------------------------
-    // UPLOAD DO STORAGE
-    // --------------------------------------------------
-
-    const {
-        error: uploadError
-    } =
-        await supabaseClient
-            .storage
-            .from("materials")
-            .upload(
-                filePath,
-                file,
-                {
-                    cacheControl:
-                        "3600",
-
-                    upsert:
-                        false
-                }
-            );
-
-
-    // Błąd uploadu
-
-    if (uploadError) {
-
-        console.error(
-            "Błąd Storage:",
-            uploadError
-        );
-
-
-        message.textContent =
-            "❌ Błąd przesyłania: " +
-            uploadError.message;
-
-
-        message.style.color =
-            "red";
-
-
-        return;
-    }
-
-
-    // --------------------------------------------------
-    // ZAPIS DO TABELI MATERIALS
-    // --------------------------------------------------
-
-    message.textContent =
-        "⏳ Zapisywanie materiału...";
-
-
-    const {
-        error: databaseError
-    } =
-        await supabaseClient
-            .from("materials")
-            .insert({
-
-                title:
-                    title,
-
-                subject:
-                    subject,
-
-                file_url:
-                    filePath
-
-            });
-
-
-    // Błąd bazy
-
-    if (databaseError) {
-
-        console.error(
-            "Błąd bazy:",
-            databaseError
-        );
-
-
-        // Usunięcie pliku,
-        // jeżeli zapis w bazie się nie udał.
-
-        await supabaseClient
-            .storage
-            .from("materials")
-            .remove([
-                filePath
-            ]);
-
-
-        message.textContent =
-            "❌ Błąd bazy danych: " +
-            databaseError.message;
-
-
-        message.style.color =
-            "red";
-
-
-        return;
-    }
-
-
-    // --------------------------------------------------
-    // SUKCES
-    // --------------------------------------------------
-
-    message.textContent =
-        "✅ Materiał został dodany!";
-
-
-    message.style.color =
-        "green";
-
-
-    // Czyszczenie formularza
-
-    document.getElementById(
-        "title"
-    ).value = "";
-
-
-    document.getElementById(
-        "file"
-    ).value = "";
-
-
-    // Odświeżenie listy
-
-    await loadMaterials();
 }
 
 
-// ======================================================
-// PRZYCISK DODAWANIA
-// ======================================================
+/* =========================
+   DODAWANIE MATERIAŁU
+========================= */
 
 document
-    .getElementById(
-        "addButton"
-    )
+    .getElementById("addButton")
     .addEventListener(
         "click",
-        addMaterial
+        async function() {
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            const subject =
+                document.getElementById(
+                    "subject"
+                ).value;
+
+
+            const title =
+                document.getElementById(
+                    "title"
+                ).value.trim();
+
+
+            const file =
+                document.getElementById(
+                    "file"
+                ).files[0];
+
+
+            /* SPRAWDZENIE */
+
+            if (!title) {
+
+                message.textContent =
+                    "❌ Wpisz nazwę materiału.";
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            if (!file) {
+
+                message.textContent =
+                    "❌ Wybierz plik.";
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            /* INFORMACJA */
+
+            message.textContent =
+                "⏳ Przesyłanie pliku...";
+
+            message.style.color =
+                "#1769e0";
+
+
+            /* NAZWA PLIKU */
+
+            const fileName =
+                Date.now() +
+                "_" +
+                file.name
+                    .replace(
+                        /[^a-zA-Z0-9._-]/g,
+                        "_"
+                    );
+
+
+            const filePath =
+                fileName;
+
+
+            /* UPLOAD */
+
+            const {
+                error: uploadError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("materials")
+                    .upload(
+                        filePath,
+                        file
+                    );
+
+
+            if (uploadError) {
+
+                console.error(
+                    uploadError
+                );
+
+                message.textContent =
+                    "❌ Błąd przesyłania: " +
+                    uploadError.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            /* ZAPIS DO BAZY */
+
+            const {
+                error: databaseError
+            } =
+                await supabaseClient
+                    .from("materials")
+                    .insert({
+
+                        title:
+                            title,
+
+                        subject:
+                            subject,
+
+                        file_url:
+                            filePath
+
+                    });
+
+
+            if (databaseError) {
+
+                console.error(
+                    databaseError
+                );
+
+
+                /* JEŻELI BAZA SIĘ NIE ZAPISAŁA,
+                   USUWAMY WGRANY PLIK */
+
+                await supabaseClient
+                    .storage
+                    .from("materials")
+                    .remove([
+                        filePath
+                    ]);
+
+
+                message.textContent =
+                    "❌ Błąd bazy danych: " +
+                    databaseError.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            /* SUKCES */
+
+            message.textContent =
+                "✅ Materiał został dodany!";
+
+            message.style.color =
+                "green";
+
+
+            document.getElementById(
+                "title"
+            ).value = "";
+
+
+            document.getElementById(
+                "file"
+            ).value = "";
+
+
+            await loadMaterials();
+
+        }
     );
 
 
-// ======================================================
-// START PANELU
-// ======================================================
+/* =========================
+   START
+========================= */
 
 async function start() {
-
-    console.log(
-        "Uruchamianie panelu administratora..."
-    );
-
 
     const isAdmin =
         await checkUser();
 
 
     if (!isAdmin) {
-
         return;
     }
 
 
     await loadMaterials();
+
 }
 
-
-// Uruchomienie
 
 start();
 
 </script>
 
+
 </body>
 
 </html>
+```
