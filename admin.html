@@ -617,95 +617,99 @@ async function loadMaterials() {
 // USUWANIE MATERIAŁU
 // ======================================================
 
-async function deleteMaterial(
-    id,
-    filePath,
-    title
-) {
+async function deleteMaterial(id, filePath, title) {
 
-    const confirmed =
-        confirm(
-            'Czy na pewno chcesz usunąć materiał "' +
-            title +
-            '"?'
-        );
-
+    const confirmed = confirm(
+        'Czy na pewno chcesz usunąć materiał "' +
+        title +
+        '"?'
+    );
 
     if (!confirmed) {
-
         return;
     }
 
+    console.log("USUWANIE:");
+    console.log("ID:", id);
+    console.log("FILE:", filePath);
 
-    // --------------------------------------------------
-    // USUWANIE PLIKU ZE STORAGE
-    // --------------------------------------------------
+
+    // ==========================================
+    // 1. USUNIĘCIE PLIKU ZE STORAGE
+    // ==========================================
 
     if (filePath) {
 
-        const {
-            error: storageError
-        } =
+        const { data: storageData, error: storageError } =
             await supabaseClient
                 .storage
                 .from("materials")
-                .remove([
-                    filePath
-                ]);
+                .remove([filePath]);
 
+        console.log("Storage:", storageData);
+        console.log("Storage error:", storageError);
 
         if (storageError) {
 
-            console.error(
-                "Błąd usuwania pliku:",
-                storageError
-            );
-
-
             alert(
-                "❌ Nie udało się usunąć pliku:\n" +
+                "❌ Błąd usuwania pliku:\n\n" +
                 storageError.message
             );
-
 
             return;
         }
     }
 
 
-    // --------------------------------------------------
-    // USUWANIE REKORDU Z BAZY
-    // --------------------------------------------------
+    // ==========================================
+    // 2. USUNIĘCIE REKORDU Z TABELI
+    // ==========================================
 
-    const {
-        error: databaseError
-    } =
+    const { data: deletedData, error: databaseError } =
         await supabaseClient
             .from("materials")
             .delete()
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id)
+            .select();
+
+    console.log("Usunięty rekord:", deletedData);
+    console.log("Database error:", databaseError);
 
 
     if (databaseError) {
 
-        console.error(
-            "Błąd usuwania rekordu:",
-            databaseError
-        );
-
-
         alert(
-            "❌ Nie udało się usunąć wpisu:\n" +
+            "❌ Błąd usuwania materiału z bazy:\n\n" +
             databaseError.message
         );
-
 
         return;
     }
 
+
+    // ==========================================
+    // 3. SPRAWDZENIE CZY REKORD FAKTYCZNIE ZNIKNĄŁ
+    // ==========================================
+
+    if (!deletedData || deletedData.length === 0) {
+
+        alert(
+            "❌ Materiał NIE został usunięty z bazy.\n\n" +
+            "Najprawdopodobniej tabela materials ma " +
+            "blokadę RLS dla DELETE."
+        );
+
+        console.error(
+            "DELETE zwrócił 0 rekordów."
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // 4. SUKCES
+    // ==========================================
 
     alert(
         "✅ Materiał został usunięty."
@@ -714,7 +718,6 @@ async function deleteMaterial(
 
     await loadMaterials();
 }
-
 
 // ======================================================
 // DODAWANIE MATERIAŁU
