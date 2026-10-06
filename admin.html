@@ -305,15 +305,6 @@ const supabaseClient =
 // =====================================
 // SPRAWDZENIE ADMINISTRATORA
 // =====================================
-
-console.log("ADMIN: Supabase uruchomiony");
-console.log("ADMIN: URL =", SUPABASE_URL);
-
-const { data: sessionTest, error: sessionError } =
-    await supabaseClient.auth.getSession();
-
-console.log("ADMIN: sesja =", sessionTest);
-console.log("ADMIN: błąd sesji =", sessionError);
     
     async function checkUser() {
 
@@ -357,44 +348,6 @@ console.log("ADMIN: błąd sesji =", sessionError);
 
     return true;
 }
-
-
-    const adminEmail =
-        data.user.email;
-
-
-    const allowedEmail =
-        "TWÓJ_EMAIL_ADMINA";
-
-
-    if (adminEmail !== allowedEmail) {
-
-        document.body.innerHTML = `
-
-            <h1 style="text-align:center;margin-top:100px;">
-                🚫 Brak dostępu
-            </h1>
-
-            <p style="text-align:center;">
-                Ta strona jest tylko dla administratora.
-            </p>
-
-            <p style="text-align:center;">
-                <a href="index.html">
-                    Wróć na stronę główną
-                </a>
-            </p>
-
-        `;
-
-        return false;
-    }
-
-
-    return true;
-}
-
-
 // =====================================
 // POBIERANIE LISTY MATERIAŁÓW
 // =====================================
@@ -616,8 +569,6 @@ document
     .addEventListener(
         "click",
         async function() {
-
-            alert("PRZYCISK DZIAŁA");
 
 
             const message =
