@@ -1,967 +1,1576 @@
 ```html
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Panel administratora | Szkoła Podstawowa nr 55</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</title>
 
 <style>
 
-* {
-    box-sizing: border-box;
+:root{
+    --blue:#1769e0;
+    --dark:#0d2342;
+    --light:#f5f8fd;
+    --text:#536176;
+    --white:#fff;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #222;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* =========================
-   HEADER
-========================= */
-
-header {
-    background: linear-gradient(135deg, #1769e0, #4c8ff5);
-    color: white;
-    text-align: center;
-    padding: 40px 20px;
+html{
+    scroll-behavior:smooth;
 }
 
-header h1 {
-    margin: 0 0 10px;
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--dark);
+    background:var(--light);
+    line-height:1.6;
+    overflow-x:hidden;
 }
 
-/* =========================
-   MAIN
-========================= */
-
-main {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 20px;
+a{
+    text-decoration:none;
+    color:inherit;
 }
 
-.box {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    margin-bottom: 25px;
+.container{
+    width:min(1200px,92%);
+    margin:auto;
 }
 
 /* =========================
-   FORMULARZ
+   NAVBAR
 ========================= */
 
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:76px;
+    z-index:1000;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid rgba(0,0,0,.06);
 }
 
-input,
-select {
-    width: 100%;
-    padding: 13px;
-    margin-top: 8px;
-    margin-bottom: 18px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+.nav-inner{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:800;
+    color:var(--dark);
+}
+
+.logo img{
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    border-radius:10px;
+}
+
+.logo-fallback{
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:linear-gradient(135deg,#1769e0,#65a2ff);
+    color:white;
+    font-weight:900;
+}
+
+.logo-text{
+    line-height:1.15;
+}
+
+.logo-text small{
+    display:block;
+    font-size:11px;
+    color:#718096;
+    margin-top:3px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    list-style:none;
+}
+
+.nav-links a{
+    font-size:14px;
+    font-weight:700;
+    color:#33415c;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:var(--blue);
+}
+
+.login{
+    background:var(--blue)!important;
+    color:white!important;
+    padding:11px 17px;
+    border-radius:10px;
+    box-shadow:0 7px 20px rgba(23,105,224,.25);
+}
+
+/* hamburger */
+
+.menu-button{
+    display:none;
+    border:0;
+    background:none;
+    font-size:29px;
+    cursor:pointer;
+    color:var(--dark);
 }
 
 /* =========================
-   PRZYCISK DODAWANIA
+   HERO
 ========================= */
 
-.add-button {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #1769e0;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+.hero{
+    min-height:800px;
+    padding-top:76px;
+    display:flex;
+    align-items:center;
+    background:
+        radial-gradient(circle at 80% 20%,rgba(23,105,224,.18),transparent 32%),
+        radial-gradient(circle at 10% 80%,rgba(67,210,190,.15),transparent 30%),
+        linear-gradient(135deg,#edf5ff,#fff);
 }
 
-.add-button:hover {
-    background: #1257bd;
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:70px;
+    align-items:center;
+}
+
+.hero-content{
+    animation:fadeUp .9s ease both;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:30px;
+    background:#e7f0ff;
+    color:var(--blue);
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(45px,6vw,76px);
+    line-height:1.02;
+    letter-spacing:-3px;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:var(--blue);
+}
+
+.hero-description{
+    max-width:650px;
+    color:var(--text);
+    font-size:19px;
+    margin-bottom:32px;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 21px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:14px;
+    transition:.25s;
+}
+
+.button:hover{
+    transform:translateY(-3px);
+}
+
+.primary{
+    background:var(--blue);
+    color:white;
+    box-shadow:0 12px 25px rgba(23,105,224,.25);
+}
+
+.secondary{
+    background:white;
+    color:var(--blue);
+    border:1px solid #dce6f5;
+}
+
+.hero-visual{
+    animation:float 5s ease-in-out infinite;
+}
+
+.school-card{
+    min-height:450px;
+    border-radius:35px;
+    padding:45px;
+    color:white;
+    background:
+        linear-gradient(145deg,rgba(13,35,66,.2),rgba(13,35,66,.8)),
+        linear-gradient(135deg,#3987ef,#12366d);
+    box-shadow:0 30px 70px rgba(13,35,66,.25);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    position:relative;
+    overflow:hidden;
+}
+
+.school-card::before{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    top:-100px;
+    right:-100px;
+}
+
+.school-symbol{
+    font-size:85px;
+    margin-bottom:auto;
+}
+
+.school-card h2{
+    font-size:31px;
+    margin-bottom:10px;
+}
+
+.school-card p{
+    color:rgba(255,255,255,.8);
 }
 
 /* =========================
-   KOMUNIKAT
+   SEKCJE
 ========================= */
 
-#message {
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
+section{
+    padding:100px 0;
+}
+
+.section-heading{
+    text-align:center;
+    margin-bottom:55px;
+}
+
+.section-heading span{
+    color:var(--blue);
+    font-size:12px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.section-heading h2{
+    font-size:43px;
+    margin-top:8px;
+}
+
+.section-heading p{
+    max-width:650px;
+    margin:12px auto 0;
+    color:var(--text);
 }
 
 /* =========================
-   MATERIAŁY
+   AKTUALNOŚCI
 ========================= */
 
-.material-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 15px;
-    margin-top: 10px;
-    background: #f4f7fb;
-    border-radius: 10px;
+.news{
+    background:white;
 }
 
-.material-info {
-    flex: 1;
+.news-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
 }
 
-.material-title {
-    font-weight: bold;
-    color: #1769e0;
+.news-card{
+    padding:30px;
+    border-radius:20px;
+    background:#f8faff;
+    border:1px solid #e7edf6;
+    transition:.3s;
 }
 
-.material-subject {
-    font-size: 14px;
-    color: #666;
-    margin-top: 5px;
+.news-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(15,43,80,.09);
+}
+
+.news-icon{
+    font-size:30px;
+    margin-bottom:15px;
+}
+
+.news-date{
+    color:var(--blue);
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+}
+
+.news-card h3{
+    font-size:20px;
+    margin:8px 0;
+}
+
+.news-card p{
+    color:var(--text);
+    font-size:14px;
 }
 
 /* =========================
-   USUWANIE
+   DLA UCZNIA / RODZICA
 ========================= */
 
-.delete-button {
-    border: none;
-    background: #d93025;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
+.audience{
+    background:#f1f6fc;
 }
 
-.delete-button:hover {
-    background: #b9231b;
+.audience-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.audience-card{
+    background:white;
+    border-radius:25px;
+    padding:40px;
+    border:1px solid #e2eaf4;
+    transition:.3s;
+}
+
+.audience-card:hover{
+    transform:translateY(-7px);
+    box-shadow:0 20px 45px rgba(15,43,80,.08);
+}
+
+.audience-card.student{
+    border-top:5px solid #1769e0;
+}
+
+.audience-card.parent{
+    border-top:5px solid #18a88b;
+}
+
+.audience-card h3{
+    font-size:28px;
+    margin-bottom:12px;
+}
+
+.audience-card p{
+    color:var(--text);
+    margin-bottom:22px;
+}
+
+.audience-list{
+    list-style:none;
+}
+
+.audience-list li{
+    padding:10px 0;
+    border-bottom:1px solid #edf1f6;
+    font-weight:600;
+}
+
+.audience-list li::before{
+    content:"✓";
+    color:var(--blue);
+    font-weight:900;
+    margin-right:10px;
 }
 
 /* =========================
-   POWRÓT NA STRONĘ
+   GALERIA
 ========================= */
 
-.back-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-    background: #1769e0;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 20px;
-    transition: 0.2s;
+.gallery{
+    background:white;
 }
 
-.back-button:hover {
-    background: #1257bd;
-    transform: translateY(-2px);
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-auto-rows:220px;
+    gap:15px;
+}
+
+.gallery-item{
+    overflow:hidden;
+    border-radius:18px;
+    position:relative;
+    background:#dfe8f4;
+}
+
+.gallery-item:first-child{
+    grid-column:span 2;
+    grid-row:span 2;
+}
+
+.gallery-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.5s;
+}
+
+.gallery-item:hover img{
+    transform:scale(1.08);
+}
+
+.gallery-overlay{
+    position:absolute;
+    inset:auto 0 0;
+    padding:20px;
+    color:white;
+    background:linear-gradient(transparent,rgba(0,0,0,.7));
+    opacity:0;
+    transition:.3s;
+}
+
+.gallery-item:hover .gallery-overlay{
+    opacity:1;
+}
+
+/*
+    WSTAW SWOJE ZDJĘCIA:
+
+    galeria1.jpg
+    galeria2.jpg
+    galeria3.jpg
+    galeria4.jpg
+    galeria5.jpg
+    galeria6.jpg
+
+    Zdjęcia powinny znajdować się w tym samym folderze
+    co index.html.
+*/
+
+/* =========================
+   O SZKOLE
+========================= */
+
+.about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:center;
+}
+
+.about-image{
+    min-height:430px;
+    border-radius:28px;
+    overflow:hidden;
+    background:#dfe8f4;
+}
+
+.about-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.about-content h2{
+    font-size:43px;
+    margin-bottom:20px;
+}
+
+.about-content p{
+    color:var(--text);
+    margin-bottom:15px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:30px;
+}
+
+.stat{
+    background:white;
+    padding:20px 10px;
+    text-align:center;
+    border-radius:15px;
+    border:1px solid #e3eaf4;
+}
+
+.stat strong{
+    display:block;
+    font-size:25px;
+    color:var(--blue);
+}
+
+.stat span{
+    color:#718096;
+    font-size:12px;
 }
 
 /* =========================
-   INNE
+   KONTAKT
 ========================= */
 
-.empty {
-    color: #777;
-    padding: 10px 0;
+.contact{
+    background:#f1f6fc;
 }
 
-.loading {
-    color: #1769e0;
+.contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.contact-card{
+    background:white;
+    padding:35px;
+    border-radius:22px;
+}
+
+.contact-row{
+    padding:14px 0;
+    border-bottom:1px solid #edf1f5;
+}
+
+.contact-row strong{
+    display:block;
+    font-size:13px;
+    color:#33415c;
+}
+
+.contact-row span{
+    color:var(--text);
+}
+
+.map{
+    min-height:350px;
+    border-radius:22px;
+    background:
+        linear-gradient(135deg,#dce9f8,#eef5fc);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:30px;
+}
+
+.map-icon{
+    font-size:65px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    background:#0b203d;
+    color:white;
+    padding:50px 0;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:40px;
+}
+
+footer h3{
+    margin-bottom:12px;
+}
+
+footer p,
+footer a{
+    color:rgba(255,255,255,.65);
+    font-size:13px;
+}
+
+.footer-links{
+    list-style:none;
+}
+
+.footer-links li{
+    margin-bottom:8px;
+}
+
+.copyright{
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.1);
+    text-align:center;
+}
+
+/* =========================
+   ANIMACJE
+========================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+.reveal{
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .7s,transform .7s;
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:translateY(0);
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media (max-width: 600px) {
+@media(max-width:900px){
 
-    .material-item {
-        flex-direction: column;
-        align-items: stretch;
+    .menu-button{
+        display:block;
     }
 
-    .delete-button {
-        width: 100%;
+    .nav-links{
+        position:absolute;
+        top:76px;
+        left:0;
+        width:100%;
+        background:white;
+        flex-direction:column;
+        align-items:stretch;
+        gap:0;
+        padding:10px 5%;
+        box-shadow:0 15px 30px rgba(0,0,0,.08);
+
+        display:none;
     }
 
-    main {
-        margin: 20px auto;
-        padding: 15px;
+    .nav-links.open{
+        display:flex;
     }
 
-    .box {
-        padding: 20px;
+    .nav-links li{
+        padding:13px 0;
     }
 
+    .nav-links .login{
+        display:block;
+        text-align:center;
+    }
+
+    .hero-grid,
+    .about-grid,
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .news-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .gallery-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    section{
+        padding:70px 0;
+    }
+
+    .hero{
+        min-height:auto;
+        padding-top:130px;
+        padding-bottom:70px;
+    }
+
+    .hero h1{
+        font-size:48px;
+    }
+
+    .hero-description{
+        font-size:16px;
+    }
+
+    .school-card{
+        min-height:340px;
+        padding:30px;
+    }
+
+    .news-grid,
+    .audience-grid,
+    .gallery-grid,
+    .footer-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-item:first-child{
+        grid-column:span 1;
+        grid-row:span 1;
+    }
+
+    .gallery-grid{
+        grid-auto-rows:250px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .section-heading h2,
+    .about-content h2{
+        font-size:32px;
+    }
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <!-- =========================
-     NAGŁÓWEK
+     MENU
 ========================= -->
 
-<header>
+<header class="navbar">
 
-    <h1>👨‍💼 Panel administratora</h1>
+<div class="container nav-inner">
 
-    <p>
-        Dodawanie i zarządzanie materiałami
-    </p>
+<a href="#start" class="logo">
+
+    <!--
+        PRAWDZIWE LOGO:
+        Umieść plik logo.png obok index.html.
+    -->
+
+    <img src="logo.png" alt="Logo szkoły">
+
+    <div class="logo-text">
+        Szkoła Podstawowa nr 55
+        <small>im. Marii Skłodowskiej</small>
+    </div>
+
+</a>
+
+<button class="menu-button" onclick="toggleMenu()" aria-label="Otwórz menu">
+    ☰
+</button>
+
+<ul class="nav-links" id="navLinks">
+
+    <li><a href="#start">Start</a></li>
+    <li><a href="#aktualnosci">Aktualności</a></li>
+    <li><a href="#szkola">O szkole</a></li>
+    <li><a href="#uczen">Dla ucznia</a></li>
+    <li><a href="#rodzic">Dla rodzica</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+
+<li id="loginMenu">
+    <a class="login" href="logowanie.html">
+        🔐 Logowanie
+    </a>
+</li>
+
+<li id="materialsMenu" style="display: none;">
+    <a href="materiały.html">
+        📚 Materiały
+    </a>
+</li>
+    
+    <li id="adminMenu" style="display: none;">
+    <a href="admin.html">
+        ⚙️ Panel administratora
+    </a>
+</li>
+
+<li id="logoutMenu" style="display: none;">
+    <a href="#" id="logoutButton">
+        🚪 Wyloguj
+    </a>
+</li>
+
+<li>
+    <a
+        href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        E-dziennik
+    </a>
+</li>
+
+</ul>
+
+</div>
 
 </header>
 
 
+<!-- =========================
+     HERO
+========================= -->
+
 <main>
 
+<section class="hero" id="start">
 
-<!-- =========================
-     DODAWANIE MATERIAŁU
-========================= -->
+<div class="container hero-grid">
 
-<div class="box">
+<div class="hero-content">
 
-    <h2>➕ Dodaj materiał</h2>
+<span class="badge">
+    WITAMY NA STRONIE SZKOŁY
+</span>
 
+<h1>
+    Wiedza.<br>
+    <span>Pasja.</span><br>
+    Przyszłość.
+</h1>
 
-    <label for="subject">
-        Przedmiot
-    </label>
+<p class="hero-description">
+    Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+    — miejsce, w którym uczniowie rozwijają wiedzę,
+    talenty i ciekawość świata.
+</p>
 
-    <select id="subject">
+<div class="buttons">
 
-        <option value="Matematyka">
-            📐 Matematyka
-        </option>
+<a href="#aktualnosci" class="button primary">
+    📰 Aktualności
+</a>
 
-        <option value="Język polski">
-            📖 Język polski
-        </option>
+<a href="#galeria" class="button secondary">
+    📷 Galeria
+</a>
 
-        <option value="Język angielski">
-            🇬🇧 Język angielski
-        </option>
+<a
+    href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="button secondary"
+>
+    🔐 E-dziennik
+</a>
 
-        <option value="Przyroda">
-            🧪 Przyroda
-        </option>
-
-        <option value="Informatyka">
-            💻 Informatyka
-        </option>
-
-        <option value="Inne">
-            📚 Inne
-        </option>
-
-    </select>
-
-
-    <label for="title">
-        Nazwa materiału
-    </label>
-
-    <input
-        type="text"
-        id="title"
-        placeholder="np. Zadania z ułamków"
-    >
-
-
-    <label for="file">
-        Plik
-    </label>
-
-    <input
-        type="file"
-        id="file"
-        accept=".pdf,.doc,.docx,.ppt,.pptx"
-    >
-
-
-    <button
-        class="add-button"
-        id="addButton">
-
-        ➕ Dodaj materiał
-
-    </button>
-
-
-    <p id="message"></p>
+</div>
 
 </div>
 
 
+<div class="hero-visual">
+
+<div class="school-card">
+
+<div class="school-symbol">
+    ⚛️
+</div>
+
+<h2>
+    Odkrywamy świat
+</h2>
+
+<p>
+    Uczymy się, eksperymentujemy
+    i rozwijamy swoje pasje.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
 <!-- =========================
-     LISTA MATERIAŁÓW
+     AKTUALNOŚCI
 ========================= -->
 
-<div class="box">
+<section class="news" id="aktualnosci">
 
-    <h2>📚 Wszystkie materiały</h2>
+<div class="container">
 
-    <div id="materialsList">
+<div class="section-heading reveal">
 
-        <div class="loading">
-            Ładowanie materiałów...
-        </div>
+<span>Co nowego?</span>
 
-    </div>
+<h2>Aktualności</h2>
+
+<p>
+    Najważniejsze wydarzenia i informacje
+    z życia szkoły.
+</p>
 
 </div>
 
 
+<div class="news-grid">
+
+<article class="news-card reveal">
+
+<div class="news-icon">📚</div>
+
+<div class="news-date">
+    Informacja
+</div>
+
+<h3>
+    Nowy rok szkolny
+</h3>
+
+<p>
+    Najważniejsze informacje dotyczące
+    rozpoczęcia roku szkolnego.
+</p>
+
+</article>
+
+
+<article class="news-card reveal">
+
+<div class="news-icon">🔬</div>
+
+<div class="news-date">
+    Wydarzenie
+</div>
+
+<h3>
+    Dzień Nauki
+</h3>
+
+<p>
+    Eksperymenty, doświadczenia i ciekawostki
+    naukowe przygotowane dla uczniów.
+</p>
+
+</article>
+
+
+<article class="news-card reveal">
+
+<div class="news-icon">🏆</div>
+
+<div class="news-date">
+    Sukces
+</div>
+
+<h3>
+    Konkursy szkolne
+</h3>
+
+<p>
+    Informacje o konkursach, zawodach
+    i sukcesach naszych uczniów.
+</p>
+
+</article>
+
+</div>
+
+</div>
+
+</section>
+
+
 <!-- =========================
-     POWRÓT NA STRONĘ GŁÓWNĄ
+     O SZKOLE
 ========================= -->
 
-<div class="box">
+<section id="szkola">
 
-    <a
-        href="index.html"
-        class="back-button"
+<div class="container about-grid">
+
+<div class="about-image reveal">
+
+    <!-- Wstaw tutaj np. szkoła.jpg -->
+    <img
+        src="szkola.jpg"
+        alt="Budynek szkoły"
     >
-        ← Powrót na stronę główną
-    </a>
 
 </div>
 
+
+<div class="about-content reveal">
+
+<span class="badge">
+    O NAS
+</span>
+
+<h2>
+    Szkoła, która inspiruje
+</h2>
+
+<p>
+    Nasza szkoła to przestrzeń do nauki,
+    rozwijania zainteresowań i poznawania świata.
+</p>
+
+<p>
+    Stawiamy na bezpieczeństwo, współpracę,
+    kreatywność oraz nowoczesną edukację.
+</p>
+
+
+<div class="stats">
+
+<div class="stat">
+    <strong>📚</strong>
+    <span>Nowoczesna edukacja</span>
+</div>
+
+<div class="stat">
+    <strong>🔬</strong>
+    <span>Nauka przez doświadczenie</span>
+</div>
+
+<div class="stat">
+    <strong>🤝</strong>
+    <span>Współpraca</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     DLA UCZNIA / RODZICA
+========================= -->
+
+<section class="audience">
+
+<div class="container">
+
+<div class="section-heading reveal">
+
+<span>Strefa szkoły</span>
+
+<h2>
+    Dla ucznia i rodzica
+</h2>
+
+<p>
+    Najważniejsze informacje w jednym miejscu.
+</p>
+
+</div>
+
+
+<div class="audience-grid">
+
+
+<div class="audience-card student reveal" id="uczen">
+
+<h3>
+    🎒 Dla ucznia
+</h3>
+
+<p>
+    Materiały i informacje przydatne
+    podczas codziennej nauki.
+</p>
+
+<ul class="audience-list">
+
+<li>Plan lekcji</li>
+<li>Ogłoszenia</li>
+<li>Konkursy i wydarzenia</li>
+<li>Koła zainteresowań</li>
+<li>Materiały edukacyjne</li>
+
+</ul>
+
+</div>
+
+
+<div class="audience-card parent reveal" id="rodzic">
+
+<h3>
+    👨‍👩‍👧 Dla rodzica
+</h3>
+
+<p>
+    Najważniejsze informacje dla rodziców
+    i opiekunów uczniów.
+</p>
+
+<ul class="audience-list">
+
+<li>Informacje szkolne</li>
+<li>Dokumenty i regulaminy</li>
+<li>Terminy spotkań</li>
+<li>Ważne komunikaty</li>
+<li>E-dziennik</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     GALERIA
+========================= -->
+
+<section class="gallery" id="galeria">
+
+<div class="container">
+
+<div class="section-heading reveal">
+
+<span>Zobacz naszą szkołę</span>
+
+<h2>
+    Galeria
+</h2>
+
+<p>
+    Zdjęcia z życia szkoły, wydarzeń i zajęć.
+</p>
+
+</div>
+
+
+<div class="gallery-grid">
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria1.jpg" alt="Zdjęcie szkoły">
+
+<div class="gallery-overlay">
+    Nasza szkoła
+</div>
+
+</div>
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria2.jpg" alt="Wydarzenie szkolne">
+
+<div class="gallery-overlay">
+    Wydarzenia
+</div>
+
+</div>
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria3.jpg" alt="Uczniowie">
+
+<div class="gallery-overlay">
+    Uczniowie
+</div>
+
+</div>
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria4.jpg" alt="Zajęcia">
+
+<div class="gallery-overlay">
+    Zajęcia
+</div>
+
+</div>
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria5.jpg" alt="Szkolne wydarzenie">
+
+<div class="gallery-overlay">
+    Szkolne wydarzenia
+</div>
+
+</div>
+
+
+<div class="gallery-item reveal">
+
+<img src="galeria6.jpg" alt="Życie szkoły">
+
+<div class="gallery-overlay">
+    Życie szkoły
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     KONTAKT
+========================= -->
+
+<section class="contact" id="kontakt">
+
+<div class="container">
+
+<div class="section-heading reveal">
+
+<span>Skontaktuj się z nami</span>
+
+<h2>
+    Kontakt
+</h2>
+
+<p>
+    Dane szkoły możesz uzupełnić poniżej.
+</p>
+
+</div>
+
+
+<div class="contact-grid">
+
+<div class="contact-card reveal">
+
+<h3>
+    Szkoła Podstawowa nr 55
+</h3>
+
+<div class="contact-row">
+<strong>📍 Adres</strong>
+<span>Tu wpisz adres szkoły</span>
+</div>
+
+<div class="contact-row">
+<strong>☎ Telefon</strong>
+<span>Tu wpisz numer telefonu</span>
+</div>
+
+<div class="contact-row">
+<strong>✉ E-mail</strong>
+<span>Tu wpisz adres e-mail</span>
+</div>
+
+<div class="contact-row">
+<strong>🕐 Sekretariat</strong>
+<span>Tu wpisz godziny pracy</span>
+</div>
+
+</div>
+
+
+<div class="map reveal">
+
+<div>
+
+<div class="map-icon">
+    📍
+</div>
+
+<h3>
+    Lokalizacja szkoły
+</h3>
+
+<p>
+    W tym miejscu można później
+    dodać Google Maps.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 </main>
 
 
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-grid">
+
+<div>
+
+<h3>
+    Szkoła Podstawowa nr 55
+</h3>
+
+<p>
+    im. Marii Skłodowskiej
+</p>
+
+<p style="margin-top:10px">
+    Wiedza • Pasja • Przyszłość
+</p>
+
+</div>
+
+
+<div>
+
+<h3>
+    Menu
+</h3>
+
+<ul class="footer-links">
+
+<li><a href="#start">Start</a></li>
+<li><a href="#aktualnosci">Aktualności</a></li>
+<li><a href="#szkola">O szkole</a></li>
+<li><a href="#galeria">Galeria</a></li>
+
+</ul>
+
+</div>
+
+
+<div>
+
+<h3>
+    Dla społeczności
+</h3>
+
+<ul class="footer-links">
+
+<li><a href="#uczen">Dla ucznia</a></li>
+<li><a href="#rodzic">Dla rodzica</a></li>
+
+<li>
+<a
+href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+target="_blank"
+rel="noopener noreferrer"
+>
+E-dziennik
+</a>
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="copyright">
+
+<p>
+© 2026 Szkoła Podstawowa nr 55. Wszystkie prawa zastrzeżone.
+</p>
+
+</div>
+
+</div>
+
+</footer>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
+/* MENU NA TELEFONIE */
 
-const SUPABASE_URL =
-    "https://vqilsuvpinnfmngrczlj.supabase.co";
+function toggleMenu(){
 
-const SUPABASE_KEY =
-    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+    const menu = document.getElementById("navLinks");
 
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================
-   ADMIN
-========================= */
-
-const ADMIN_EMAIL = "pi.pu2@op.pl";
-
-
-/* =========================
-   SPRAWDZENIE LOGOWANIA
-========================= */
-
-async function checkUser() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getSession();
-
-
-    if (error) {
-
-        console.error(
-            "Błąd sesji:",
-            error
-        );
-
-        document.body.innerHTML = `
-            <h1 style="
-                text-align:center;
-                margin-top:100px;
-            ">
-                ❌ Błąd logowania
-            </h1>
-
-            <p style="
-                text-align:center;
-            ">
-                Nie udało się sprawdzić sesji.
-            </p>
-
-            <p style="
-                text-align:center;
-            ">
-                <a href="logowanie.html">
-                    Wróć do logowania
-                </a>
-            </p>
-        `;
-
-        return false;
-    }
-
-
-    const session = data.session;
-
-
-    if (!session || !session.user) {
-
-        window.location.href =
-            "logowanie.html";
-
-        return false;
-    }
-
-
-    const email =
-        session.user.email;
-
-
-    if (email !== ADMIN_EMAIL) {
-
-        document.body.innerHTML = `
-
-            <h1 style="
-                text-align:center;
-                margin-top:100px;
-            ">
-                🚫 Brak dostępu
-            </h1>
-
-            <p style="
-                text-align:center;
-            ">
-                Ta strona jest tylko dla administratora.
-            </p>
-
-            <p style="
-                text-align:center;
-            ">
-                <a href="index.html">
-                    ← Powrót na stronę główną
-                </a>
-            </p>
-
-        `;
-
-        return false;
-    }
-
-
-    return true;
-}
-
-
-/* =========================
-   POBIERANIE MATERIAŁÓW
-========================= */
-
-async function loadMaterials() {
-
-    const list =
-        document.getElementById(
-            "materialsList"
-        );
-
-
-    list.innerHTML =
-        `
-        <div class="loading">
-            Ładowanie materiałów...
-        </div>
-        `;
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("materials")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Błąd pobierania:",
-            error
-        );
-
-        list.innerHTML =
-            `
-            <div class="empty">
-                ❌ Nie udało się pobrać materiałów.
-                <br>
-                ${error.message}
-            </div>
-            `;
-
-        return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-        list.innerHTML =
-            `
-            <div class="empty">
-                Brak materiałów.
-            </div>
-            `;
-
-        return;
-    }
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(
-        material => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "material-item";
-
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-            info.className =
-                "material-info";
-
-
-            const title =
-                document.createElement(
-                    "div"
-                );
-
-            title.className =
-                "material-title";
-
-            title.textContent =
-                "📄 " +
-                material.title;
-
-
-            const subject =
-                document.createElement(
-                    "div"
-                );
-
-            subject.className =
-                "material-subject";
-
-            subject.textContent =
-                "Przedmiot: " +
-                material.subject;
-
-
-            info.appendChild(title);
-
-            info.appendChild(subject);
-
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-            deleteButton.className =
-                "delete-button";
-
-            deleteButton.textContent =
-                "🗑️ Usuń";
-
-
-            deleteButton.addEventListener(
-                "click",
-                () => {
-
-                    deleteMaterial(
-                        material.id,
-                        material.file_url,
-                        material.title
-                    );
-
-                }
-            );
-
-
-            item.appendChild(info);
-
-            item.appendChild(
-                deleteButton
-            );
-
-
-            list.appendChild(item);
-
-        }
-    );
+    menu.classList.toggle("open");
 
 }
 
 
-/* =========================
-   USUWANIE MATERIAŁU
-========================= */
+/* ZAMYKANIE MENU PO KLIKNIĘCIU */
 
-async function deleteMaterial(
-    id,
-    filePath,
-    title
-) {
+document.querySelectorAll(".nav-links a").forEach(link => {
 
-    const confirmed =
-        confirm(
-            'Czy na pewno chcesz usunąć materiał "' +
-            title +
-            '"?'
-        );
+    link.addEventListener("click", () => {
+
+        document
+            .getElementById("navLinks")
+            .classList.remove("open");
+
+    });
+
+});
 
 
-    if (!confirmed) {
-        return;
+/* ANIMACJE PODCZAS PRZEWIJANIA */
+
+const observer = new IntersectionObserver(
+
+    entries => {
+
+        entries.forEach(entry => {
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("visible");
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold:.12
     }
 
+);
 
-    /* USUNIĘCIE PLIKU */
-
-    if (filePath) {
-
-        const {
-            error: storageError
-        } =
-            await supabaseClient
-                .storage
-                .from("materials")
-                .remove([
-                    filePath
-                ]);
-
-
-        if (storageError) {
-
-            alert(
-                "❌ Nie udało się usunąć pliku:\n" +
-                storageError.message
-            );
-
-            console.error(
-                storageError
-            );
-
-            return;
-        }
-
-    }
-
-
-    /* USUNIĘCIE REKORDU */
-
-    const {
-        error: databaseError
-    } =
-        await supabaseClient
-            .from("materials")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
-
-
-    if (databaseError) {
-
-        alert(
-            "❌ Nie udało się usunąć materiału:\n" +
-            databaseError.message
-        );
-
-        console.error(
-            databaseError
-        );
-
-        return;
-    }
-
-
-    alert(
-        "✅ Materiał został usunięty."
-    );
-
-
-    await loadMaterials();
-
-}
-
-
-/* =========================
-   DODAWANIE MATERIAŁU
-========================= */
 
 document
-    .getElementById("addButton")
-    .addEventListener(
-        "click",
-        async function() {
+    .querySelectorAll(".reveal")
+    .forEach(element => observer.observe(element));
 
-
-            const message =
-                document.getElementById(
-                    "message"
-                );
-
-
-            const subject =
-                document.getElementById(
-                    "subject"
-                ).value;
-
-
-            const title =
-                document.getElementById(
-                    "title"
-                ).value.trim();
-
-
-            const file =
-                document.getElementById(
-                    "file"
-                ).files[0];
-
-
-            /* SPRAWDZENIE */
-
-            if (!title) {
-
-                message.textContent =
-                    "❌ Wpisz nazwę materiału.";
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-
-            if (!file) {
-
-                message.textContent =
-                    "❌ Wybierz plik.";
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-
-            /* INFORMACJA */
-
-            message.textContent =
-                "⏳ Przesyłanie pliku...";
-
-            message.style.color =
-                "#1769e0";
-
-
-            /* NAZWA PLIKU */
-
-            const fileName =
-                Date.now() +
-                "_" +
-                file.name
-                    .replace(
-                        /[^a-zA-Z0-9._-]/g,
-                        "_"
-                    );
-
-
-            const filePath =
-                fileName;
-
-
-            /* UPLOAD */
-
-            const {
-                error: uploadError
-            } =
-                await supabaseClient
-                    .storage
-                    .from("materials")
-                    .upload(
-                        filePath,
-                        file
-                    );
-
-
-            if (uploadError) {
-
-                console.error(
-                    uploadError
-                );
-
-                message.textContent =
-                    "❌ Błąd przesyłania: " +
-                    uploadError.message;
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-
-            /* ZAPIS DO BAZY */
-
-            const {
-                error: databaseError
-            } =
-                await supabaseClient
-                    .from("materials")
-                    .insert({
-
-                        title:
-                            title,
-
-                        subject:
-                            subject,
-
-                        file_url:
-                            filePath
-
-                    });
-
-
-            if (databaseError) {
-
-                console.error(
-                    databaseError
-                );
-
-
-                /* JEŻELI BAZA SIĘ NIE ZAPISAŁA,
-                   USUWAMY WGRANY PLIK */
-
-                await supabaseClient
-                    .storage
-                    .from("materials")
-                    .remove([
-                        filePath
-                    ]);
-
-
-                message.textContent =
-                    "❌ Błąd bazy danych: " +
-                    databaseError.message;
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-
-            /* SUKCES */
-
-            message.textContent =
-                "✅ Materiał został dodany!";
-
-            message.style.color =
-                "green";
-
-
-            document.getElementById(
-                "title"
-            ).value = "";
-
-
-            document.getElementById(
-                "file"
-            ).value = "";
-
-
-            await loadMaterials();
-
-        }
-    );
-
-
-/* =========================
-   START
-========================= */
-
-async function start() {
-
-    const isAdmin =
-        await checkUser();
-
-
-    if (!isAdmin) {
-        return;
-    }
-
-
-    await loadMaterials();
-
-}
-
-
-start();
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function checkLogin() {
+
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
+
+    const loginMenu = document.getElementById("loginMenu");
+    const materialsMenu = document.getElementById("materialsMenu");
+    const logoutMenu = document.getElementById("logoutMenu");
+    const adminMenu = document.getElementById("adminMenu");
+
+    if (session && session.user) {
+
+        loginMenu.style.display = "none";
+        materialsMenu.style.display = "block";
+        logoutMenu.style.display = "block";
+
+        if (session.user.email === "pi.pu2@op.pl") {
+            adminMenu.style.display = "block";
+        } else {
+            adminMenu.style.display = "none";
+        }
+
+    } else {
+
+        loginMenu.style.display = "block";
+        materialsMenu.style.display = "none";
+        logoutMenu.style.display = "none";
+        adminMenu.style.display = "none";
+
+    }
+}
+
+checkLogin();
+
+supabaseClient.auth.onAuthStateChange(() => {
+    checkLogin();
+});
+
+document.getElementById("logoutButton").addEventListener("click", async function(event) {
+
+    event.preventDefault();
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href = "index.html";
+
+});
+</script>
 
 </body>
-
 </html>
 ```
