@@ -1508,8 +1508,6 @@ document
     .forEach(element => observer.observe(element));
 
 
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -1520,6 +1518,11 @@ const supabaseClient = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+
+/* =========================
+   LOGOWANIE
+========================= */
 
 async function checkLogin() {
 
@@ -1553,19 +1556,146 @@ async function checkLogin() {
     }
 }
 
+
+/* =========================
+   AKTUALNOŚCI Z SUPABASE
+========================= */
+
+async function loadNews() {
+
+    const newsGrid = document.querySelector(".news-grid");
+
+    if (!newsGrid) {
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("news")
+        .select("id, title, content, created_at")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+
+        console.error("Błąd pobierania aktualności:", error);
+
+        return;
+    }
+
+
+    /* Jeżeli nie ma żadnych aktualności */
+
+    if (!data || data.length === 0) {
+
+        newsGrid.innerHTML = `
+            <article class="news-card reveal visible">
+
+                <div class="news-icon">📢</div>
+
+                <div class="news-date">
+                    Informacja
+                </div>
+
+                <h3>
+                    Brak nowych aktualności
+                </h3>
+
+                <p>
+                    W tej chwili nie ma żadnych nowych informacji.
+                </p>
+
+            </article>
+        `;
+
+        return;
+    }
+
+
+    /* Tworzenie kart aktualności */
+
+    newsGrid.innerHTML = data.map(news => {
+
+        const date = new Date(news.created_at);
+
+        const formattedDate = date.toLocaleDateString("pl-PL", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+
+
+        return `
+            <article class="news-card reveal visible">
+
+                <div class="news-icon">
+                    📢
+                </div>
+
+                <div class="news-date">
+                    ${formattedDate}
+                </div>
+
+                <h3>
+                    ${escapeHtml(news.title)}
+                </h3>
+
+                <p>
+                    ${escapeHtml(news.content)}
+                </p>
+
+            </article>
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================
+   BEZPIECZNE WYŚWIETLANIE TEKSTU
+========================= */
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text ?? "";
+
+    return div.innerHTML;
+}
+
+
+/* =========================
+   WYLOGOWANIE
+========================= */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener("click", async function(event) {
+
+        event.preventDefault();
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "index.html";
+
+    });
+
+
+/* =========================
+   START
+========================= */
+
 checkLogin();
+loadNews();
+
+
+/* =========================
+   AKTUALIZACJA PO ZMIANIE LOGOWANIA
+========================= */
 
 supabaseClient.auth.onAuthStateChange(() => {
+
     checkLogin();
-});
-
-document.getElementById("logoutButton").addEventListener("click", async function(event) {
-
-    event.preventDefault();
-
-    await supabaseClient.auth.signOut();
-
-    window.location.href = "index.html";
 
 });
 </script>
