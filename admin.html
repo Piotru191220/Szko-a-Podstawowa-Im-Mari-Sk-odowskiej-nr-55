@@ -3,224 +3,351 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Panel administratora | Szkoła Podstawowa nr 55</title>
+    <title>
+        Panel administratora | Szkoła Podstawowa nr 55
+    </title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
 
-* {
-    box-sizing: border-box;
-}
+    <style>
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #222;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-/* =========================
-   HEADER
-========================= */
 
-header {
-    background: linear-gradient(135deg, #1769e0, #4c8ff5);
-    color: white;
-    text-align: center;
-    padding: 40px 20px;
-}
+        body {
+            margin: 0;
 
-header h1 {
-    margin: 0 0 10px;
-}
+            font-family: Arial, sans-serif;
 
-/* =========================
-   MAIN
-========================= */
+            background: #f4f7fb;
 
-main {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 20px;
-}
+            color: #222;
+        }
 
-.box {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    margin-bottom: 25px;
-}
 
-/* =========================
-   FORMULARZ
-========================= */
+        header {
 
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-}
+            background:
+                linear-gradient(
+                    135deg,
+                    #1769e0,
+                    #4c8ff5
+                );
 
-input,
-select {
-    width: 100%;
-    padding: 13px;
-    margin-top: 8px;
-    margin-bottom: 18px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-}
+            color: white;
 
-/* =========================
-   PRZYCISK DODAWANIA
-========================= */
+            text-align: center;
 
-.add-button {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #1769e0;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
+            padding: 40px 20px;
+        }
 
-.add-button:hover {
-    background: #1257bd;
-}
 
-/* =========================
-   KOMUNIKAT
-========================= */
+        header h1 {
+            margin: 0 0 10px;
+        }
 
-#message {
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-}
 
-/* =========================
-   MATERIAŁY
-========================= */
+        main {
 
-.material-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 15px;
-    margin-top: 10px;
-    background: #f4f7fb;
-    border-radius: 10px;
-}
+            max-width: 900px;
 
-.material-info {
-    flex: 1;
-}
+            margin: 40px auto;
 
-.material-title {
-    font-weight: bold;
-    color: #1769e0;
-}
+            padding: 20px;
+        }
 
-.material-subject {
-    font-size: 14px;
-    color: #666;
-    margin-top: 5px;
-}
 
-/* =========================
-   USUWANIE
-========================= */
+        .box {
 
-.delete-button {
-    border: none;
-    background: #d93025;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
-}
+            background: white;
 
-.delete-button:hover {
-    background: #b9231b;
-}
+            padding: 30px;
 
-/* =========================
-   POWRÓT NA STRONĘ
-========================= */
+            border-radius: 16px;
 
-.back-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-    background: #1769e0;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 20px;
-    transition: 0.2s;
-}
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.08);
 
-.back-button:hover {
-    background: #1257bd;
-    transform: translateY(-2px);
-}
+            margin-bottom: 25px;
+        }
 
-/* =========================
-   INNE
-========================= */
 
-.empty {
-    color: #777;
-    padding: 10px 0;
-}
+        label {
 
-.loading {
-    color: #1769e0;
-}
+            display: block;
 
-/* =========================
-   MOBILE
-========================= */
+            margin-top: 15px;
 
-@media (max-width: 600px) {
+            font-weight: bold;
+        }
 
-    .material-item {
-        flex-direction: column;
-        align-items: stretch;
-    }
 
-    .delete-button {
-        width: 100%;
-    }
+        input,
+        textarea {
 
-    main {
-        margin: 20px auto;
-        padding: 15px;
-    }
+            width: 100%;
 
-    .box {
-        padding: 20px;
-    }
+            padding: 13px;
 
-}
+            margin-top: 8px;
 
-</style>
+            margin-bottom: 18px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            font-family: Arial, sans-serif;
+        }
+
+
+        textarea {
+
+            min-height: 130px;
+
+            resize: vertical;
+        }
+
+
+        button {
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+
+        .add-button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            background: #1769e0;
+
+            color: white;
+        }
+
+
+        .add-button:hover {
+
+            background: #1257bd;
+        }
+
+
+        .message {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+
+        /* =================================
+           AKTUALNOŚCI
+        ================================= */
+
+        .news-item {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 18px;
+
+            margin-top: 12px;
+
+            background: #f4f7fb;
+
+            border-radius: 10px;
+        }
+
+
+        .news-info {
+
+            flex: 1;
+        }
+
+
+        .news-title {
+
+            font-weight: bold;
+
+            color: #1769e0;
+
+            font-size: 18px;
+        }
+
+
+        .news-content {
+
+            margin-top: 8px;
+
+            line-height: 1.5;
+
+            white-space: pre-wrap;
+        }
+
+
+        .news-date {
+
+            margin-top: 8px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        .delete-button {
+
+            background: #d93025;
+
+            color: white;
+
+            padding: 9px 13px;
+
+            white-space: nowrap;
+        }
+
+
+        .delete-button:hover {
+
+            background: #b9231b;
+        }
+
+
+        /* =================================
+           MATERIAŁY
+        ================================= */
+
+        .material-item {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 15px;
+
+            margin-top: 10px;
+
+            background: #f4f7fb;
+
+            border-radius: 10px;
+        }
+
+
+        .material-info {
+
+            flex: 1;
+        }
+
+
+        .material-title {
+
+            font-weight: bold;
+
+            color: #1769e0;
+        }
+
+
+        .material-subject {
+
+            font-size: 14px;
+
+            color: #666;
+
+            margin-top: 5px;
+        }
+
+
+        .empty {
+
+            color: #777;
+
+            padding: 10px 0;
+        }
+
+
+        .loading {
+
+            color: #1769e0;
+        }
+
+
+        /* =================================
+           POWRÓT
+        ================================= */
+
+        .back-button {
+
+            display: block;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            background: #1769e0;
+
+            color: white;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+        }
+
+
+        .back-button:hover {
+
+            background: #1257bd;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .news-item,
+            .material-item {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .delete-button {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -228,16 +355,14 @@ select {
 <body>
 
 
-<!-- =========================
-     NAGŁÓWEK
-========================= -->
-
 <header>
 
-    <h1>👨‍💼 Panel administratora</h1>
+    <h1>
+        👨‍💼 Panel administratora
+    </h1>
 
     <p>
-        Dodawanie i zarządzanie materiałami
+        Zarządzanie aktualnościami i materiałami
     </p>
 
 </header>
@@ -246,117 +371,211 @@ select {
 <main>
 
 
-<!-- =========================
-     DODAWANIE MATERIAŁU
-========================= -->
+    <!-- =====================================
+         AKTUALNOŚĆ
+    ====================================== -->
 
-<div class="box">
+    <div class="box">
 
-    <h2>➕ Dodaj materiał</h2>
-
-
-    <label for="subject">
-        Przedmiot
-    </label>
-
-    <select id="subject">
-
-        <option value="Matematyka">
-            📐 Matematyka
-        </option>
-
-        <option value="Język polski">
-            📖 Język polski
-        </option>
-
-        <option value="Język angielski">
-            🇬🇧 Język angielski
-        </option>
-
-        <option value="Przyroda">
-            🧪 Przyroda
-        </option>
-
-        <option value="Informatyka">
-            💻 Informatyka
-        </option>
-
-        <option value="Inne">
-            📚 Inne
-        </option>
-
-    </select>
+        <h2>
+            📢 Dodaj aktualność
+        </h2>
 
 
-    <label for="title">
-        Nazwa materiału
-    </label>
+        <label for="newsTitle">
+            Tytuł aktualności
+        </label>
 
-    <input
-        type="text"
-        id="title"
-        placeholder="np. Zadania z ułamków"
-    >
-
-
-    <label for="file">
-        Plik
-    </label>
-
-    <input
-        type="file"
-        id="file"
-        accept=".pdf,.doc,.docx,.ppt,.pptx"
-    >
+        <input
+            type="text"
+            id="newsTitle"
+            placeholder="np. Apel szkolny"
+        >
 
 
-    <button
-        class="add-button"
-        id="addButton">
+        <label for="newsContent">
+            Treść aktualności
+        </label>
 
-        ➕ Dodaj materiał
-
-    </button>
-
-
-    <p id="message"></p>
-
-</div>
+        <textarea
+            id="newsContent"
+            placeholder="np. Dziś na 7. lekcji będzie apel."
+        ></textarea>
 
 
-<!-- =========================
-     LISTA MATERIAŁÓW
-========================= -->
+        <button
+            class="add-button"
+            id="addNewsButton">
 
-<div class="box">
+            📢 Dodaj aktualność
 
-    <h2>📚 Wszystkie materiały</h2>
+        </button>
 
-    <div id="materialsList">
 
-        <div class="loading">
-            Ładowanie materiałów...
+        <div
+            id="newsMessage"
+            class="message">
         </div>
 
     </div>
 
-</div>
+
+    <!-- =====================================
+         LISTA AKTUALNOŚCI
+    ====================================== -->
+
+    <div class="box">
+
+        <h2>
+            📢 Wszystkie aktualności
+        </h2>
 
 
-<!-- =========================
-     POWRÓT NA STRONĘ GŁÓWNĄ
-========================= -->
+        <div id="newsList">
 
-<div class="box">
+            <div class="loading">
+                Ładowanie aktualności...
+            </div>
 
-    <a
-        href="index.html"
-        class="back-button"
-    >
-        ← Powrót na stronę główną
-    </a>
+        </div>
 
-</div>
+    </div>
+
+
+    <!-- =====================================
+         DODAWANIE MATERIAŁU
+    ====================================== -->
+
+    <div class="box">
+
+        <h2>
+            ➕ Dodaj materiał
+        </h2>
+
+
+        <label for="subject">
+            Przedmiot
+        </label>
+
+
+        <select
+            id="subject"
+            style="
+                width:100%;
+                padding:13px;
+                margin-top:8px;
+                margin-bottom:18px;
+                border:1px solid #ccc;
+                border-radius:8px;
+                font-size:16px;
+            "
+        >
+
+            <option value="Matematyka">
+                📐 Matematyka
+            </option>
+
+            <option value="Język polski">
+                📖 Język polski
+            </option>
+
+            <option value="Język angielski">
+                🇬🇧 Język angielski
+            </option>
+
+            <option value="Przyroda">
+                🧪 Przyroda
+            </option>
+
+            <option value="Informatyka">
+                💻 Informatyka
+            </option>
+
+            <option value="Inne">
+                📚 Inne
+            </option>
+
+        </select>
+
+
+        <label for="title">
+            Nazwa materiału
+        </label>
+
+
+        <input
+            type="text"
+            id="title"
+            placeholder="np. Zadania z ułamków"
+        >
+
+
+        <label for="file">
+            Plik
+        </label>
+
+
+        <input
+            type="file"
+            id="file"
+            accept=".pdf,.doc,.docx,.ppt,.pptx"
+        >
+
+
+        <button
+            class="add-button"
+            id="addButton">
+
+            ➕ Dodaj materiał
+
+        </button>
+
+
+        <p
+            id="message"
+            class="message">
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         MATERIAŁY
+    ====================================== -->
+
+    <div class="box">
+
+        <h2>
+            📚 Wszystkie materiały
+        </h2>
+
+
+        <div id="materialsList">
+
+            <div class="loading">
+                Ładowanie materiałów...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         POWRÓT
+    ====================================== -->
+
+    <div class="box">
+
+        <a
+            href="index.html"
+            class="back-button">
+
+            ← Powrót na stronę główną
+
+        </a>
+
+    </div>
 
 
 </main>
@@ -364,15 +583,22 @@ select {
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
+
+// ==========================================
+// SUPABASE
+// ==========================================
 
 const SUPABASE_URL =
     "https://vqilsuvpinnfmngrczlj.supabase.co";
 
+
 const SUPABASE_KEY =
     "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+
+const ADMIN_EMAIL =
+    "pi.pu2@op.pl";
+
 
 const supabaseClient =
     supabase.createClient(
@@ -381,63 +607,24 @@ const supabaseClient =
     );
 
 
-/* =========================
-   ADMIN
-========================= */
-
-const ADMIN_EMAIL = "pi.pu2@op.pl";
-
-
-/* =========================
-   SPRAWDZENIE LOGOWANIA
-========================= */
+// ==========================================
+// SPRAWDZENIE ADMINA
+// ==========================================
 
 async function checkUser() {
 
     const {
-        data,
-        error
-    } = await supabaseClient.auth.getSession();
+        data: {
+            session
+        }
+    } =
+        await supabaseClient.auth.getSession();
 
 
-    if (error) {
-
-        console.error(
-            "Błąd sesji:",
-            error
-        );
-
-        document.body.innerHTML = `
-            <h1 style="
-                text-align:center;
-                margin-top:100px;
-            ">
-                ❌ Błąd logowania
-            </h1>
-
-            <p style="
-                text-align:center;
-            ">
-                Nie udało się sprawdzić sesji.
-            </p>
-
-            <p style="
-                text-align:center;
-            ">
-                <a href="logowanie.html">
-                    Wróć do logowania
-                </a>
-            </p>
-        `;
-
-        return false;
-    }
-
-
-    const session = data.session;
-
-
-    if (!session || !session.user) {
+    if (
+        !session ||
+        !session.user
+    ) {
 
         window.location.href =
             "logowanie.html";
@@ -450,28 +637,36 @@ async function checkUser() {
         session.user.email;
 
 
-    if (email !== ADMIN_EMAIL) {
+    if (
+        email !== ADMIN_EMAIL
+    ) {
 
         document.body.innerHTML = `
 
-            <h1 style="
-                text-align:center;
-                margin-top:100px;
-            ">
+            <h1
+                style="
+                    text-align:center;
+                    margin-top:100px;
+                "
+            >
                 🚫 Brak dostępu
             </h1>
 
-            <p style="
-                text-align:center;
-            ">
+            <p
+                style="
+                    text-align:center;
+                "
+            >
                 Ta strona jest tylko dla administratora.
             </p>
 
-            <p style="
-                text-align:center;
-            ">
+            <p
+                style="
+                    text-align:center;
+                "
+            >
                 <a href="index.html">
-                    ← Powrót na stronę główną
+                    Wróć na stronę główną
                 </a>
             </p>
 
@@ -485,9 +680,358 @@ async function checkUser() {
 }
 
 
-/* =========================
-   POBIERANIE MATERIAŁÓW
-========================= */
+// ==========================================
+// AKTUALNOŚCI — POBIERANIE
+// ==========================================
+
+async function loadNews() {
+
+    const list =
+        document.getElementById(
+            "newsList"
+        );
+
+
+    list.innerHTML =
+        '<div class="loading">Ładowanie aktualności...</div>';
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("news")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+
+        list.innerHTML =
+            '<div class="empty">❌ Nie udało się pobrać aktualności.</div>';
+
+        return;
+    }
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        list.innerHTML =
+            '<div class="empty">Brak aktualności.</div>';
+
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(news => {
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+
+        item.className =
+            "news-item";
+
+
+        const info =
+            document.createElement(
+                "div"
+            );
+
+
+        info.className =
+            "news-info";
+
+
+        const title =
+            document.createElement(
+                "div"
+            );
+
+
+        title.className =
+            "news-title";
+
+
+        title.textContent =
+            "📢 " + news.title;
+
+
+        const content =
+            document.createElement(
+                "div"
+            );
+
+
+        content.className =
+            "news-content";
+
+
+        content.textContent =
+            news.content;
+
+
+        const date =
+            document.createElement(
+                "div"
+            );
+
+
+        date.className =
+            "news-date";
+
+
+        if (news.created_at) {
+
+            date.textContent =
+                "Dodano: " +
+                new Date(
+                    news.created_at
+                ).toLocaleString(
+                    "pl-PL",
+                    {
+                        dateStyle: "medium",
+                        timeStyle: "short"
+                    }
+                );
+
+        }
+
+
+        info.appendChild(title);
+
+        info.appendChild(content);
+
+        info.appendChild(date);
+
+
+        const deleteButton =
+            document.createElement(
+                "button"
+            );
+
+
+        deleteButton.className =
+            "delete-button";
+
+
+        deleteButton.textContent =
+            "🗑️ Usuń";
+
+
+        deleteButton.addEventListener(
+            "click",
+            function() {
+
+                deleteNews(
+                    news.id,
+                    news.title
+                );
+
+            }
+        );
+
+
+        item.appendChild(info);
+
+        item.appendChild(deleteButton);
+
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+// ==========================================
+// AKTUALNOŚCI — DODAWANIE
+// ==========================================
+
+document
+    .getElementById(
+        "addNewsButton"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+
+            const titleInput =
+                document.getElementById(
+                    "newsTitle"
+                );
+
+
+            const contentInput =
+                document.getElementById(
+                    "newsContent"
+                );
+
+
+            const message =
+                document.getElementById(
+                    "newsMessage"
+                );
+
+
+            const title =
+                titleInput.value.trim();
+
+
+            const content =
+                contentInput.value.trim();
+
+
+            if (
+                !title ||
+                !content
+            ) {
+
+                message.textContent =
+                    "❌ Wpisz tytuł i treść aktualności.";
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            message.textContent =
+                "⏳ Dodawanie aktualności...";
+
+            message.style.color =
+                "#1769e0";
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("news")
+                    .insert({
+
+                        title: title,
+
+                        content: content
+
+                    });
+
+
+            if (error) {
+
+                console.error(error);
+
+
+                message.textContent =
+                    "❌ Błąd: " +
+                    error.message;
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            message.textContent =
+                "✅ Aktualność została dodana!";
+
+            message.style.color =
+                "green";
+
+
+            titleInput.value =
+                "";
+
+
+            contentInput.value =
+                "";
+
+
+            loadNews();
+
+        }
+    );
+
+
+// ==========================================
+// AKTUALNOŚCI — USUWANIE
+// ==========================================
+
+async function deleteNews(
+    id,
+    title
+) {
+
+
+    const confirmed =
+        confirm(
+            'Czy na pewno chcesz usunąć aktualność "' +
+            title +
+            '"?'
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("news")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        alert(
+            "❌ Nie udało się usunąć aktualności:\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "✅ Aktualność została usunięta."
+    );
+
+
+    loadNews();
+
+}
+
+
+// ==========================================
+// MATERIAŁY — POBIERANIE
+// ==========================================
 
 async function loadMaterials() {
 
@@ -498,11 +1042,7 @@ async function loadMaterials() {
 
 
     list.innerHTML =
-        `
-        <div class="loading">
-            Ładowanie materiałów...
-        </div>
-        `;
+        '<div class="loading">Ładowanie materiałów...</div>';
 
 
     const {
@@ -522,32 +1062,23 @@ async function loadMaterials() {
 
     if (error) {
 
-        console.error(
-            "Błąd pobierania:",
-            error
-        );
+        console.error(error);
+
 
         list.innerHTML =
-            `
-            <div class="empty">
-                ❌ Nie udało się pobrać materiałów.
-                <br>
-                ${error.message}
-            </div>
-            `;
+            '<div class="empty">❌ Nie udało się pobrać materiałów.</div>';
 
         return;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         list.innerHTML =
-            `
-            <div class="empty">
-                Brak materiałów.
-            </div>
-            `;
+            '<div class="empty">Brak materiałów.</div>';
 
         return;
     }
@@ -556,108 +1087,113 @@ async function loadMaterials() {
     list.innerHTML = "";
 
 
-    data.forEach(
-        material => {
+    data.forEach(material => {
 
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "material-item";
-
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-            info.className =
-                "material-info";
-
-
-            const title =
-                document.createElement(
-                    "div"
-                );
-
-            title.className =
-                "material-title";
-
-            title.textContent =
-                "📄 " +
-                material.title;
-
-
-            const subject =
-                document.createElement(
-                    "div"
-                );
-
-            subject.className =
-                "material-subject";
-
-            subject.textContent =
-                "Przedmiot: " +
-                material.subject;
-
-
-            info.appendChild(title);
-
-            info.appendChild(subject);
-
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-            deleteButton.className =
-                "delete-button";
-
-            deleteButton.textContent =
-                "🗑️ Usuń";
-
-
-            deleteButton.addEventListener(
-                "click",
-                () => {
-
-                    deleteMaterial(
-                        material.id,
-                        material.file_url,
-                        material.title
-                    );
-
-                }
+        const item =
+            document.createElement(
+                "div"
             );
 
 
-            item.appendChild(info);
+        item.className =
+            "material-item";
 
-            item.appendChild(
-                deleteButton
+
+        const info =
+            document.createElement(
+                "div"
             );
 
 
-            list.appendChild(item);
+        info.className =
+            "material-info";
 
-        }
-    );
+
+        const title =
+            document.createElement(
+                "div"
+            );
+
+
+        title.className =
+            "material-title";
+
+
+        title.textContent =
+            "📄 " +
+            material.title;
+
+
+        const subject =
+            document.createElement(
+                "div"
+            );
+
+
+        subject.className =
+            "material-subject";
+
+
+        subject.textContent =
+            "Przedmiot: " +
+            material.subject;
+
+
+        info.appendChild(title);
+
+        info.appendChild(subject);
+
+
+        const deleteButton =
+            document.createElement(
+                "button"
+            );
+
+
+        deleteButton.className =
+            "delete-button";
+
+
+        deleteButton.textContent =
+            "🗑️ Usuń";
+
+
+        deleteButton.addEventListener(
+            "click",
+            function() {
+
+                deleteMaterial(
+                    material.id,
+                    material.file_url,
+                    material.title
+                );
+
+            }
+        );
+
+
+        item.appendChild(info);
+
+        item.appendChild(deleteButton);
+
+
+        list.appendChild(item);
+
+    });
 
 }
 
 
-/* =========================
-   USUWANIE MATERIAŁU
-========================= */
+// ==========================================
+// MATERIAŁY — USUWANIE
+// ==========================================
 
 async function deleteMaterial(
     id,
     filePath,
     title
 ) {
+
 
     const confirmed =
         confirm(
@@ -672,39 +1208,27 @@ async function deleteMaterial(
     }
 
 
-    /* USUNIĘCIE PLIKU */
-
-    if (filePath) {
-
-        const {
-            error: storageError
-        } =
-            await supabaseClient
-                .storage
-                .from("materials")
-                .remove([
-                    filePath
-                ]);
+    const {
+        error: storageError
+    } =
+        await supabaseClient
+            .storage
+            .from("materials")
+            .remove([
+                filePath
+            ]);
 
 
-        if (storageError) {
+    if (storageError) {
 
-            alert(
-                "❌ Nie udało się usunąć pliku:\n" +
-                storageError.message
-            );
+        alert(
+            "❌ Nie udało się usunąć pliku:\n" +
+            storageError.message
+        );
 
-            console.error(
-                storageError
-            );
-
-            return;
-        }
-
+        return;
     }
 
-
-    /* USUNIĘCIE REKORDU */
 
     const {
         error: databaseError
@@ -721,12 +1245,8 @@ async function deleteMaterial(
     if (databaseError) {
 
         alert(
-            "❌ Nie udało się usunąć materiału:\n" +
+            "❌ Nie udało się usunąć wpisu:\n" +
             databaseError.message
-        );
-
-        console.error(
-            databaseError
         );
 
         return;
@@ -738,17 +1258,19 @@ async function deleteMaterial(
     );
 
 
-    await loadMaterials();
+    loadMaterials();
 
 }
 
 
-/* =========================
-   DODAWANIE MATERIAŁU
-========================= */
+// ==========================================
+// MATERIAŁY — DODAWANIE
+// ==========================================
 
 document
-    .getElementById("addButton")
+    .getElementById(
+        "addButton"
+    )
     .addEventListener(
         "click",
         async function() {
@@ -778,12 +1300,13 @@ document
                 ).files[0];
 
 
-            /* SPRAWDZENIE */
-
-            if (!title) {
+            if (
+                !title ||
+                !file
+            ) {
 
                 message.textContent =
-                    "❌ Wpisz nazwę materiału.";
+                    "Uzupełnij nazwę i wybierz plik.";
 
                 message.style.color =
                     "red";
@@ -791,45 +1314,30 @@ document
                 return;
             }
 
-
-            if (!file) {
-
-                message.textContent =
-                    "❌ Wybierz plik.";
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-
-            /* INFORMACJA */
 
             message.textContent =
                 "⏳ Przesyłanie pliku...";
 
             message.style.color =
-                "#1769e0";
+                "black";
 
 
-            /* NAZWA PLIKU */
+            const safeFileName =
+                file.name.replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
+                );
+
 
             const fileName =
                 Date.now() +
                 "_" +
-                file.name
-                    .replace(
-                        /[^a-zA-Z0-9._-]/g,
-                        "_"
-                    );
+                safeFileName;
 
 
             const filePath =
                 fileName;
 
-
-            /* UPLOAD */
 
             const {
                 error: uploadError
@@ -845,10 +1353,6 @@ document
 
             if (uploadError) {
 
-                console.error(
-                    uploadError
-                );
-
                 message.textContent =
                     "❌ Błąd przesyłania: " +
                     uploadError.message;
@@ -860,8 +1364,6 @@ document
             }
 
 
-            /* ZAPIS DO BAZY */
-
             const {
                 error: databaseError
             } =
@@ -869,27 +1371,17 @@ document
                     .from("materials")
                     .insert({
 
-                        title:
-                            title,
+                        title: title,
 
-                        subject:
-                            subject,
+                        subject: subject,
 
-                        file_url:
-                            filePath
+                        file_url: filePath
 
                     });
 
 
             if (databaseError) {
 
-                console.error(
-                    databaseError
-                );
-
-
-                /* JEŻELI BAZA SIĘ NIE ZAPISAŁA,
-                   USUWAMY WGRANY PLIK */
 
                 await supabaseClient
                     .storage
@@ -910,8 +1402,6 @@ document
             }
 
 
-            /* SUKCES */
-
             message.textContent =
                 "✅ Materiał został dodany!";
 
@@ -929,17 +1419,18 @@ document
             ).value = "";
 
 
-            await loadMaterials();
+            loadMaterials();
 
         }
     );
 
 
-/* =========================
-   START
-========================= */
+// ==========================================
+// START
+// ==========================================
 
 async function start() {
+
 
     const isAdmin =
         await checkUser();
@@ -950,6 +1441,8 @@ async function start() {
     }
 
 
+    await loadNews();
+
     await loadMaterials();
 
 }
@@ -957,10 +1450,10 @@ async function start() {
 
 start();
 
+
 </script>
 
 
 </body>
 
 </html>
-```
