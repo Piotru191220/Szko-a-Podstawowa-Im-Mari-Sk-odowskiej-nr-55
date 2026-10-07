@@ -1,1576 +1,726 @@
-```html
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</title>
-
-<style>
-
-:root{
-    --blue:#1769e0;
-    --dark:#0d2342;
-    --light:#f5f8fd;
-    --text:#536176;
-    --white:#fff;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    color:var(--dark);
-    background:var(--light);
-    line-height:1.6;
-    overflow-x:hidden;
-}
-
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
-.container{
-    width:min(1200px,92%);
-    margin:auto;
-}
-
-/* =========================
-   NAVBAR
-========================= */
-
-.navbar{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:76px;
-    z-index:1000;
-    background:rgba(255,255,255,.92);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid rgba(0,0,0,.06);
-}
-
-.nav-inner{
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    font-weight:800;
-    color:var(--dark);
-}
-
-.logo img{
-    width:48px;
-    height:48px;
-    object-fit:contain;
-    border-radius:10px;
-}
-
-.logo-fallback{
-    width:48px;
-    height:48px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,#1769e0,#65a2ff);
-    color:white;
-    font-weight:900;
-}
-
-.logo-text{
-    line-height:1.15;
-}
-
-.logo-text small{
-    display:block;
-    font-size:11px;
-    color:#718096;
-    margin-top:3px;
-}
-
-.nav-links{
-    display:flex;
-    align-items:center;
-    gap:25px;
-    list-style:none;
-}
-
-.nav-links a{
-    font-size:14px;
-    font-weight:700;
-    color:#33415c;
-    transition:.25s;
-}
-
-.nav-links a:hover{
-    color:var(--blue);
-}
-
-.login{
-    background:var(--blue)!important;
-    color:white!important;
-    padding:11px 17px;
-    border-radius:10px;
-    box-shadow:0 7px 20px rgba(23,105,224,.25);
-}
-
-/* hamburger */
-
-.menu-button{
-    display:none;
-    border:0;
-    background:none;
-    font-size:29px;
-    cursor:pointer;
-    color:var(--dark);
-}
-
-/* =========================
-   HERO
-========================= */
-
-.hero{
-    min-height:800px;
-    padding-top:76px;
-    display:flex;
-    align-items:center;
-    background:
-        radial-gradient(circle at 80% 20%,rgba(23,105,224,.18),transparent 32%),
-        radial-gradient(circle at 10% 80%,rgba(67,210,190,.15),transparent 30%),
-        linear-gradient(135deg,#edf5ff,#fff);
-}
-
-.hero-grid{
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:70px;
-    align-items:center;
-}
-
-.hero-content{
-    animation:fadeUp .9s ease both;
-}
-
-.badge{
-    display:inline-block;
-    padding:8px 15px;
-    border-radius:30px;
-    background:#e7f0ff;
-    color:var(--blue);
-    font-size:12px;
-    font-weight:800;
-    margin-bottom:20px;
-}
-
-.hero h1{
-    font-size:clamp(45px,6vw,76px);
-    line-height:1.02;
-    letter-spacing:-3px;
-    margin-bottom:25px;
-}
-
-.hero h1 span{
-    color:var(--blue);
-}
-
-.hero-description{
-    max-width:650px;
-    color:var(--text);
-    font-size:19px;
-    margin-bottom:32px;
-}
-
-.buttons{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-}
-
-.button{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:14px 21px;
-    border-radius:12px;
-    font-weight:800;
-    font-size:14px;
-    transition:.25s;
-}
-
-.button:hover{
-    transform:translateY(-3px);
-}
-
-.primary{
-    background:var(--blue);
-    color:white;
-    box-shadow:0 12px 25px rgba(23,105,224,.25);
-}
-
-.secondary{
-    background:white;
-    color:var(--blue);
-    border:1px solid #dce6f5;
-}
-
-.hero-visual{
-    animation:float 5s ease-in-out infinite;
-}
-
-.school-card{
-    min-height:450px;
-    border-radius:35px;
-    padding:45px;
-    color:white;
-    background:
-        linear-gradient(145deg,rgba(13,35,66,.2),rgba(13,35,66,.8)),
-        linear-gradient(135deg,#3987ef,#12366d);
-    box-shadow:0 30px 70px rgba(13,35,66,.25);
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    position:relative;
-    overflow:hidden;
-}
-
-.school-card::before{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    top:-100px;
-    right:-100px;
-}
-
-.school-symbol{
-    font-size:85px;
-    margin-bottom:auto;
-}
-
-.school-card h2{
-    font-size:31px;
-    margin-bottom:10px;
-}
-
-.school-card p{
-    color:rgba(255,255,255,.8);
-}
-
-/* =========================
-   SEKCJE
-========================= */
-
-section{
-    padding:100px 0;
-}
-
-.section-heading{
-    text-align:center;
-    margin-bottom:55px;
-}
-
-.section-heading span{
-    color:var(--blue);
-    font-size:12px;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:2px;
-}
-
-.section-heading h2{
-    font-size:43px;
-    margin-top:8px;
-}
-
-.section-heading p{
-    max-width:650px;
-    margin:12px auto 0;
-    color:var(--text);
-}
-
-/* =========================
-   AKTUALNOŚCI
-========================= */
-
-.news{
-    background:white;
-}
-
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
-}
-
-.news-card{
-    padding:30px;
-    border-radius:20px;
-    background:#f8faff;
-    border:1px solid #e7edf6;
-    transition:.3s;
-}
-
-.news-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 20px 40px rgba(15,43,80,.09);
-}
-
-.news-icon{
-    font-size:30px;
-    margin-bottom:15px;
-}
-
-.news-date{
-    color:var(--blue);
-    font-size:11px;
-    font-weight:900;
-    text-transform:uppercase;
-}
-
-.news-card h3{
-    font-size:20px;
-    margin:8px 0;
-}
-
-.news-card p{
-    color:var(--text);
-    font-size:14px;
-}
-
-/* =========================
-   DLA UCZNIA / RODZICA
-========================= */
-
-.audience{
-    background:#f1f6fc;
-}
-
-.audience-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
-}
-
-.audience-card{
-    background:white;
-    border-radius:25px;
-    padding:40px;
-    border:1px solid #e2eaf4;
-    transition:.3s;
-}
-
-.audience-card:hover{
-    transform:translateY(-7px);
-    box-shadow:0 20px 45px rgba(15,43,80,.08);
-}
-
-.audience-card.student{
-    border-top:5px solid #1769e0;
-}
-
-.audience-card.parent{
-    border-top:5px solid #18a88b;
-}
-
-.audience-card h3{
-    font-size:28px;
-    margin-bottom:12px;
-}
-
-.audience-card p{
-    color:var(--text);
-    margin-bottom:22px;
-}
-
-.audience-list{
-    list-style:none;
-}
-
-.audience-list li{
-    padding:10px 0;
-    border-bottom:1px solid #edf1f6;
-    font-weight:600;
-}
-
-.audience-list li::before{
-    content:"✓";
-    color:var(--blue);
-    font-weight:900;
-    margin-right:10px;
-}
-
-/* =========================
-   GALERIA
-========================= */
-
-.gallery{
-    background:white;
-}
-
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-auto-rows:220px;
-    gap:15px;
-}
-
-.gallery-item{
-    overflow:hidden;
-    border-radius:18px;
-    position:relative;
-    background:#dfe8f4;
-}
-
-.gallery-item:first-child{
-    grid-column:span 2;
-    grid-row:span 2;
-}
-
-.gallery-item img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.5s;
-}
-
-.gallery-item:hover img{
-    transform:scale(1.08);
-}
-
-.gallery-overlay{
-    position:absolute;
-    inset:auto 0 0;
-    padding:20px;
-    color:white;
-    background:linear-gradient(transparent,rgba(0,0,0,.7));
-    opacity:0;
-    transition:.3s;
-}
-
-.gallery-item:hover .gallery-overlay{
-    opacity:1;
-}
-
-/*
-    WSTAW SWOJE ZDJĘCIA:
-
-    galeria1.jpg
-    galeria2.jpg
-    galeria3.jpg
-    galeria4.jpg
-    galeria5.jpg
-    galeria6.jpg
-
-    Zdjęcia powinny znajdować się w tym samym folderze
-    co index.html.
-*/
-
-/* =========================
-   O SZKOLE
-========================= */
-
-.about-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:70px;
-    align-items:center;
-}
-
-.about-image{
-    min-height:430px;
-    border-radius:28px;
-    overflow:hidden;
-    background:#dfe8f4;
-}
-
-.about-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.about-content h2{
-    font-size:43px;
-    margin-bottom:20px;
-}
-
-.about-content p{
-    color:var(--text);
-    margin-bottom:15px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-top:30px;
-}
-
-.stat{
-    background:white;
-    padding:20px 10px;
-    text-align:center;
-    border-radius:15px;
-    border:1px solid #e3eaf4;
-}
-
-.stat strong{
-    display:block;
-    font-size:25px;
-    color:var(--blue);
-}
-
-.stat span{
-    color:#718096;
-    font-size:12px;
-}
-
-/* =========================
-   KONTAKT
-========================= */
-
-.contact{
-    background:#f1f6fc;
-}
-
-.contact-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
-}
-
-.contact-card{
-    background:white;
-    padding:35px;
-    border-radius:22px;
-}
-
-.contact-row{
-    padding:14px 0;
-    border-bottom:1px solid #edf1f5;
-}
-
-.contact-row strong{
-    display:block;
-    font-size:13px;
-    color:#33415c;
-}
-
-.contact-row span{
-    color:var(--text);
-}
-
-.map{
-    min-height:350px;
-    border-radius:22px;
-    background:
-        linear-gradient(135deg,#dce9f8,#eef5fc);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:30px;
-}
-
-.map-icon{
-    font-size:65px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    background:#0b203d;
-    color:white;
-    padding:50px 0;
-}
-
-.footer-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr;
-    gap:40px;
-}
-
-footer h3{
-    margin-bottom:12px;
-}
-
-footer p,
-footer a{
-    color:rgba(255,255,255,.65);
-    font-size:13px;
-}
-
-.footer-links{
-    list-style:none;
-}
-
-.footer-links li{
-    margin-bottom:8px;
-}
-
-.copyright{
-    margin-top:40px;
-    padding-top:20px;
-    border-top:1px solid rgba(255,255,255,.1);
-    text-align:center;
-}
-
-/* =========================
-   ANIMACJE
-========================= */
-
-@keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(30px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes float{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-12px);
-    }
-}
-
-.reveal{
-    opacity:0;
-    transform:translateY(30px);
-    transition:opacity .7s,transform .7s;
-}
-
-.reveal.visible{
-    opacity:1;
-    transform:translateY(0);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:900px){
-
-    .menu-button{
-        display:block;
-    }
-
-    .nav-links{
-        position:absolute;
-        top:76px;
-        left:0;
-        width:100%;
-        background:white;
-        flex-direction:column;
-        align-items:stretch;
-        gap:0;
-        padding:10px 5%;
-        box-shadow:0 15px 30px rgba(0,0,0,.08);
-
-        display:none;
-    }
-
-    .nav-links.open{
-        display:flex;
-    }
-
-    .nav-links li{
-        padding:13px 0;
-    }
-
-    .nav-links .login{
-        display:block;
-        text-align:center;
-    }
-
-    .hero-grid,
-    .about-grid,
-    .contact-grid{
-        grid-template-columns:1fr;
-    }
-
-    .news-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .gallery-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .footer-grid{
-        grid-template-columns:1fr 1fr;
-    }
-}
-
-@media(max-width:600px){
-
-    section{
-        padding:70px 0;
-    }
-
-    .hero{
-        min-height:auto;
-        padding-top:130px;
-        padding-bottom:70px;
-    }
-
-    .hero h1{
-        font-size:48px;
-    }
-
-    .hero-description{
-        font-size:16px;
-    }
-
-    .school-card{
-        min-height:340px;
-        padding:30px;
-    }
-
-    .news-grid,
-    .audience-grid,
-    .gallery-grid,
-    .footer-grid{
-        grid-template-columns:1fr;
-    }
-
-    .gallery-item:first-child{
-        grid-column:span 1;
-        grid-row:span 1;
-    }
-
-    .gallery-grid{
-        grid-auto-rows:250px;
-    }
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .section-heading h2,
-    .about-content h2{
-        font-size:32px;
-    }
-}
-
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+    </title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        /* =========================
+           NAWIGACJA
+        ========================= */
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            background: #1769e0;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        nav ul {
+            margin: 0;
+            padding: 0;
+
+            list-style: none;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin: 0;
+        }
+
+        nav a {
+            display: block;
+
+            padding: 16px 18px;
+
+            color: white;
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            background: #1257bd;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1769e0,
+                    #4c8ff5
+                );
+
+            color: white;
+
+            text-align: center;
+
+            padding: 70px 20px;
+        }
+
+        header h1 {
+            margin: 0 0 15px;
+
+            font-size: 38px;
+        }
+
+        header p {
+            margin: 0;
+
+            font-size: 19px;
+        }
+
+        /* =========================
+           GŁÓWNA ZAWARTOŚĆ
+        ========================= */
+
+        main {
+            max-width: 1100px;
+
+            margin: 40px auto;
+
+            padding: 20px;
+        }
+
+        .section {
+            background: white;
+
+            padding: 30px;
+
+            margin-bottom: 30px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+
+            color: #1769e0;
+        }
+
+        /* =========================
+           AKTUALNOŚCI
+        ========================= */
+
+        .news-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 15px;
+        }
+
+        .news-item {
+            background: #f4f7fb;
+
+            border-left: 5px solid #1769e0;
+
+            padding: 18px;
+
+            border-radius: 10px;
+        }
+
+        .news-title {
+            font-size: 20px;
+
+            font-weight: bold;
+
+            color: #1769e0;
+
+            margin-bottom: 8px;
+        }
+
+        .news-content {
+            font-size: 16px;
+
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+        }
+
+        .news-date {
+            margin-top: 10px;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+        .news-empty {
+            color: #777;
+
+            padding: 10px 0;
+        }
+
+        .news-loading {
+            color: #1769e0;
+        }
+
+        /* =========================
+           PRZYCISKI
+        ========================= */
+
+        .button {
+            display: inline-block;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: bold;
+        }
+
+        .blue-button {
+            background: #1769e0;
+            color: white;
+        }
+
+        .blue-button:hover {
+            background: #1257bd;
+        }
+
+        .red-button {
+            background: #d93025;
+            color: white;
+        }
+
+        /* =========================
+           STOPKA
+        ========================= */
+
+        footer {
+            background: #1769e0;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 30px 20px;
+
+            margin-top: 50px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            nav a {
+                padding: 12px 10px;
+
+                font-size: 14px;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================
+
+<!-- ==========================================
      MENU
-========================= -->
+========================================== -->
 
-<header class="navbar">
+<nav>
 
-<div class="container nav-inner">
+    <ul>
 
-<a href="#start" class="logo">
+        <li>
+            <a href="#start">
+                🏠 Strona główna
+            </a>
+        </li>
 
-    <!--
-        PRAWDZIWE LOGO:
-        Umieść plik logo.png obok index.html.
-    -->
+        <li>
+            <a href="#aktualnosci">
+                📢 Aktualności
+            </a>
+        </li>
 
-    <img src="logo.png" alt="Logo szkoły">
+        <li id="materialsMenu">
+            <a href="#materialy">
+                📚 Materiały
+            </a>
+        </li>
 
-    <div class="logo-text">
+        <li id="loginMenu">
+            <a href="logowanie.html">
+                🔐 Logowanie
+            </a>
+        </li>
+
+        <li id="adminMenu" style="display:none;">
+            <a href="admin.html">
+                ⚙️ Panel administratora
+            </a>
+        </li>
+
+        <li id="logoutMenu" style="display:none;">
+            <a href="#" id="logoutButton">
+                🚪 Wyloguj
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header id="start">
+
+    <h1>
         Szkoła Podstawowa nr 55
-        <small>im. Marii Skłodowskiej</small>
-    </div>
+    </h1>
 
-</a>
-
-<button class="menu-button" onclick="toggleMenu()" aria-label="Otwórz menu">
-    ☰
-</button>
-
-<ul class="nav-links" id="navLinks">
-
-    <li><a href="#start">Start</a></li>
-    <li><a href="#aktualnosci">Aktualności</a></li>
-    <li><a href="#szkola">O szkole</a></li>
-    <li><a href="#uczen">Dla ucznia</a></li>
-    <li><a href="#rodzic">Dla rodzica</a></li>
-    <li><a href="#galeria">Galeria</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
-
-<li id="loginMenu">
-    <a class="login" href="logowanie.html">
-        🔐 Logowanie
-    </a>
-</li>
-
-<li id="materialsMenu" style="display: none;">
-    <a href="materiały.html">
-        📚 Materiały
-    </a>
-</li>
-    
-    <li id="adminMenu" style="display: none;">
-    <a href="admin.html">
-        ⚙️ Panel administratora
-    </a>
-</li>
-
-<li id="logoutMenu" style="display: none;">
-    <a href="#" id="logoutButton">
-        🚪 Wyloguj
-    </a>
-</li>
-
-<li>
-    <a
-        href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        E-dziennik
-    </a>
-</li>
-
-</ul>
-
-</div>
+    <p>
+        im. Marii Skłodowskiej
+    </p>
 
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
 <main>
 
-<section class="hero" id="start">
 
-<div class="container hero-grid">
+    <!-- ======================================
+         AKTUALNOŚCI
+    ======================================= -->
 
-<div class="hero-content">
+    <section
+        class="section"
+        id="aktualnosci">
 
-<span class="badge">
-    WITAMY NA STRONIE SZKOŁY
-</span>
+        <h2>
+            📢 Aktualności
+        </h2>
 
-<h1>
-    Wiedza.<br>
-    <span>Pasja.</span><br>
-    Przyszłość.
-</h1>
+        <div
+            id="newsList"
+            class="news-list">
 
-<p class="hero-description">
-    Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
-    — miejsce, w którym uczniowie rozwijają wiedzę,
-    talenty i ciekawość świata.
-</p>
+            <div class="news-loading">
+                Ładowanie aktualności...
+            </div>
 
-<div class="buttons">
+        </div>
 
-<a href="#aktualnosci" class="button primary">
-    📰 Aktualności
-</a>
+    </section>
 
-<a href="#galeria" class="button secondary">
-    📷 Galeria
-</a>
 
-<a
-    href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="button secondary"
->
-    🔐 E-dziennik
-</a>
+    <!-- ======================================
+         O SZKOLE
+    ======================================= -->
 
-</div>
+    <section class="section">
 
-</div>
+        <h2>
+            🏫 O naszej szkole
+        </h2>
 
+        <p>
+            Witamy na stronie Szkoły Podstawowej nr 55
+            im. Marii Skłodowskiej.
+        </p>
 
-<div class="hero-visual">
+        <p>
+            Znajdziesz tutaj najważniejsze informacje,
+            aktualności oraz materiały dla uczniów.
+        </p>
 
-<div class="school-card">
+    </section>
 
-<div class="school-symbol">
-    ⚛️
-</div>
 
-<h2>
-    Odkrywamy świat
-</h2>
+    <!-- ======================================
+         MATERIAŁY
+    ======================================= -->
 
-<p>
-    Uczymy się, eksperymentujemy
-    i rozwijamy swoje pasje.
-</p>
+    <section
+        class="section"
+        id="materialy">
 
-</div>
+        <h2>
+            📚 Materiały
+        </h2>
 
-</div>
+        <div id="materialsList">
 
-</div>
+            <p>
+                Zaloguj się, aby korzystać z materiałów.
+            </p>
 
-</section>
+        </div>
 
+    </section>
 
-<!-- =========================
-     AKTUALNOŚCI
-========================= -->
-
-<section class="news" id="aktualnosci">
-
-<div class="container">
-
-<div class="section-heading reveal">
-
-<span>Co nowego?</span>
-
-<h2>Aktualności</h2>
-
-<p>
-    Najważniejsze wydarzenia i informacje
-    z życia szkoły.
-</p>
-
-</div>
-
-
-<div class="news-grid">
-
-<article class="news-card reveal">
-
-<div class="news-icon">📚</div>
-
-<div class="news-date">
-    Informacja
-</div>
-
-<h3>
-    Nowy rok szkolny
-</h3>
-
-<p>
-    Najważniejsze informacje dotyczące
-    rozpoczęcia roku szkolnego.
-</p>
-
-</article>
-
-
-<article class="news-card reveal">
-
-<div class="news-icon">🔬</div>
-
-<div class="news-date">
-    Wydarzenie
-</div>
-
-<h3>
-    Dzień Nauki
-</h3>
-
-<p>
-    Eksperymenty, doświadczenia i ciekawostki
-    naukowe przygotowane dla uczniów.
-</p>
-
-</article>
-
-
-<article class="news-card reveal">
-
-<div class="news-icon">🏆</div>
-
-<div class="news-date">
-    Sukces
-</div>
-
-<h3>
-    Konkursy szkolne
-</h3>
-
-<p>
-    Informacje o konkursach, zawodach
-    i sukcesach naszych uczniów.
-</p>
-
-</article>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     O SZKOLE
-========================= -->
-
-<section id="szkola">
-
-<div class="container about-grid">
-
-<div class="about-image reveal">
-
-    <!-- Wstaw tutaj np. szkoła.jpg -->
-    <img
-        src="szkola.png"
-        alt="Budynek szkoły"
-    >
-
-</div>
-
-
-<div class="about-content reveal">
-
-<span class="badge">
-    O NAS
-</span>
-
-<h2>
-    Szkoła, która inspiruje
-</h2>
-
-<p>
-    Nasza szkoła to przestrzeń do nauki,
-    rozwijania zainteresowań i poznawania świata.
-</p>
-
-<p>
-    Stawiamy na bezpieczeństwo, współpracę,
-    kreatywność oraz nowoczesną edukację.
-</p>
-
-
-<div class="stats">
-
-<div class="stat">
-    <strong>📚</strong>
-    <span>Nowoczesna edukacja</span>
-</div>
-
-<div class="stat">
-    <strong>🔬</strong>
-    <span>Nauka przez doświadczenie</span>
-</div>
-
-<div class="stat">
-    <strong>🤝</strong>
-    <span>Współpraca</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     DLA UCZNIA / RODZICA
-========================= -->
-
-<section class="audience">
-
-<div class="container">
-
-<div class="section-heading reveal">
-
-<span>Strefa szkoły</span>
-
-<h2>
-    Dla ucznia i rodzica
-</h2>
-
-<p>
-    Najważniejsze informacje w jednym miejscu.
-</p>
-
-</div>
-
-
-<div class="audience-grid">
-
-
-<div class="audience-card student reveal" id="uczen">
-
-<h3>
-    🎒 Dla ucznia
-</h3>
-
-<p>
-    Materiały i informacje przydatne
-    podczas codziennej nauki.
-</p>
-
-<ul class="audience-list">
-
-<li>Plan lekcji</li>
-<li>Ogłoszenia</li>
-<li>Konkursy i wydarzenia</li>
-<li>Koła zainteresowań</li>
-<li>Materiały edukacyjne</li>
-
-</ul>
-
-</div>
-
-
-<div class="audience-card parent reveal" id="rodzic">
-
-<h3>
-    👨‍👩‍👧 Dla rodzica
-</h3>
-
-<p>
-    Najważniejsze informacje dla rodziców
-    i opiekunów uczniów.
-</p>
-
-<ul class="audience-list">
-
-<li>Informacje szkolne</li>
-<li>Dokumenty i regulaminy</li>
-<li>Terminy spotkań</li>
-<li>Ważne komunikaty</li>
-<li>E-dziennik</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     GALERIA
-========================= -->
-
-<section class="gallery" id="galeria">
-
-<div class="container">
-
-<div class="section-heading reveal">
-
-<span>Zobacz naszą szkołę</span>
-
-<h2>
-    Galeria
-</h2>
-
-<p>
-    Zdjęcia z życia szkoły, wydarzeń i zajęć.
-</p>
-
-</div>
-
-
-<div class="gallery-grid">
-
-
-<div class="gallery-item reveal">
-
-<img src="szkola.png" alt="Zdjęcie szkoły">
-
-<div class="gallery-overlay">
-    Nasza szkoła
-</div>
-
-</div>
-
-
-<div class="gallery-item reveal">
-
-<img src="galeria2.jpg" alt="Wydarzenie szkolne">
-
-<div class="gallery-overlay">
-    Wydarzenia
-</div>
-
-</div>
-
-
-<div class="gallery-item reveal">
-
-<img src="galeria3.jpg" alt="Uczniowie">
-
-<div class="gallery-overlay">
-    Uczniowie
-</div>
-
-</div>
-
-
-<div class="gallery-item reveal">
-
-<img src="galeria4.jpg" alt="Zajęcia">
-
-<div class="gallery-overlay">
-    Zajęcia
-</div>
-
-</div>
-
-
-<div class="gallery-item reveal">
-
-<img src="galeria5.jpg" alt="Szkolne wydarzenie">
-
-<div class="gallery-overlay">
-    Szkolne wydarzenia
-</div>
-
-</div>
-
-
-<div class="gallery-item reveal">
-
-<img src="galeria6.jpg" alt="Życie szkoły">
-
-<div class="gallery-overlay">
-    Życie szkoły
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     KONTAKT
-========================= -->
-
-<section class="contact" id="kontakt">
-
-<div class="container">
-
-<div class="section-heading reveal">
-
-<span>Skontaktuj się z nami</span>
-
-<h2>
-    Kontakt
-</h2>
-
-<p>
-    Informacje:
-</p>
-
-</div>
-
-
-<div class="contact-grid">
-
-<div class="contact-card reveal">
-
-<h3>
-    Szkoła Podstawowa nr 55
-</h3>
-
-<div class="contact-row">
-<strong>📍 Adres</strong>
-<span>Brak</span>
-</div>
-
-<div class="contact-row">
-<strong>☎ Telefon</strong>
-<span>Brak</span>
-</div>
-
-<div class="contact-row">
-<strong>✉ E-mail</strong>
-<span>szkolapodstawowaimmarisklodowskiejnr55@op.pl</span>
-</div>
-
-<div class="contact-row">
-<strong>🕐 Sekretariat</strong>
-<span>Brak</span>
-</div>
-
-</div>
-
-
-<div class="map reveal">
-
-<div>
-
-<div class="map-icon">
-    📍
-</div>
-
-<h3>
-    Lokalizacja szkoły
-</h3>
-
-<p>
-    W tym miejscu można później
-    dodać Google Maps.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
 
 </main>
 
 
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- ==========================================
+     STOPKA
+========================================== -->
 
 <footer>
 
-<div class="container">
-
-<div class="footer-grid">
-
-<div>
-
-<h3>
-    Szkoła Podstawowa nr 55
-</h3>
-
-<p>
-    im. Marii Skłodowskiej
-</p>
-
-<p style="margin-top:10px">
-    Wiedza • Pasja • Przyszłość
-</p>
-
-</div>
-
-
-<div>
-
-<h3>
-    Menu
-</h3>
-
-<ul class="footer-links">
-
-<li><a href="#start">Start</a></li>
-<li><a href="#aktualnosci">Aktualności</a></li>
-<li><a href="#szkola">O szkole</a></li>
-<li><a href="#galeria">Galeria</a></li>
-
-</ul>
-
-</div>
-
-
-<div>
-
-<h3>
-    Dla społeczności
-</h3>
-
-<ul class="footer-links">
-
-<li><a href="#uczen">Dla ucznia</a></li>
-<li><a href="#rodzic">Dla rodzica</a></li>
-
-<li>
-<a
-href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-target="_blank"
-rel="noopener noreferrer"
->
-E-dziennik
-</a>
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-
-<div class="copyright">
-
-<p>
-© 2026 Szkoła Podstawowa nr 55. Wszystkie prawa zastrzeżone.
-</p>
-
-</div>
-
-</div>
+    <p>
+        © Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+    </p>
 
 </footer>
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-
 <script>
 
-/* MENU NA TELEFONIE */
-
-function toggleMenu(){
-
-    const menu = document.getElementById("navLinks");
-
-    menu.classList.toggle("open");
-
-}
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
 
 
-/* ZAMYKANIE MENU PO KLIKNIĘCIU */
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 
-document.querySelectorAll(".nav-links a").forEach(link => {
 
-    link.addEventListener("click", () => {
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-        document
-            .getElementById("navLinks")
-            .classList.remove("open");
+
+const ADMIN_EMAIL =
+    "pi.pu2@op.pl";
+
+
+// ==========================================
+// AKTUALNOŚCI
+// ==========================================
+
+async function loadNews() {
+
+    const newsList =
+        document.getElementById("newsList");
+
+
+    newsList.innerHTML =
+        '<div class="news-loading">Ładowanie aktualności...</div>';
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("news")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Błąd pobierania aktualności:",
+            error
+        );
+
+        newsList.innerHTML =
+            '<div class="news-empty">❌ Nie udało się pobrać aktualności.</div>';
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        newsList.innerHTML =
+            '<div class="news-empty">Brak aktualności.</div>';
+
+        return;
+    }
+
+
+    newsList.innerHTML = "";
+
+
+    data.forEach(news => {
+
+        const item =
+            document.createElement("article");
+
+
+        item.className =
+            "news-item";
+
+
+        const title =
+            document.createElement("div");
+
+
+        title.className =
+            "news-title";
+
+
+        title.textContent =
+            "📢 " + news.title;
+
+
+        const content =
+            document.createElement("div");
+
+
+        content.className =
+            "news-content";
+
+
+        content.textContent =
+            news.content;
+
+
+        const date =
+            document.createElement("div");
+
+
+        date.className =
+            "news-date";
+
+
+        if (news.created_at) {
+
+            const dateObject =
+                new Date(news.created_at);
+
+
+            date.textContent =
+                "Dodano: " +
+                dateObject.toLocaleString(
+                    "pl-PL",
+                    {
+                        dateStyle: "medium",
+                        timeStyle: "short"
+                    }
+                );
+
+        }
+
+
+        item.appendChild(title);
+
+        item.appendChild(content);
+
+        item.appendChild(date);
+
+
+        newsList.appendChild(item);
 
     });
 
-});
+}
 
 
-/* ANIMACJE PODCZAS PRZEWIJANIA */
-
-const observer = new IntersectionObserver(
-
-    entries => {
-
-        entries.forEach(entry => {
-
-            if(entry.isIntersecting){
-
-                entry.target.classList.add("visible");
-
-            }
-
-        });
-
-    },
-
-    {
-        threshold:.12
-    }
-
-);
-
-
-document
-    .querySelectorAll(".reveal")
-    .forEach(element => observer.observe(element));
-
-
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+// ==========================================
+// SPRAWDZENIE LOGOWANIA
+// ==========================================
 
 async function checkLogin() {
 
-    const { data: { session } } =
+    const {
+        data: {
+            session
+        }
+    } =
         await supabaseClient.auth.getSession();
 
-    const loginMenu = document.getElementById("loginMenu");
-    const materialsMenu = document.getElementById("materialsMenu");
-    const logoutMenu = document.getElementById("logoutMenu");
-    const adminMenu = document.getElementById("adminMenu");
 
-    if (session && session.user) {
+    const loginMenu =
+        document.getElementById("loginMenu");
 
-        loginMenu.style.display = "none";
-        materialsMenu.style.display = "block";
-        logoutMenu.style.display = "block";
 
-        if (session.user.email === "pi.pu2@op.pl") {
-            adminMenu.style.display = "block";
-        } else {
-            adminMenu.style.display = "none";
-        }
+    const logoutMenu =
+        document.getElementById("logoutMenu");
+
+
+    const adminMenu =
+        document.getElementById("adminMenu");
+
+
+    const materialsList =
+        document.getElementById("materialsList");
+
+
+    if (!session) {
+
+        loginMenu.style.display =
+            "block";
+
+        logoutMenu.style.display =
+            "none";
+
+        adminMenu.style.display =
+            "none";
+
+        materialsList.innerHTML = `
+            <p>
+                Zaloguj się, aby korzystać z materiałów.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    loginMenu.style.display =
+        "none";
+
+
+    logoutMenu.style.display =
+        "block";
+
+
+    materialsList.innerHTML = `
+        <p>
+            ✅ Jesteś zalogowany.
+        </p>
+
+        <p>
+            Materiały są dostępne po zalogowaniu.
+        </p>
+    `;
+
+
+    if (
+        session.user.email ===
+        ADMIN_EMAIL
+    ) {
+
+        adminMenu.style.display =
+            "block";
 
     } else {
 
-        loginMenu.style.display = "block";
-        materialsMenu.style.display = "none";
-        logoutMenu.style.display = "none";
-        adminMenu.style.display = "none";
+        adminMenu.style.display =
+            "none";
 
     }
+
 }
+
+
+// ==========================================
+// WYLOGOWANIE
+// ==========================================
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const { error } =
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+            if (error) {
+
+                alert(
+                    "❌ Nie udało się wylogować: " +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            window.location.reload();
+
+        }
+    );
+
+
+// ==========================================
+// START
+// ==========================================
+
+loadNews();
 
 checkLogin();
 
-supabaseClient.auth.onAuthStateChange(() => {
-    checkLogin();
-});
 
-document.getElementById("logoutButton").addEventListener("click", async function(event) {
-
-    event.preventDefault();
-
-    await supabaseClient.auth.signOut();
-
-    window.location.href = "index.html";
-
-});
 </script>
 
+
 </body>
+
 </html>
-```
