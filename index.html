@@ -1,10 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="pl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</title>
+
+<!-- SUPABASE — tylko jeden raz -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -44,9 +50,7 @@ a{
     margin:auto;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* NAVBAR */
 
 .navbar{
     position:fixed;
@@ -80,18 +84,6 @@ a{
     height:48px;
     object-fit:contain;
     border-radius:10px;
-}
-
-.logo-fallback{
-    width:48px;
-    height:48px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,#1769e0,#65a2ff);
-    color:white;
-    font-weight:900;
 }
 
 .logo-text{
@@ -131,8 +123,6 @@ a{
     box-shadow:0 7px 20px rgba(23,105,224,.25);
 }
 
-/* hamburger */
-
 .menu-button{
     display:none;
     border:0;
@@ -142,9 +132,7 @@ a{
     color:var(--dark);
 }
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 
 .hero{
     min-height:800px;
@@ -276,9 +264,7 @@ a{
     color:rgba(255,255,255,.8);
 }
 
-/* =========================
-   SEKCJE
-========================= */
+/* SEKCJE */
 
 section{
     padding:100px 0;
@@ -308,9 +294,7 @@ section{
     color:var(--text);
 }
 
-/* =========================
-   AKTUALNOŚCI
-========================= */
+/* AKTUALNOŚCI */
 
 .news{
     background:white;
@@ -357,9 +341,7 @@ section{
     font-size:14px;
 }
 
-/* =========================
-   DLA UCZNIA / RODZICA
-========================= */
+/* DLA UCZNIA / RODZICA */
 
 .audience{
     background:#f1f6fc;
@@ -419,9 +401,7 @@ section{
     margin-right:10px;
 }
 
-/* =========================
-   GALERIA
-========================= */
+/* GALERIA */
 
 .gallery{
     background:white;
@@ -471,23 +451,7 @@ section{
     opacity:1;
 }
 
-/*
-    WSTAW SWOJE ZDJĘCIA:
-
-    galeria1.jpg
-    galeria2.jpg
-    galeria3.jpg
-    galeria4.jpg
-    galeria5.jpg
-    galeria6.jpg
-
-    Zdjęcia powinny znajdować się w tym samym folderze
-    co index.html.
-*/
-
-/* =========================
-   O SZKOLE
-========================= */
+/* O SZKOLE */
 
 .about-grid{
     display:grid;
@@ -545,9 +509,7 @@ section{
     font-size:12px;
 }
 
-/* =========================
-   KONTAKT
-========================= */
+/* KONTAKT */
 
 .contact{
     background:#f1f6fc;
@@ -583,8 +545,7 @@ section{
 .map{
     min-height:350px;
     border-radius:22px;
-    background:
-        linear-gradient(135deg,#dce9f8,#eef5fc);
+    background:linear-gradient(135deg,#dce9f8,#eef5fc);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -596,9 +557,7 @@ section{
     font-size:65px;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 
 footer{
     background:#0b203d;
@@ -637,9 +596,7 @@ footer a{
     text-align:center;
 }
 
-/* =========================
-   ANIMACJE
-========================= */
+/* ANIMACJE */
 
 @keyframes fadeUp{
     from{
@@ -672,9 +629,7 @@ footer a{
     transform:translateY(0);
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -693,7 +648,6 @@ footer a{
         gap:0;
         padding:10px 5%;
         box-shadow:0 15px 30px rgba(0,0,0,.08);
-
         display:none;
     }
 
@@ -781,13 +735,12 @@ footer a{
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- =========================
-     MENU
-========================= -->
+<!-- MENU -->
 
 <header class="navbar">
 
@@ -795,17 +748,14 @@ footer a{
 
 <a href="#start" class="logo">
 
-    <!--
-        PRAWDZIWE LOGO:
-        Umieść plik logo.png obok index.html.
-    -->
+```
+<img src="logo.png" alt="Logo szkoły">
 
-    <img src="logo.png" alt="Logo szkoły">
-
-    <div class="logo-text">
-        Szkoła Podstawowa nr 55
-        <small>im. Marii Skłodowskiej</small>
-    </div>
+<div class="logo-text">
+    Szkoła Podstawowa nr 55
+    <small>im. Marii Skłodowskiej</small>
+</div>
+```
 
 </a>
 
@@ -815,13 +765,14 @@ footer a{
 
 <ul class="nav-links" id="navLinks">
 
-    <li><a href="#start">Start</a></li>
-    <li><a href="#aktualnosci">Aktualności</a></li>
-    <li><a href="#szkola">O szkole</a></li>
-    <li><a href="#uczen">Dla ucznia</a></li>
-    <li><a href="#rodzic">Dla rodzica</a></li>
-    <li><a href="#galeria">Galeria</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
+```
+<li><a href="#start">Start</a></li>
+<li><a href="#aktualnosci">Aktualności</a></li>
+<li><a href="#szkola">O szkole</a></li>
+<li><a href="#uczen">Dla ucznia</a></li>
+<li><a href="#rodzic">Dla rodzica</a></li>
+<li><a href="#galeria">Galeria</a></li>
+<li><a href="#kontakt">Kontakt</a></li>
 
 <li id="loginMenu">
     <a class="login" href="logowanie.html">
@@ -829,19 +780,19 @@ footer a{
     </a>
 </li>
 
-<li id="materialsMenu" style="display: none;">
+<li id="materialsMenu" style="display:none;">
     <a href="materiały.html">
         📚 Materiały
     </a>
 </li>
-    
-    <li id="adminMenu" style="display: none;">
+
+<li id="adminMenu" style="display:none;">
     <a href="admin.html">
         ⚙️ Panel administratora
     </a>
 </li>
 
-<li id="logoutMenu" style="display: none;">
+<li id="logoutMenu" style="display:none;">
     <a href="#" id="logoutButton">
         🚪 Wyloguj
     </a>
@@ -856,6 +807,7 @@ footer a{
         E-dziennik
     </a>
 </li>
+```
 
 </ul>
 
@@ -863,12 +815,9 @@ footer a{
 
 </header>
 
-
-<!-- =========================
-     HERO
-========================= -->
-
 <main>
+
+<!-- HERO -->
 
 <section class="hero" id="start">
 
@@ -903,18 +852,22 @@ footer a{
 </a>
 
 <a
-    href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="button secondary"
+href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+target="_blank"
+rel="noopener noreferrer"
+class="button secondary"
+
 >
-    🔐 E-dziennik
+
+```
+🔐 E-dziennik
+```
+
 </a>
 
 </div>
 
 </div>
-
 
 <div class="hero-visual">
 
@@ -941,10 +894,7 @@ footer a{
 
 </section>
 
-
-<!-- =========================
-     AKTUALNOŚCI
-========================= -->
+<!-- AKTUALNOŚCI -->
 
 <section class="news" id="aktualnosci">
 
@@ -962,7 +912,6 @@ footer a{
 </p>
 
 </div>
-
 
 <div class="news-grid">
 
@@ -985,7 +934,6 @@ footer a{
 
 </article>
 
-
 <article class="news-card reveal">
 
 <div class="news-icon">🔬</div>
@@ -1004,7 +952,6 @@ footer a{
 </p>
 
 </article>
-
 
 <article class="news-card reveal">
 
@@ -1031,10 +978,7 @@ footer a{
 
 </section>
 
-
-<!-- =========================
-     O SZKOLE
-========================= -->
+<!-- O SZKOLE -->
 
 <section id="szkola">
 
@@ -1042,14 +986,13 @@ footer a{
 
 <div class="about-image reveal">
 
-    <!-- Wstaw tutaj np. szkoła.jpg -->
-    <img
-        src="szkola.png"
-        alt="Budynek szkoły"
-    >
+<img
+src="szkola.png"
+alt="Budynek szkoły"
+
+>
 
 </div>
-
 
 <div class="about-content reveal">
 
@@ -1070,7 +1013,6 @@ footer a{
     Stawiamy na bezpieczeństwo, współpracę,
     kreatywność oraz nowoczesną edukację.
 </p>
-
 
 <div class="stats">
 
@@ -1097,10 +1039,7 @@ footer a{
 
 </section>
 
-
-<!-- =========================
-     DLA UCZNIA / RODZICA
-========================= -->
+<!-- UCZEŃ / RODZIC -->
 
 <section class="audience">
 
@@ -1120,9 +1059,7 @@ footer a{
 
 </div>
 
-
 <div class="audience-grid">
-
 
 <div class="audience-card student reveal" id="uczen">
 
@@ -1146,7 +1083,6 @@ footer a{
 </ul>
 
 </div>
-
 
 <div class="audience-card parent reveal" id="rodzic">
 
@@ -1177,10 +1113,7 @@ footer a{
 
 </section>
 
-
-<!-- =========================
-     GALERIA
-========================= -->
+<!-- GALERIA -->
 
 <section class="gallery" id="galeria">
 
@@ -1200,9 +1133,7 @@ footer a{
 
 </div>
 
-
 <div class="gallery-grid">
-
 
 <div class="gallery-item reveal">
 
@@ -1214,7 +1145,6 @@ footer a{
 
 </div>
 
-
 <div class="gallery-item reveal">
 
 <img src="galeria2.jpg" alt="Wydarzenie szkolne">
@@ -1224,7 +1154,6 @@ footer a{
 </div>
 
 </div>
-
 
 <div class="gallery-item reveal">
 
@@ -1236,7 +1165,6 @@ footer a{
 
 </div>
 
-
 <div class="gallery-item reveal">
 
 <img src="galeria4.jpg" alt="Zajęcia">
@@ -1247,7 +1175,6 @@ footer a{
 
 </div>
 
-
 <div class="gallery-item reveal">
 
 <img src="galeria5.jpg" alt="Szkolne wydarzenie">
@@ -1257,7 +1184,6 @@ footer a{
 </div>
 
 </div>
-
 
 <div class="gallery-item reveal">
 
@@ -1275,10 +1201,7 @@ footer a{
 
 </section>
 
-
-<!-- =========================
-     KONTAKT
-========================= -->
+<!-- KONTAKT -->
 
 <section class="contact" id="kontakt">
 
@@ -1297,7 +1220,6 @@ footer a{
 </p>
 
 </div>
-
 
 <div class="contact-grid">
 
@@ -1329,7 +1251,6 @@ footer a{
 
 </div>
 
-
 <div class="map reveal">
 
 <div>
@@ -1359,10 +1280,7 @@ footer a{
 
 </main>
 
-
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- FOOTER -->
 
 <footer>
 
@@ -1386,7 +1304,6 @@ footer a{
 
 </div>
 
-
 <div>
 
 <h3>
@@ -1403,7 +1320,6 @@ footer a{
 </ul>
 
 </div>
-
 
 <div>
 
@@ -1432,7 +1348,6 @@ E-dziennik
 
 </div>
 
-
 <div class="copyright">
 
 <p>
@@ -1445,222 +1360,378 @@ E-dziennik
 
 </footer>
 
-
 <!-- =========================
      JAVASCRIPT
 ========================= -->
 
 <script>
 
-/* MENU NA TELEFONIE */
+/* =========================
+   MENU TELEFONICZNE
+========================= */
 
 function toggleMenu(){
 
     const menu = document.getElementById("navLinks");
 
-    menu.classList.toggle("open");
+    if(menu){
+        menu.classList.toggle("open");
+    }
 
 }
 
 
-/* ZAMYKANIE MENU PO KLIKNIĘCIU */
+/* ZAMYKANIE MENU */
 
 document.querySelectorAll(".nav-links a").forEach(link => {
 
     link.addEventListener("click", () => {
 
-        document
-            .getElementById("navLinks")
-            .classList.remove("open");
+        const menu = document.getElementById("navLinks");
+
+        if(menu){
+            menu.classList.remove("open");
+        }
 
     });
 
 });
 
 
-/* ANIMACJE PODCZAS PRZEWIJANIA */
+/* =========================
+   ANIMACJE
+========================= */
 
-const observer = new IntersectionObserver(
+if("IntersectionObserver" in window){
 
-    entries => {
+    const observer = new IntersectionObserver(
 
-        entries.forEach(entry => {
+        entries => {
 
-            if(entry.isIntersecting){
+            entries.forEach(entry => {
 
-                entry.target.classList.add("visible");
+                if(entry.isIntersecting){
+
+                    entry.target.classList.add("visible");
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.12
+        }
+
+    );
+
+    document
+        .querySelectorAll(".reveal")
+        .forEach(element => observer.observe(element));
+
+}
+
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+let supabaseClient = null;
+
+
+/* Sprawdzenie biblioteki */
+
+if(typeof supabase === "undefined"){
+
+    console.error("Supabase nie został załadowany.");
+
+}else{
+
+    supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+}
+
+
+/* =========================
+   LOGOWANIE — MENU
+========================= */
+
+async function checkLogin(){
+
+    if(!supabaseClient){
+        return;
+    }
+
+    const loginMenu =
+        document.getElementById("loginMenu");
+
+    const materialsMenu =
+        document.getElementById("materialsMenu");
+
+    const logoutMenu =
+        document.getElementById("logoutMenu");
+
+    const adminMenu =
+        document.getElementById("adminMenu");
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if(error){
+
+            console.error(
+                "Błąd pobierania sesji:",
+                error
+            );
+
+        }
+
+
+        const session =
+            data?.session;
+
+
+        if(session && session.user){
+
+            if(loginMenu){
+                loginMenu.style.display = "none";
+            }
+
+            if(materialsMenu){
+                materialsMenu.style.display = "block";
+            }
+
+            if(logoutMenu){
+                logoutMenu.style.display = "block";
+            }
+
+
+            if(
+                session.user.email ===
+                "pi.pu2@op.pl"
+            ){
+
+                if(adminMenu){
+                    adminMenu.style.display = "block";
+                }
+
+            }else{
+
+                if(adminMenu){
+                    adminMenu.style.display = "none";
+                }
 
             }
 
-        });
+        }else{
 
-    },
+            if(loginMenu){
+                loginMenu.style.display = "block";
+            }
 
-    {
-        threshold:.12
-    }
+            if(materialsMenu){
+                materialsMenu.style.display = "none";
+            }
 
-);
+            if(logoutMenu){
+                logoutMenu.style.display = "none";
+            }
 
+            if(adminMenu){
+                adminMenu.style.display = "none";
+            }
 
-document
-    .querySelectorAll(".reveal")
-    .forEach(element => observer.observe(element));
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-/* =========================
-   LOGOWANIE
-========================= */
-
-async function checkLogin() {
-
-    const { data: { session } } =
-        await supabaseClient.auth.getSession();
-
-    const loginMenu = document.getElementById("loginMenu");
-    const materialsMenu = document.getElementById("materialsMenu");
-    const logoutMenu = document.getElementById("logoutMenu");
-    const adminMenu = document.getElementById("adminMenu");
-
-    if (session && session.user) {
-
-        loginMenu.style.display = "none";
-        materialsMenu.style.display = "block";
-        logoutMenu.style.display = "block";
-
-        if (session.user.email === "pi.pu2@op.pl") {
-            adminMenu.style.display = "block";
-        } else {
-            adminMenu.style.display = "none";
         }
 
-    } else {
+    }catch(error){
 
-        loginMenu.style.display = "block";
-        materialsMenu.style.display = "none";
-        logoutMenu.style.display = "none";
-        adminMenu.style.display = "none";
+        console.error(
+            "Błąd sprawdzania logowania:",
+            error
+        );
 
     }
-}
-
-
-/* =========================
-   AKTUALNOŚCI Z SUPABASE
-========================= */
-
-async function loadNews() {
-
-    const newsGrid = document.querySelector(".news-grid");
-
-    if (!newsGrid) {
-        return;
-    }
-
-    const { data, error } = await supabaseClient
-        .from("news")
-        .select("id, title, content, created_at")
-        .order("created_at", { ascending: false });
-
-    if (error) {
-
-        console.error("Błąd pobierania aktualności:", error);
-
-        return;
-    }
-
-
-    /* Jeżeli nie ma żadnych aktualności */
-
-    if (!data || data.length === 0) {
-
-        newsGrid.innerHTML = `
-            <article class="news-card reveal visible">
-
-                <div class="news-icon">📢</div>
-
-                <div class="news-date">
-                    Informacja
-                </div>
-
-                <h3>
-                    Brak nowych aktualności
-                </h3>
-
-                <p>
-                    W tej chwili nie ma żadnych nowych informacji.
-                </p>
-
-            </article>
-        `;
-
-        return;
-    }
-
-
-    /* Tworzenie kart aktualności */
-
-    newsGrid.innerHTML = data.map(news => {
-
-        const date = new Date(news.created_at);
-
-        const formattedDate = date.toLocaleDateString("pl-PL", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
-
-
-        return `
-            <article class="news-card reveal visible">
-
-                <div class="news-icon">
-                    📢
-                </div>
-
-                <div class="news-date">
-                    ${formattedDate}
-                </div>
-
-                <h3>
-                    ${escapeHtml(news.title)}
-                </h3>
-
-                <p>
-                    ${escapeHtml(news.content)}
-                </p>
-
-            </article>
-        `;
-
-    }).join("");
 
 }
 
 
 /* =========================
-   BEZPIECZNE WYŚWIETLANIE TEKSTU
+   AKTUALNOŚCI
 ========================= */
 
-function escapeHtml(text) {
+async function loadNews(){
 
-    const div = document.createElement("div");
+    if(!supabaseClient){
+        return;
+    }
 
-    div.textContent = text ?? "";
+
+    const newsGrid =
+        document.querySelector(".news-grid");
+
+
+    if(!newsGrid){
+        return;
+    }
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("news")
+                .select(
+                    "id,title,content,created_at"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:false
+                    }
+                );
+
+
+        if(error){
+
+            console.error(
+                "Błąd pobierania aktualności:",
+                error
+            );
+
+            return;
+
+        }
+
+
+        if(
+            !data ||
+            data.length === 0
+        ){
+
+            newsGrid.innerHTML = `
+
+                <article class="news-card reveal visible">
+
+                    <div class="news-icon">
+                        📢
+                    </div>
+
+                    <div class="news-date">
+                        Informacja
+                    </div>
+
+                    <h3>
+                        Brak nowych aktualności
+                    </h3>
+
+                    <p>
+                        W tej chwili nie ma żadnych nowych informacji.
+                    </p>
+
+                </article>
+
+            `;
+
+            return;
+
+        }
+
+
+        newsGrid.innerHTML =
+            data.map(news => {
+
+                const date =
+                    news.created_at
+                    ? new Date(news.created_at)
+                    : null;
+
+
+                const formattedDate =
+                    date
+                    ? date.toLocaleDateString(
+                        "pl-PL",
+                        {
+                            day:"2-digit",
+                            month:"2-digit",
+                            year:"numeric"
+                        }
+                    )
+                    : "";
+
+
+                return `
+
+                    <article class="news-card reveal visible">
+
+                        <div class="news-icon">
+                            📢
+                        </div>
+
+                        <div class="news-date">
+                            ${escapeHtml(formattedDate)}
+                        </div>
+
+                        <h3>
+                            ${escapeHtml(news.title)}
+                        </h3>
+
+                        <p>
+                            ${escapeHtml(news.content)}
+                        </p>
+
+                    </article>
+
+                `;
+
+            }).join("");
+
+
+    }catch(error){
+
+        console.error(
+            "Błąd aktualności:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
+   BEZPIECZNY TEKST
+========================= */
+
+function escapeHtml(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text ?? "";
 
     return div.innerHTML;
+
 }
 
 
@@ -1668,38 +1739,81 @@ function escapeHtml(text) {
    WYLOGOWANIE
 ========================= */
 
-document
-    .getElementById("logoutButton")
-    .addEventListener("click", async function(event) {
+const logoutButton =
+    document.getElementById("logoutButton");
 
-        event.preventDefault();
 
-        await supabaseClient.auth.signOut();
+if(logoutButton){
 
-        window.location.href = "index.html";
+    logoutButton.addEventListener(
+        "click",
+        async function(event){
 
-    });
+            event.preventDefault();
+
+
+            if(!supabaseClient){
+                return;
+            }
+
+
+            try{
+
+                await supabaseClient.auth.signOut();
+
+                window.location.href =
+                    "index.html";
+
+            }catch(error){
+
+                console.error(
+                    "Błąd wylogowania:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================
    START
 ========================= */
 
-checkLogin();
-loadNews();
+async function startPage(){
+
+    await checkLogin();
+
+    await loadNews();
+
+}
+
+
+/* Uruchomienie strony */
+
+startPage();
 
 
 /* =========================
-   AKTUALIZACJA PO ZMIANIE LOGOWANIA
+   REAKCJA NA LOGOWANIE
 ========================= */
 
-supabaseClient.auth.onAuthStateChange(() => {
+if(supabaseClient){
 
-    checkLogin();
+    supabaseClient.auth.onAuthStateChange(
+        function(){
 
-});
+            checkLogin();
+
+        }
+    );
+
+}
+
 </script>
 
 </body>
 </html>
-```
