@@ -728,22 +728,67 @@ async function loadConversations() {
 // OTWIERANIE ROZMOWY
 // ==================================================
 
-async function openConversation(
-    conversation
-) {
+async function openConversation(conversation) {
 
-    currentConversationId =
-        conversation.id;
+    // Zapamiętujemy ID rozmowy
+    currentConversationId = conversation.id;
+
+
+    // ==========================================
+    // POBIERZ AKTUALNY STAN ROZMOWY Z BAZY
+    // ==========================================
+
+    const {
+        data: freshConversation,
+        error: freshError
+    } = await supabaseClient
+        .from("help_conversations")
+        .select("id, created_at, closed")
+        .eq("id", conversation.id)
+        .single();
+
+
+    if (freshError) {
+
+        console.error(
+            "Błąd pobierania rozmowy:",
+            freshError
+        );
+
+        alert(
+            "❌ Nie udało się pobrać stanu rozmowy:\n" +
+            freshError.message
+        );
+
+        return;
+    }
+
+
+    // WAŻNE:
+    // stan zamknięcia pobieramy z bazy,
+    // a nie ze starej zmiennej
 
     currentConversationClosed =
-        conversation.closed === true;
+        freshConversation.closed === true;
 
+
+    // ==========================================
+    // TYTUŁ
+    // ==========================================
 
     document.getElementById(
         "chatTitle"
     ).textContent =
-        "💬 Rozmowa";
+        "💬 " +
+        (
+            conversation.name ||
+            "Uczeń"
+        );
 
+
+    // ==========================================
+    // STATUS
+    // ==========================================
 
     document.getElementById(
         "chatStatus"
@@ -753,19 +798,37 @@ async function openConversation(
             : "🟢 Aktywna";
 
 
+    // ==========================================
+    // PRZYCISK ZAMYKANIA
+    // ==========================================
+
     const closeButton =
         document.getElementById(
             "closeConversationButton"
         );
 
 
-    closeButton.style.display =
-        currentConversationClosed
-            ? "none"
-            : "block";
+    if (currentConversationClosed) {
 
+        closeButton.style.display = "none";
+
+    } else {
+
+        closeButton.style.display = "block";
+
+    }
+
+
+    // ==========================================
+    // WIADOMOŚCI
+    // ==========================================
 
     await loadMessages();
+
+
+    // ==========================================
+    // PO ODŚWIEŻENIU LISTY ZACHOWAJ STAN
+    // ==========================================
 
     await loadConversations();
 
