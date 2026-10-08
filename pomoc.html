@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pomoc | Szkoła Podstawowa nr 55</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+}
+
+header {
+    background: linear-gradient(135deg, #1769e0, #4c8ff5);
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+}
+
+header h1 {
+    margin: 0 0 8px;
+}
+
+main {
+    max-width: 750px;
+    margin: 35px auto;
+    padding: 20px;
+}
+
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 9px;
+    background: #1769e0;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1257bd;
+}
+
+.message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.chat {
+    display: none;
+}
+
+.messages {
+    height: 400px;
+    overflow-y: auto;
+    background: #f4f7fb;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.chat-message {
+    background: white;
+    padding: 12px 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.chat-message strong {
+    color: #1769e0;
+}
+
+.chat-message.secretariat strong {
+    color: #15926f;
+}
+
+.chat-date {
+    display: block;
+    color: #888;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    color: #1769e0;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.notice {
+    background: #eef5ff;
+    border-left: 4px solid #1769e0;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🆘 Potrzebuję pomocy</h1>
+
+<p>Kontakt z sekretariatem szkoły</p>
+
+</header>
+
+
+<main>
+
+
+<!-- =========================
+     PODANIE IMIENIA
+========================= -->
+
+<div class="box" id="nameBox">
+
+<h2>👋 Zanim zaczniemy</h2>
+
+<div class="notice">
+
+Podaj swoje imię lub pseudonim.
+Nie wpisuj tutaj hasła, numeru telefonu ani adresu.
+
+</div>
+
+<label for="nickname">
+Imię lub pseudonim
+</label>
+
+<input
+    type="text"
+    id="nickname"
+    maxlength="40"
+    placeholder="np. Kuba albo SuperKuba"
+>
+
+<button id="startButton">
+    💬 Rozpocznij rozmowę
+</button>
+
+<p id="nameMessage" class="message"></p>
+
+</div>
+
+
+<!-- =========================
+     CZAT
+========================= -->
+
+<div class="box chat" id="chatBox">
+
+<h2>
+    💬 Rozmowa z sekretariatem
+</h2>
+
+<p>
+    Rozmawiasz jako:
+    <strong id="userName"></strong>
+</p>
+
+
+<div
+    class="messages"
+    id="messages"
+>
+
+</div>
+
+
+<label for="messageInput">
+Wiadomość
+</label>
+
+<textarea
+    id="messageInput"
+    maxlength="1000"
+    placeholder="Napisz wiadomość..."
+></textarea>
+
+
+<button id="sendButton">
+    📤 Wyślij wiadomość
+</button>
+
+
+<p
+    id="sendMessage"
+    class="message"
+></p>
+
+</div>
+
+
+<a
+    href="index.html"
+    class="back"
+>
+    ← Wróć na stronę główną
+</a>
+
+</main>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================
+   ZMIENNE
+========================= */
+
+let nickname = "";
+
+let conversationId = null;
+
+
+/* =========================
+   ROZPOCZĘCIE CZATU
+========================= */
+
+document
+.getElementById("startButton")
+.addEventListener("click", async function() {
+
+    const input =
+        document.getElementById("nickname");
+
+    const message =
+        document.getElementById("nameMessage");
+
+    nickname =
+        input.value.trim();
+
+
+    if (!nickname) {
+
+        message.textContent =
+            "❌ Wpisz imię lub pseudonim.";
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    if (nickname.length < 2) {
+
+        message.textContent =
+            "❌ Imię lub pseudonim jest za krótki.";
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    message.textContent =
+        "⏳ Otwieranie rozmowy...";
+
+    message.style.color = "#1769e0";
+
+
+    /*
+       Tworzymy nową rozmowę
+    */
+
+    const { data, error } =
+        await supabaseClient
+        .from("help_conversations")
+        .insert({
+            nickname: nickname
+        })
+        .select()
+        .single();
+
+
+    if (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "❌ Nie udało się rozpocząć rozmowy: " +
+            error.message;
+
+        message.style.color = "red";
+
+        return;
+    }
+
+
+    conversationId =
+        data.id;
+
+
+    document
+        .getElementById("nameBox")
+        .style.display = "none";
+
+
+    document
+        .getElementById("chatBox")
+        .style.display = "block";
+
+
+    document
+        .getElementById("userName")
+        .textContent = nickname;
+
+
+    await loadMessages();
+
+});
+
+
+/* =========================
+   POBIERANIE WIADOMOŚCI
+========================= */
+
+async function loadMessages() {
+
+    if (!conversationId) {
+        return;
+    }
+
+
+    const messages =
+        document.getElementById("messages");
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("help_messages")
+        .select("*")
+        .eq(
+            "conversation_id",
+            conversationId
+        )
+        .order(
+            "created_at",
+            {
+                ascending: true
+            }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        messages.innerHTML =
+            "<p>❌ Nie udało się pobrać wiadomości.</p>";
+
+        return;
+    }
+
+
+    messages.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        messages.innerHTML =
+            "<p style='color:#777'>Napisz pierwszą wiadomość.</p>";
+
+        return;
+    }
+
+
+    data.forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "chat-message";
+
+
+        if (item.sender === "secretariat") {
+
+            div.classList.add(
+                "secretariat"
+            );
+
+        }
+
+
+        const sender =
+            document.createElement("strong");
+
+
+        sender.textContent =
+            item.sender === "secretariat"
+                ? "🏫 Sekretariat"
+                : nickname;
+
+
+        const text =
+            document.createElement("div");
+
+
+        text.textContent =
+            item.message;
+
+
+        const date =
+            document.createElement("span");
+
+
+        date.className =
+            "chat-date";
+
+
+        date.textContent =
+            new Date(
+                item.created_at
+            ).toLocaleString(
+                "pl-PL"
+            );
+
+
+        div.appendChild(sender);
+
+        div.appendChild(text);
+
+        div.appendChild(date);
+
+
+        messages.appendChild(div);
+
+    });
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+/* =========================
+   WYSYŁANIE WIADOMOŚCI
+========================= */
+
+document
+.getElementById("sendButton")
+.addEventListener("click", async function() {
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    const status =
+        document.getElementById(
+            "sendMessage"
+        );
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+
+        status.textContent =
+            "❌ Wpisz wiadomość.";
+
+        status.style.color = "red";
+
+        return;
+    }
+
+
+    if (!conversationId) {
+
+        status.textContent =
+            "❌ Rozmowa nie została rozpoczęta.";
+
+        status.style.color = "red";
+
+        return;
+    }
+
+
+    status.textContent =
+        "⏳ Wysyłanie...";
+
+    status.style.color =
+        "#1769e0";
+
+
+    const { error } =
+        await supabaseClient
+        .from("help_messages")
+        .insert({
+
+            conversation_id:
+                conversationId,
+
+            sender:
+                "student",
+
+            message:
+                text
+
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "❌ Nie udało się wysłać wiadomości: " +
+            error.message;
+
+        status.style.color =
+            "red";
+
+        return;
+    }
+
+
+    input.value = "";
+
+    status.textContent =
+        "✅ Wiadomość wysłana.";
+
+    status.style.color =
+        "green";
+
+
+    await loadMessages();
+
+});
+
+
+/* =========================
+   ENTER = WYŚLIJ
+========================= */
+
+document
+.getElementById("messageInput")
+.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            document
+                .getElementById(
+                    "sendButton"
+                )
+                .click();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   AUTOMATYCZNE ODŚWIEŻANIE
+========================= */
+
+setInterval(
+    loadMessages,
+    5000
+);
+
+</script>
+
+</body>
+
+</html>
