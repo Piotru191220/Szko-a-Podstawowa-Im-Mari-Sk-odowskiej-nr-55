@@ -5,8 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sekretariat | Szkoła Podstawowa nr 55</title>
 
@@ -20,92 +19,92 @@
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     background: #f4f7fb;
-    color: #172033;
+    color: #222;
 }
 
 header {
     background: linear-gradient(135deg, #1769e0, #4c8ff5);
     color: white;
-    padding: 25px 20px;
+    padding: 30px 20px;
 }
 
 .header-inner {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: auto;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 20px;
 }
 
 header h1 {
     margin: 0;
-    font-size: 28px;
 }
 
 header p {
-    margin: 5px 0 0;
-    opacity: .85;
+    margin: 6px 0 0;
+    opacity: .9;
 }
 
-.logout {
+.logout-button {
     border: none;
-    background: white;
-    color: #1769e0;
+    background: rgba(255,255,255,.18);
+    color: white;
     padding: 11px 16px;
     border-radius: 9px;
     cursor: pointer;
     font-weight: bold;
 }
 
+.logout-button:hover {
+    background: rgba(255,255,255,.28);
+}
+
 main {
-    max-width: 1200px;
-    margin: 25px auto;
-    padding: 0 15px;
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
-.chat-layout {
+.layout {
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 330px 1fr;
     gap: 20px;
-    height: 650px;
 }
 
-/* LEWA STRONA */
-
-.conversations {
+.box {
     background: white;
-    border-radius: 15px;
+    border-radius: 16px;
     box-shadow: 0 8px 25px rgba(0,0,0,.07);
     overflow: hidden;
 }
 
-.conversations-header {
+.box-header {
     padding: 20px;
     border-bottom: 1px solid #e8edf4;
 }
 
-.conversations-header h2 {
+.box-header h2 {
     margin: 0;
     font-size: 20px;
 }
 
-#conversationList {
-    height: calc(100% - 70px);
+.conversations {
+    max-height: 650px;
     overflow-y: auto;
 }
 
 .conversation {
-    padding: 16px;
+    padding: 17px;
     border-bottom: 1px solid #edf1f6;
     cursor: pointer;
     transition: .2s;
 }
 
 .conversation:hover {
-    background: #f4f8ff;
+    background: #f5f8fd;
 }
 
 .conversation.active {
@@ -116,13 +115,12 @@ main {
 .conversation-name {
     font-weight: bold;
     color: #1769e0;
-    font-size: 16px;
+    margin-bottom: 5px;
 }
 
 .conversation-date {
-    color: #7b8798;
     font-size: 12px;
-    margin-top: 5px;
+    color: #777;
 }
 
 .empty {
@@ -137,55 +135,53 @@ main {
     color: #1769e0;
 }
 
-/* CHAT */
-
 .chat {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,.07);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 700px;
 }
 
 .chat-header {
-    padding: 18px 22px;
+    padding: 20px;
     border-bottom: 1px solid #e8edf4;
-    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
 .chat-header h2 {
     margin: 0;
-    font-size: 20px;
 }
 
-.chat-header span {
-    color: #7b8798;
+.chat-status {
     font-size: 13px;
+    color: #18a88b;
+    font-weight: bold;
 }
 
 .messages {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-    background: #f7f9fc;
+    background: #f8faff;
 }
 
 .message {
     max-width: 75%;
-    margin-bottom: 14px;
     padding: 12px 15px;
     border-radius: 14px;
-    line-height: 1.45;
+    margin-bottom: 12px;
+    word-wrap: break-word;
 }
 
 .message.student {
     background: white;
-    border: 1px solid #e1e7ef;
+    border: 1px solid #e2e8f0;
     margin-right: auto;
 }
 
-.message.secretariat {
+.message.secretary {
     background: #1769e0;
     color: white;
     margin-left: auto;
@@ -194,58 +190,75 @@ main {
 .message-author {
     font-size: 11px;
     font-weight: bold;
-    margin-bottom: 4px;
-    opacity: .75;
+    margin-bottom: 5px;
+    opacity: .7;
 }
 
-.message-time {
+.message-text {
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+.message-date {
     font-size: 10px;
-    margin-top: 6px;
+    margin-top: 7px;
     opacity: .6;
 }
 
-/* ODPOWIADANIE */
-
-.reply {
+.chat-input {
     padding: 15px;
     border-top: 1px solid #e8edf4;
+    background: white;
     display: flex;
     gap: 10px;
 }
 
-#replyInput {
+.chat-input textarea {
     flex: 1;
     resize: none;
-    height: 55px;
+    min-height: 55px;
+    max-height: 150px;
     padding: 12px;
-    border: 1px solid #ccd5e2;
+    border: 1px solid #ccd6e5;
     border-radius: 10px;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-size: 15px;
-    outline: none;
 }
 
-#replyInput:focus {
-    border-color: #1769e0;
-}
-
-#sendButton {
+.send-button {
     border: none;
     background: #1769e0;
     color: white;
     padding: 0 20px;
     border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background: #1257bd;
+}
+
+.close-button {
+    border: none;
+    background: #d93025;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
 }
 
-#sendButton:hover {
-    background: #1257bd;
+.close-button:hover {
+    background: #b9231b;
 }
 
-#sendButton:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+.closed-message {
+    padding: 15px;
+    text-align: center;
+    background: #fff3f2;
+    color: #b42318;
+    font-weight: bold;
 }
 
 .no-chat {
@@ -253,23 +266,9 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #7b8798;
     text-align: center;
+    color: #777;
     padding: 30px;
-}
-
-.status {
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 14px;
-}
-
-.status.error {
-    color: #d93025;
-}
-
-.status.success {
-    color: #16803c;
 }
 
 .back {
@@ -282,25 +281,16 @@ main {
 
 @media(max-width: 800px) {
 
-    .chat-layout {
+    .layout {
         grid-template-columns: 1fr;
-        height: auto;
     }
 
     .conversations {
-        height: 300px;
-    }
-
-    #conversationList {
-        height: 230px;
+        max-height: 300px;
     }
 
     .chat {
-        height: 600px;
-    }
-
-    .message {
-        max-width: 90%;
+        height: 650px;
     }
 
     .header-inner {
@@ -308,12 +298,15 @@ main {
         text-align: center;
     }
 
+    .message {
+        max-width: 90%;
+    }
+
 }
 
 </style>
 
 </head>
-
 
 <body>
 
@@ -324,18 +317,17 @@ main {
 
 <div>
 
-<h1>💬 Sekretariat</h1>
+<h1>🏫 Sekretariat</h1>
 
-<p>Centrum wiadomości z uczniami</p>
+<p>Panel obsługi rozmów z uczniami</p>
 
 </div>
 
 <button
-    class="logout"
-    id="logoutButton">
-
+    class="logout-button"
+    id="logoutButton"
+>
     🚪 Wyloguj
-
 </button>
 
 </div>
@@ -345,24 +337,25 @@ main {
 
 <main>
 
+<div class="layout">
 
-<div class="chat-layout">
 
-
-<!-- ================================= -->
+<!-- ============================= -->
 <!-- LISTA ROZMÓW -->
-<!-- ================================= -->
+<!-- ============================= -->
 
-<div class="conversations">
+<div class="box">
 
-<div class="conversations-header">
+<div class="box-header">
 
 <h2>💬 Rozmowy</h2>
 
 </div>
 
-
-<div id="conversationList">
+<div
+    class="conversations"
+    id="conversations"
+>
 
 <div class="loading">
     Ładowanie rozmów...
@@ -373,29 +366,46 @@ main {
 </div>
 
 
-<!-- ================================= -->
+<!-- ============================= -->
 <!-- CHAT -->
-<!-- ================================= -->
+<!-- ============================= -->
 
-<div class="chat">
+<div class="box chat">
 
+<div
+    id="chatHeader"
+    class="chat-header"
+>
 
-<div class="chat-header">
+<div>
 
 <h2 id="chatTitle">
-    Wybierz rozmowę
+    💬 Wybierz rozmowę
 </h2>
 
-<span id="chatSubtitle">
-    Wybierz ucznia z listy po lewej.
-</span>
+<div
+    id="chatStatus"
+    class="chat-status"
+>
+</div>
+
+</div>
+
+<button
+    id="closeConversationButton"
+    class="close-button"
+    style="display:none;"
+>
+    🔒 Zamknij rozmowę
+</button>
 
 </div>
 
 
 <div
+    id="messages"
     class="messages"
-    id="messages">
+>
 
 <div class="no-chat">
 
@@ -406,8 +416,7 @@ main {
         </div>
 
         <p>
-            Wybierz rozmowę,
-            aby zobaczyć wiadomości.
+            Wybierz rozmowę z listy.
         </p>
 
     </div>
@@ -418,31 +427,33 @@ main {
 
 
 <div
-    class="reply"
-    id="replyBox"
-    style="display:none;">
-
-<textarea
-    id="replyInput"
-    placeholder="Napisz odpowiedź..."></textarea>
-
-
-<button
-    id="sendButton">
-
-    Wyślij
-
-</button>
-
+    id="closedMessage"
+    class="closed-message"
+    style="display:none;"
+>
+    🔒 Ta rozmowa została zamknięta.
 </div>
 
 
 <div
-    id="status"
-    class="status">
+    id="chatInput"
+    class="chat-input"
+    style="display:none;"
+>
+
+<textarea
+    id="messageInput"
+    placeholder="Napisz odpowiedź..."
+></textarea>
+
+<button
+    id="sendButton"
+    class="send-button"
+>
+    Wyślij
+</button>
 
 </div>
-
 
 </div>
 
@@ -450,31 +461,26 @@ main {
 
 
 <a
+    class="back"
     href="index.html"
-    class="back">
-
+>
     ← Wróć na stronę główną
-
 </a>
-
 
 </main>
 
 
 <script>
 
-
-// =====================================
+// ==================================================
 // SUPABASE
-// =====================================
+// ==================================================
 
 const SUPABASE_URL =
     "https://vqilsuvpinnfmngrczlj.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
 
 const ADMIN_EMAIL =
     "pi.pu2@op.pl";
@@ -487,72 +493,20 @@ const supabaseClient =
     );
 
 
-// =====================================
+// ==================================================
 // ZMIENNE
-// =====================================
+// ==================================================
 
 let currentConversationId = null;
 
-let currentConversationName = "";
+let currentConversationClosed = false;
 
 
-// =====================================
-// ELEMENTY
-// =====================================
-
-const conversationList =
-    document.getElementById(
-        "conversationList"
-    );
-
-
-const messages =
-    document.getElementById(
-        "messages"
-    );
-
-
-const chatTitle =
-    document.getElementById(
-        "chatTitle"
-    );
-
-
-const chatSubtitle =
-    document.getElementById(
-        "chatSubtitle"
-    );
-
-
-const replyBox =
-    document.getElementById(
-        "replyBox"
-    );
-
-
-const replyInput =
-    document.getElementById(
-        "replyInput"
-    );
-
-
-const sendButton =
-    document.getElementById(
-        "sendButton"
-    );
-
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-
-// =====================================
+// ==================================================
 // SPRAWDZENIE ADMINA
-// =====================================
+// ==================================================
 
-async function checkUser() {
+async function checkAdmin() {
 
     const {
         data,
@@ -563,17 +517,13 @@ async function checkUser() {
 
     if (error) {
 
-        document.body.innerHTML = `
+        console.error(
+            "Błąd sesji:",
+            error
+        );
 
-            <h1 style="text-align:center;margin-top:100px;">
-                ❌ Błąd
-            </h1>
-
-            <p style="text-align:center;">
-                Nie udało się sprawdzić logowania.
-            </p>
-
-        `;
+        window.location.href =
+            "logowanie.html";
 
         return false;
     }
@@ -605,27 +555,33 @@ async function checkUser() {
 
         document.body.innerHTML = `
 
-            <h1 style="
+            <div style="
                 text-align:center;
                 margin-top:100px;
+                font-family:Arial;
             ">
-                🚫 Brak dostępu
-            </h1>
 
-            <p style="text-align:center;">
-                Ta strona jest tylko dla sekretariatu.
-            </p>
+                <h1>
+                    🚫 Brak dostępu
+                </h1>
 
-            <p style="text-align:center;">
-                Zalogowane konto:
-                <strong>${email}</strong>
-            </p>
+                <p>
+                    Ta strona jest przeznaczona
+                    tylko dla sekretariatu.
+                </p>
 
-            <p style="text-align:center;">
-                <a href="index.html">
-                    Wróć na stronę główną
-                </a>
-            </p>
+                <p>
+                    Zalogowane konto:
+                    <strong>${escapeHtml(email)}</strong>
+                </p>
+
+                <p>
+                    <a href="index.html">
+                        ← Wróć na stronę główną
+                    </a>
+                </p>
+
+            </div>
 
         `;
 
@@ -634,23 +590,23 @@ async function checkUser() {
 
 
     return true;
-
 }
 
 
-// =====================================
+// ==================================================
 // POBIERANIE ROZMÓW
-// =====================================
+// ==================================================
 
 async function loadConversations() {
 
-    conversationList.innerHTML = `
+    const list =
+        document.getElementById(
+            "conversations"
+        );
 
-        <div class="loading">
-            Ładowanie rozmów...
-        </div>
 
-    `;
+    list.innerHTML =
+        '<div class="loading">Ładowanie rozmów...</div>';
 
 
     const {
@@ -676,7 +632,7 @@ async function loadConversations() {
         );
 
 
-        conversationList.innerHTML = `
+        list.innerHTML = `
 
             <div class="empty">
 
@@ -685,7 +641,7 @@ async function loadConversations() {
                 <br><br>
 
                 <small>
-                    ${error.message}
+                    ${escapeHtml(error.message)}
                 </small>
 
             </div>
@@ -701,27 +657,14 @@ async function loadConversations() {
         data.length === 0
     ) {
 
-        conversationList.innerHTML = `
-
-            <div class="empty">
-
-                📭 Brak rozmów.
-
-                <br><br>
-
-                Gdy uczeń kliknie
-                „Potrzebuję pomocy!”,
-                rozmowa pojawi się tutaj.
-
-            </div>
-
-        `;
+        list.innerHTML =
+            '<div class="empty">Brak rozmów.</div>';
 
         return;
     }
 
 
-    conversationList.innerHTML = "";
+    list.innerHTML = "";
 
 
     data.forEach(
@@ -777,38 +720,38 @@ async function loadConversations() {
                 "conversation-date";
 
 
-            date.textContent =
-                formatDate(
-                    conversation.created_at
-                );
+            if (
+                conversation.created_at
+            ) {
+
+                date.textContent =
+                    new Date(
+                        conversation.created_at
+                    ).toLocaleString(
+                        "pl-PL"
+                    );
+
+            }
 
 
-            item.appendChild(
-                name
-            );
+            item.appendChild(name);
 
-
-            item.appendChild(
-                date
-            );
+            item.appendChild(date);
 
 
             item.addEventListener(
                 "click",
-                () => {
+                function() {
 
                     openConversation(
-                        conversation.id,
-                        conversation.name
+                        conversation
                     );
 
                 }
             );
 
 
-            conversationList.appendChild(
-                item
-            );
+            list.appendChild(item);
 
         }
     );
@@ -816,82 +759,90 @@ async function loadConversations() {
 }
 
 
-// =====================================
-// OTWARCIE ROZMOWY
-// =====================================
+// ==================================================
+// OTWIERANIE ROZMOWY
+// ==================================================
 
 async function openConversation(
-    conversationId,
-    name
+    conversation
 ) {
 
     currentConversationId =
-        conversationId;
+        conversation.id;
 
 
-    currentConversationName =
-        name || "Uczeń";
+    currentConversationClosed =
+        conversation.closed === true;
 
 
-    chatTitle.textContent =
+    document.getElementById(
+        "chatTitle"
+    ).textContent =
         "💬 " +
-        currentConversationName;
+        (
+            conversation.name ||
+            "Uczeń"
+        );
 
 
-    chatSubtitle.textContent =
-        "Rozmowa z uczniem";
+    document.getElementById(
+        "chatStatus"
+    ).textContent =
+        currentConversationClosed
+            ? "🔒 Zamknięta"
+            : "🟢 Aktywna";
 
 
-    replyBox.style.display =
-        "flex";
+    const closeButton =
+        document.getElementById(
+            "closeConversationButton"
+        );
 
 
-    status.textContent =
-        "";
+    if (
+        currentConversationClosed
+    ) {
 
+        closeButton.style.display =
+            "none";
 
-    messages.innerHTML = `
+    } else {
 
-        <div class="loading">
-            Ładowanie wiadomości...
-        </div>
+        closeButton.style.display =
+            "block";
 
-    `;
+    }
 
 
     await loadMessages();
 
-
-    // aktualizacja zaznaczenia
-
-    document
-        .querySelectorAll(".conversation")
-        .forEach(item => {
-
-            item.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    // ponowne pobranie listy,
-    // żeby zaznaczyć aktualną rozmowę
 
     await loadConversations();
 
 }
 
 
-// =====================================
+// ==================================================
 // POBIERANIE WIADOMOŚCI
-// =====================================
+// ==================================================
 
 async function loadMessages() {
 
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+
     if (!currentConversationId) {
+
         return;
+
     }
+
+
+    messages.innerHTML =
+        '<div class="loading">Ładowanie wiadomości...</div>';
 
 
     const {
@@ -930,7 +881,7 @@ async function loadMessages() {
                 <br><br>
 
                 <small>
-                    ${error.message}
+                    ${escapeHtml(error.message)}
                 </small>
 
             </div>
@@ -939,9 +890,6 @@ async function loadMessages() {
 
         return;
     }
-
-
-    messages.innerHTML = "";
 
 
     if (
@@ -969,147 +917,262 @@ async function loadMessages() {
 
         `;
 
-        return;
+    } else {
+
+        messages.innerHTML = "";
+
+
+        data.forEach(
+            message => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                const isSecretary =
+                    message.sender ===
+                    "secretariat";
+
+
+                item.className =
+                    "message " +
+                    (
+                        isSecretary
+                            ? "secretary"
+                            : "student"
+                    );
+
+
+                const author =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                author.className =
+                    "message-author";
+
+
+                author.textContent =
+                    isSecretary
+                        ? "Sekretariat"
+                        : "Uczeń";
+
+
+                const text =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                text.className =
+                    "message-text";
+
+
+                text.textContent =
+                    message.message ||
+                    "";
+
+
+                const date =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                date.className =
+                    "message-date";
+
+
+                if (
+                    message.created_at
+                ) {
+
+                    date.textContent =
+                        new Date(
+                            message.created_at
+                        ).toLocaleString(
+                            "pl-PL"
+                        );
+
+                }
+
+
+                item.appendChild(
+                    author
+                );
+
+                item.appendChild(
+                    text
+                );
+
+                item.appendChild(
+                    date
+                );
+
+
+                messages.appendChild(
+                    item
+                );
+
+            }
+        );
+
     }
 
 
-    data.forEach(
-        message => {
-
-            const box =
-                document.createElement(
-                    "div"
-                );
+    messages.scrollTop =
+        messages.scrollHeight;
 
 
-            const sender =
-                String(
-                    message.sender || ""
-                ).toLowerCase();
+    updateChatInput();
 
+}
+
+
+// ==================================================
+// POKAZYWANIE POLA ODPOWIEDZI
+// ==================================================
+
+function updateChatInput() {
+
+    const input =
+        document.getElementById(
+            "chatInput"
+        );
+
+    const closed =
+        document.getElementById(
+            "closedMessage"
+        );
+
+
+    if (
+        !currentConversationId
+    ) {
+
+        input.style.display =
+            "none";
+
+        closed.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    if (
+        currentConversationClosed
+    ) {
+
+        input.style.display =
+            "none";
+
+        closed.style.display =
+            "block";
+
+    } else {
+
+        input.style.display =
+            "flex";
+
+        closed.style.display =
+            "none";
+
+    }
+
+}
+
+
+// ==================================================
+// WYSYŁANIE WIADOMOŚCI
+// ==================================================
+
+document
+    .getElementById(
+        "sendButton"
+    )
+    .addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+document
+    .getElementById(
+        "messageInput"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
 
             if (
-                sender === "secretariat" ||
-                sender === "sekretariat" ||
-                sender === "admin"
+                event.key === "Enter" &&
+                !event.shiftKey
             ) {
 
-                box.className =
-                    "message secretariat";
+                event.preventDefault();
 
-            } else {
-
-                box.className =
-                    "message student";
+                sendMessage();
 
             }
-
-
-            const author =
-                document.createElement(
-                    "div"
-                );
-
-
-            author.className =
-                "message-author";
-
-
-            author.textContent =
-                (
-                    box.classList.contains(
-                        "secretariat"
-                    )
-                )
-                ? "Sekretariat"
-                : currentConversationName;
-
-
-            const text =
-                document.createElement(
-                    "div"
-                );
-
-
-            text.textContent =
-                message.message || "";
-
-
-            const time =
-                document.createElement(
-                    "div"
-                );
-
-
-            time.className =
-                "message-time";
-
-
-            time.textContent =
-                formatDate(
-                    message.created_at
-                );
-
-
-            box.appendChild(
-                author
-            );
-
-
-            box.appendChild(
-                text
-            );
-
-
-            box.appendChild(
-                time
-            );
-
-
-            messages.appendChild(
-                box
-            );
 
         }
     );
 
 
-    // przewiń na dół
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-}
-
-
-// =====================================
-// WYSŁANIE ODPOWIEDZI
-// =====================================
-
 async function sendMessage() {
 
-    if (!currentConversationId) {
+    if (
+        !currentConversationId
+    ) {
 
         return;
+
     }
 
 
+    if (
+        currentConversationClosed
+    ) {
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
     const text =
-        replyInput.value.trim();
+        input.value.trim();
 
 
     if (!text) {
 
         return;
+
     }
 
 
-    sendButton.disabled =
+    const button =
+        document.getElementById(
+            "sendButton"
+        );
+
+
+    button.disabled =
         true;
 
 
-    status.textContent =
-        "⏳ Wysyłanie...";
+    button.textContent =
+        "Wysyłanie...";
 
 
     const {
@@ -1122,108 +1185,134 @@ async function sendMessage() {
                 conversation_id:
                     currentConversationId,
 
-                sender:
-                    "secretariat",
-
                 message:
-                    text
+                    text,
+
+                sender:
+                    "secretariat"
 
             });
 
 
+    button.disabled =
+        false;
+
+
+    button.textContent =
+        "Wyślij";
+
+
     if (error) {
 
-        console.error(
-            "Błąd wysyłania:",
-            error
+        alert(
+            "❌ Nie udało się wysłać wiadomości:\n" +
+            error.message
         );
 
-
-        status.textContent =
-            "❌ Nie udało się wysłać: " +
-            error.message;
-
-
-        status.className =
-            "status error";
-
-
-        sendButton.disabled =
-            false;
-
-
         return;
+
     }
 
 
-    replyInput.value =
-        "";
-
-
-    status.textContent =
-        "✅ Wiadomość wysłana";
-
-
-    status.className =
-        "status success";
+    input.value = "";
 
 
     await loadMessages();
 
-
-    sendButton.disabled =
-        false;
+}
 
 
-    setTimeout(
-        () => {
+// ==================================================
+// ZAMYKANIE ROZMOWY
+// ==================================================
 
-            status.textContent =
-                "";
-
-        },
-        2500
+document
+    .getElementById(
+        "closeConversationButton"
+    )
+    .addEventListener(
+        "click",
+        closeConversation
     );
+
+
+async function closeConversation() {
+
+    if (
+        !currentConversationId
+    ) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Czy na pewno chcesz zamknąć tę rozmowę?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("help_conversations")
+            .update({
+                closed: true
+            })
+            .eq(
+                "id",
+                currentConversationId
+            );
+
+
+    if (error) {
+
+        alert(
+            "❌ Nie udało się zamknąć rozmowy:\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    currentConversationClosed =
+        true;
+
+
+    document.getElementById(
+        "chatStatus"
+    ).textContent =
+        "🔒 Zamknięta";
+
+
+    document.getElementById(
+        "closeConversationButton"
+    ).style.display =
+        "none";
+
+
+    updateChatInput();
+
+
+    await loadConversations();
 
 }
 
 
-// =====================================
-// ENTER = WYŚLIJ
-// =====================================
-
-replyInput.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-// =====================================
-// PRZYCISK WYŚLIJ
-// =====================================
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-// =====================================
+// ==================================================
 // WYLOGOWANIE
-// =====================================
+// ==================================================
 
 document
     .getElementById(
@@ -1242,70 +1331,41 @@ document
     );
 
 
-// =====================================
-// DATA
-// =====================================
+// ==================================================
+// ESCAPE HTML
+// ==================================================
 
-function formatDate(
-    value
+function escapeHtml(
+    text
 ) {
 
-    if (!value) {
-        return "";
-    }
+    const div =
+        document.createElement(
+            "div"
+        );
 
+    div.textContent =
+        text ?? "";
 
-    const date =
-        new Date(value);
-
-
-    return date.toLocaleString(
-        "pl-PL",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
+    return div.innerHTML;
 
 }
 
 
-// =====================================
-// AUTOMATYCZNE ODŚWIEŻANIE
-// =====================================
-
-setInterval(
-    async function() {
-
-        await loadConversations();
-
-
-        if (currentConversationId) {
-
-            await loadMessages();
-
-        }
-
-    },
-    5000
-);
-
-
-// =====================================
+// ==================================================
 // START
-// =====================================
+// ==================================================
 
 async function start() {
 
     const isAdmin =
-        await checkUser();
+        await checkAdmin();
 
 
     if (!isAdmin) {
+
         return;
+
     }
 
 
@@ -1315,6 +1375,29 @@ async function start() {
 
 
 start();
+
+
+// ==================================================
+// AUTOMATYCZNE ODŚWIEŻANIE
+// ==================================================
+
+setInterval(
+    async function() {
+
+        await loadConversations();
+
+
+        if (
+            currentConversationId
+        ) {
+
+            await loadMessages();
+
+        }
+
+    },
+    5000
+);
 
 </script>
 
