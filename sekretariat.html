@@ -3,9 +3,7 @@
 <html lang="pl">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sekretariat | Szkoła Podstawowa nr 55</title>
@@ -13,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -85,7 +82,6 @@ main {
 
 .box-header h2 {
     margin: 0;
-    font-size: 20px;
 }
 
 .conversations {
@@ -114,9 +110,23 @@ main {
     margin-bottom: 5px;
 }
 
+.conversation-status {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
 .conversation-date {
     font-size: 12px;
     color: #777;
+}
+
+.closed {
+    color: #c62828;
+}
+
+.open {
+    color: #18a88b;
 }
 
 .empty,
@@ -151,6 +161,7 @@ main {
 .chat-status {
     font-size: 13px;
     font-weight: bold;
+    margin-top: 5px;
 }
 
 .messages {
@@ -222,19 +233,27 @@ main {
 .close-button {
     border: none;
     color: white;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 10px 16px;
+    border-radius: 9px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .send-button {
     background: #1769e0;
-    padding: 0 20px;
 }
 
 .close-button {
     background: #d93025;
-    padding: 10px 14px;
+}
+
+.close-button:hover {
+    background: #b9231b;
+}
+
+.send-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
 }
 
 .closed-message {
@@ -262,8 +281,7 @@ main {
     font-weight: bold;
 }
 
-@media(max-width: 800px) {
-
+@media(max-width:800px) {
     .layout {
         grid-template-columns: 1fr;
     }
@@ -281,8 +299,10 @@ main {
         text-align: center;
     }
 
+    .message {
+        max-width: 90%;
+    }
 }
-
 </style>
 
 </head>
@@ -290,61 +310,35 @@ main {
 <body>
 
 <header>
-
 <div class="header-inner">
 
 <div>
-
 <h1>🏫 Sekretariat</h1>
-
 <p>Panel obsługi rozmów z uczniami</p>
-
 </div>
 
-<button
-class="logout-button"
-id="logoutButton"
-
->
-
-```
+<button class="logout-button" id="logoutButton">
 🚪 Wyloguj
-```
-
 </button>
 
 </div>
-
 </header>
 
 <main>
 
 <div class="layout">
 
-<!-- LISTA ROZMÓW -->
-
 <div class="box">
 
 <div class="box-header">
-
 <h2>💬 Rozmowy</h2>
-
 </div>
 
-<div
-    class="conversations"
-    id="conversations"
->
-
-<div class="loading">
-    Ładowanie rozmów...
+<div class="conversations" id="conversations">
+<div class="loading">Ładowanie rozmów...</div>
 </div>
 
 </div>
-
-</div>
-
-<!-- CHAT -->
 
 <div class="box chat">
 
@@ -353,14 +347,10 @@ id="logoutButton"
 <div>
 
 <h2 id="chatTitle">
-    💬 Wybierz rozmowę
+💬 Wybierz rozmowę
 </h2>
 
-<div
-    id="chatStatus"
-    class="chat-status"
->
-</div>
+<div id="chatStatus" class="chat-status"></div>
 
 </div>
 
@@ -371,29 +361,22 @@ style="display:none;"
 
 >
 
-```
-🔒 Zamknij rozmowę
-```
-
-</button>
+🔒 Zamknij rozmowę </button>
 
 </div>
 
-<div
-    id="messages"
-    class="messages"
->
+<div id="messages" class="messages">
 
 <div class="no-chat">
 
 <div>
 
 <div style="font-size:50px;">
-    💬
+💬
 </div>
 
 <p>
-    Wybierz rozmowę z listy.
+Wybierz rozmowę z listy.
 </p>
 
 </div>
@@ -403,22 +386,22 @@ style="display:none;"
 </div>
 
 <div
-    id="closedMessage"
-    class="closed-message"
-    style="display:none;"
+id="closedMessage"
+class="closed-message"
+style="display:none;"
 >
-    🔒 Ta rozmowa została zamknięta.
+🔒 Ta rozmowa została zamknięta.
 </div>
 
 <div
-    id="chatInput"
-    class="chat-input"
-    style="display:none;"
+id="chatInput"
+class="chat-input"
+style="display:none;"
 >
 
 <textarea
-    id="messageInput"
-    placeholder="Napisz odpowiedź..."
+id="messageInput"
+placeholder="Napisz odpowiedź..."
 ></textarea>
 
 <button
@@ -427,11 +410,7 @@ class="send-button"
 
 >
 
-```
-Wyślij
-```
-
-</button>
+Wyślij </button>
 
 </div>
 
@@ -439,16 +418,8 @@ Wyślij
 
 </div>
 
-<a
-class="back"
-href="index.html"
-
->
-
-```
+<a class="back" href="index.html">
 ← Wróć na stronę główną
-```
-
 </a>
 
 </main>
@@ -476,7 +447,7 @@ const supabaseClient =
 
 
 // ==================================================
-// ZMIENNE
+// AKTUALNA ROZMOWA
 // ==================================================
 
 let currentConversationId = null;
@@ -528,12 +499,13 @@ async function checkAdmin() {
                     <strong>${escapeHtml(email)}</strong>
                 </p>
 
-                <a href="index.html">
-                    ← Wróć na stronę główną
-                </a>
+                <p>
+                    <a href="index.html">
+                        ← Wróć na stronę główną
+                    </a>
+                </p>
 
             </div>
-
         `;
 
         return false;
@@ -545,6 +517,11 @@ async function checkAdmin() {
 
 // ==================================================
 // POBIERANIE ROZMÓW
+//
+// WAŻNE:
+// W TWOJEJ TABELI NIE MA KOLUMNY "name".
+// Dlatego pobieramy tylko:
+// id, created_at, closed
 // ==================================================
 
 async function loadConversations() {
@@ -564,31 +541,25 @@ async function loadConversations() {
         .order(
             "created_at",
             {
-                ascending: false
+                ascending:false
             }
         );
 
     if (error) {
 
         console.error(
-            "Błąd rozmów:",
+            "Błąd pobierania rozmów:",
             error
         );
 
         list.innerHTML = `
-
             <div class="empty">
-
                 ❌ Nie udało się pobrać rozmów.
-
                 <br><br>
-
                 <small>
                     ${escapeHtml(error.message)}
                 </small>
-
             </div>
-
         `;
 
         return;
@@ -604,14 +575,11 @@ async function loadConversations() {
 
     list.innerHTML = "";
 
-
     data.forEach(
         (conversation, index) => {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             item.className =
                 "conversation";
@@ -621,37 +589,48 @@ async function loadConversations() {
                 currentConversationId
             ) {
 
-                item.classList.add(
-                    "active"
-                );
+                item.classList.add("active");
 
             }
 
 
             const name =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             name.className =
                 "conversation-name";
-
 
             name.textContent =
                 "💬 Rozmowa " +
                 (data.length - index);
 
 
-            const date =
-                document.createElement(
-                    "div"
+            const status =
+                document.createElement("div");
+
+            status.className =
+                "conversation-status " +
+                (
+                    conversation.closed
+                        ? "closed"
+                        : "open"
                 );
+
+            status.textContent =
+                conversation.closed
+                    ? "🔒 Zamknięta"
+                    : "🟢 Aktywna";
+
+
+            const date =
+                document.createElement("div");
 
             date.className =
                 "conversation-date";
 
-
-            if (conversation.created_at) {
+            if (
+                conversation.created_at
+            ) {
 
                 date.textContent =
                     new Date(
@@ -663,45 +642,9 @@ async function loadConversations() {
             }
 
 
-            const status =
-                document.createElement(
-                    "div"
-                );
-
-            status.style.marginTop =
-                "6px";
-
-            status.style.fontSize =
-                "12px";
-
-            status.style.fontWeight =
-                "bold";
-
-
-            if (
-                conversation.closed === true
-            ) {
-
-                status.textContent =
-                    "🔒 Zamknięta";
-
-                status.style.color =
-                    "#b42318";
-
-            } else {
-
-                status.textContent =
-                    "🟢 Aktywna";
-
-                status.style.color =
-                    "#18a88b";
-
-            }
-
-
             item.appendChild(name);
-            item.appendChild(date);
             item.appendChild(status);
+            item.appendChild(date);
 
 
             item.addEventListener(
@@ -709,7 +652,7 @@ async function loadConversations() {
                 function() {
 
                     openConversation(
-                        conversation
+                        conversation.id
                     );
 
                 }
@@ -720,44 +663,49 @@ async function loadConversations() {
 
         }
     );
-
 }
 
 
 // ==================================================
 // OTWIERANIE ROZMOWY
+//
+// ZA KAŻDYM RAZEM pobieramy świeży rekord
+// z Supabase po ID.
+// Dzięki temu zmiana rozmowy nie przywraca
+// starego stanu.
 // ==================================================
 
-async function openConversation(conversation) {
+async function openConversation(
+    conversationId
+) {
 
-    // Zapamiętujemy ID rozmowy
-    currentConversationId = conversation.id;
+    currentConversationId =
+        conversationId;
 
-
-    // ==========================================
-    // POBIERZ AKTUALNY STAN ROZMOWY Z BAZY
-    // ==========================================
 
     const {
-        data: freshConversation,
-        error: freshError
-    } = await supabaseClient
+        data,
+        error
+    } =
+    await supabaseClient
         .from("help_conversations")
         .select("id, created_at, closed")
-        .eq("id", conversation.id)
+        .eq(
+            "id",
+            conversationId
+        )
         .single();
 
 
-    if (freshError) {
+    if (error || !data) {
 
         console.error(
-            "Błąd pobierania rozmowy:",
-            freshError
+            "Błąd otwierania rozmowy:",
+            error
         );
 
         alert(
-            "❌ Nie udało się pobrać stanu rozmowy:\n" +
-            freshError.message
+            "❌ Nie udało się otworzyć rozmowy."
         );
 
         return;
@@ -765,30 +713,17 @@ async function openConversation(conversation) {
 
 
     // WAŻNE:
-    // stan zamknięcia pobieramy z bazy,
-    // a nie ze starej zmiennej
+    // stan rozmowy pochodzi BEZPOŚREDNIO z bazy
 
     currentConversationClosed =
-        freshConversation.closed === true;
+        data.closed === true;
 
-
-    // ==========================================
-    // TYTUŁ
-    // ==========================================
 
     document.getElementById(
         "chatTitle"
     ).textContent =
-        "💬 " +
-        (
-            conversation.name ||
-            "Uczeń"
-        );
+        "💬 Rozmowa";
 
-
-    // ==========================================
-    // STATUS
-    // ==========================================
 
     document.getElementById(
         "chatStatus"
@@ -798,45 +733,26 @@ async function openConversation(conversation) {
             : "🟢 Aktywna";
 
 
-    // ==========================================
-    // PRZYCISK ZAMYKANIA
-    // ==========================================
-
     const closeButton =
         document.getElementById(
             "closeConversationButton"
         );
 
 
-    if (currentConversationClosed) {
+    closeButton.style.display =
+        currentConversationClosed
+            ? "none"
+            : "block";
 
-        closeButton.style.display = "none";
-
-    } else {
-
-        closeButton.style.display = "block";
-
-    }
-
-
-    // ==========================================
-    // WIADOMOŚCI
-    // ==========================================
 
     await loadMessages();
 
-
-    // ==========================================
-    // PO ODŚWIEŻENIU LISTY ZACHOWAJ STAN
-    // ==========================================
-
     await loadConversations();
-
 }
 
 
 // ==================================================
-// WIADOMOŚCI
+// POBIERANIE WIADOMOŚCI
 // ==================================================
 
 async function loadMessages() {
@@ -866,23 +782,20 @@ async function loadMessages() {
         .order(
             "created_at",
             {
-                ascending: true
+                ascending:true
             }
         );
 
 
     if (error) {
 
+        console.error(
+            "Błąd wiadomości:",
+            error
+        );
+
         messages.innerHTML =
-            `
-            <div class="empty">
-                ❌ Nie udało się pobrać wiadomości.
-                <br><br>
-                <small>
-                    ${escapeHtml(error.message)}
-                </small>
-            </div>
-            `;
+            '<div class="empty">❌ Nie udało się pobrać wiadomości.</div>';
 
         return;
     }
@@ -890,19 +803,24 @@ async function loadMessages() {
 
     if (!data || data.length === 0) {
 
-        messages.innerHTML =
-            `
+        messages.innerHTML = `
+
             <div class="no-chat">
+
                 <div>
+
                     <div style="font-size:45px;">
                         💬
                     </div>
+
                     <p>
                         Brak wiadomości.
                     </p>
+
                 </div>
+
             </div>
-            `;
+        `;
 
     } else {
 
@@ -913,15 +831,11 @@ async function loadMessages() {
             message => {
 
                 const item =
-                    document.createElement(
-                        "div"
-                    );
-
+                    document.createElement("div");
 
                 const isSecretary =
                     message.sender ===
                     "secretariat";
-
 
                 item.className =
                     "message " +
@@ -933,9 +847,7 @@ async function loadMessages() {
 
 
                 const author =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 author.className =
                     "message-author";
@@ -947,9 +859,7 @@ async function loadMessages() {
 
 
                 const text =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 text.className =
                     "message-text";
@@ -959,14 +869,14 @@ async function loadMessages() {
 
 
                 const date =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 date.className =
                     "message-date";
 
-                if (message.created_at) {
+                if (
+                    message.created_at
+                ) {
 
                     date.textContent =
                         new Date(
@@ -986,7 +896,6 @@ async function loadMessages() {
 
             }
         );
-
     }
 
 
@@ -995,7 +904,6 @@ async function loadMessages() {
 
 
     updateChatInput();
-
 }
 
 
@@ -1045,18 +953,15 @@ function updateChatInput() {
             "none";
 
     }
-
 }
 
 
 // ==================================================
-// WYSYŁANIE
+// WYSYŁANIE WIADOMOŚCI
 // ==================================================
 
 document
-    .getElementById(
-        "sendButton"
-    )
+    .getElementById("sendButton")
     .addEventListener(
         "click",
         sendMessage
@@ -1064,9 +969,7 @@ document
 
 
 document
-    .getElementById(
-        "messageInput"
-    )
+    .getElementById("messageInput")
     .addEventListener(
         "keydown",
         function(event) {
@@ -1118,11 +1021,8 @@ async function sendMessage() {
         );
 
 
-    button.disabled =
-        true;
-
-    button.textContent =
-        "Wysyłanie...";
+    button.disabled = true;
+    button.textContent = "Wysyłanie...";
 
 
     const {
@@ -1144,11 +1044,8 @@ async function sendMessage() {
         });
 
 
-    button.disabled =
-        false;
-
-    button.textContent =
-        "Wyślij";
+    button.disabled = false;
+    button.textContent = "Wyślij";
 
 
     if (error) {
@@ -1165,12 +1062,15 @@ async function sendMessage() {
     input.value = "";
 
     await loadMessages();
-
 }
 
 
 // ==================================================
 // ZAMYKANIE ROZMOWY
+//
+// KLUCZOWA ZMIANA:
+// najpierw zapisujemy closed=true,
+// potem ponownie pobieramy TEN SAM rekord.
 // ==================================================
 
 document
@@ -1190,6 +1090,10 @@ async function closeConversation() {
     }
 
 
+    const conversationToClose =
+        currentConversationId;
+
+
     const confirmed =
         confirm(
             "Czy na pewno chcesz zamknąć tę rozmowę?"
@@ -1201,8 +1105,22 @@ async function closeConversation() {
     }
 
 
+    const button =
+        document.getElementById(
+            "closeConversationButton"
+        );
+
+
+    button.disabled = true;
+    button.textContent = "Zamykanie...";
+
+
+    // ==========================================
+    // ZAPIS CLOSED = TRUE
+    // ==========================================
+
     const {
-        error
+        error: updateError
     } =
     await supabaseClient
         .from("help_conversations")
@@ -1211,23 +1129,90 @@ async function closeConversation() {
         })
         .eq(
             "id",
-            currentConversationId
+            conversationToClose
         );
 
 
-    if (error) {
+    if (updateError) {
+
+        console.error(
+            "Błąd zamykania:",
+            updateError
+        );
 
         alert(
             "❌ Nie udało się zamknąć rozmowy:\n" +
-            error.message
+            updateError.message
         );
+
+        button.disabled = false;
+        button.textContent = "🔒 Zamknij rozmowę";
 
         return;
     }
 
 
-    currentConversationClosed =
-        true;
+    // ==========================================
+    // PONOWNE POBRANIE Z BAZY
+    // ==========================================
+
+    const {
+        data: closedConversation,
+        error: verifyError
+    } =
+    await supabaseClient
+        .from("help_conversations")
+        .select("id, closed")
+        .eq(
+            "id",
+            conversationToClose
+        )
+        .single();
+
+
+    if (verifyError) {
+
+        console.error(
+            "Błąd sprawdzania:",
+            verifyError
+        );
+
+        alert(
+            "❌ Nie udało się sprawdzić stanu rozmowy."
+        );
+
+        button.disabled = false;
+        button.textContent = "🔒 Zamknij rozmowę";
+
+        return;
+    }
+
+
+    // ==========================================
+    // SPRAWDZENIE
+    // ==========================================
+
+    if (
+        !closedConversation ||
+        closedConversation.closed !== true
+    ) {
+
+        alert(
+            "❌ Baza danych nie zapisała zamknięcia rozmowy."
+        );
+
+        button.disabled = false;
+        button.textContent = "🔒 Zamknij rozmowę";
+
+        return;
+    }
+
+
+    // ==========================================
+    // LOKALNY STAN
+    // ==========================================
+
+    currentConversationClosed = true;
 
 
     document.getElementById(
@@ -1236,17 +1221,28 @@ async function closeConversation() {
         "🔒 Zamknięta";
 
 
-    document.getElementById(
-        "closeConversationButton"
-    ).style.display =
+    button.style.display =
         "none";
 
 
     updateChatInput();
 
 
+    // ==========================================
+    // ODŚWIEŻENIE LISTY
+    // ==========================================
+
     await loadConversations();
 
+
+    // ==========================================
+    // PONOWNE OTWARCIE TEJ SAMEJ ROZMOWY
+    // ŻEBY UI BYŁO 100% ZGODNE Z BAZĄ
+    // ==========================================
+
+    await openConversation(
+        conversationToClose
+    );
 }
 
 
@@ -1272,15 +1268,13 @@ document
 
 
 // ==================================================
-// ESCAPE
+// ESCAPE HTML
 // ==================================================
 
 function escapeHtml(text) {
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     div.textContent =
         text ?? "";
@@ -1303,15 +1297,13 @@ async function start() {
     }
 
     await loadConversations();
-
 }
-
 
 start();
 
 
 // ==================================================
-// ODŚWIEŻANIE
+// AUTOMATYCZNE ODŚWIEŻANIE
 // ==================================================
 
 setInterval(
@@ -1319,10 +1311,52 @@ setInterval(
 
         await loadConversations();
 
+
         if (currentConversationId) {
 
-            await loadMessages();
+            // Pobierz AKTUALNY stan rozmowy z bazy
 
+            const {
+                data,
+                error
+            } =
+            await supabaseClient
+                .from("help_conversations")
+                .select("id, closed")
+                .eq(
+                    "id",
+                    currentConversationId
+                )
+                .single();
+
+
+            if (
+                !error &&
+                data
+            ) {
+
+                currentConversationClosed =
+                    data.closed === true;
+
+                document.getElementById(
+                    "chatStatus"
+                ).textContent =
+                    currentConversationClosed
+                        ? "🔒 Zamknięta"
+                        : "🟢 Aktywna";
+
+                document.getElementById(
+                    "closeConversationButton"
+                ).style.display =
+                    currentConversationClosed
+                        ? "none"
+                        : "block";
+
+                updateChatInput();
+
+                await loadMessages();
+
+            }
         }
 
     },
@@ -1332,5 +1366,4 @@ setInterval(
 </script>
 
 </body>
-
 </html>
