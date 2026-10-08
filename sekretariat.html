@@ -614,8 +614,8 @@ async function loadConversations() {
         error
     } =
         await supabaseClient
-            .from("help_conversations")
-            .select("*")
+        .from("help_conversations")
+        .select("id, name, created_at, closed")
             .order(
                 "created_at",
                 {
