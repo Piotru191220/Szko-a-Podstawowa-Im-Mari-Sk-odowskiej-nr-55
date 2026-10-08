@@ -1238,43 +1238,38 @@ document
 
 async function closeConversation() {
 
-    if (
-        !currentConversationId
-    ) {
-
+    if (!currentConversationId) {
         return;
-
     }
 
-
-    const confirmed =
-        confirm(
-            "Czy na pewno chcesz zamknąć tę rozmowę?"
-        );
-
+    const confirmed = confirm(
+        "Czy na pewno chcesz zamknąć tę rozmowę?"
+    );
 
     if (!confirmed) {
-
         return;
-
     }
 
-
     const {
+        data,
         error
-    } =
-        await supabaseClient
-            .from("help_conversations")
-            .update({
-                closed: true
-            })
-            .eq(
-                "id",
-                currentConversationId
-            );
-
+    } = await supabaseClient
+        .from("help_conversations")
+        .update({
+            closed: true
+        })
+        .eq(
+            "id",
+            currentConversationId
+        )
+        .select("id, closed");
 
     if (error) {
+
+        console.error(
+            "Błąd zamykania rozmowy:",
+            error
+        );
 
         alert(
             "❌ Nie udało się zamknąć rozmowy:\n" +
@@ -1282,31 +1277,80 @@ async function closeConversation() {
         );
 
         return;
-
     }
 
+    // Sprawdzenie, czy baza faktycznie zmieniła rekord
 
-    currentConversationClosed =
-        true;
+    if (
+        !data ||
+        data.length === 0 ||
+        data[0].closed !== true
+    ) {
 
+        alert(
+            "❌ Rozmowa nie została zamknięta w bazie danych."
+        );
+
+        return;
+    }
+
+    // Ustawienie lokalnego stanu
+
+    currentConversationClosed = true;
 
     document.getElementById(
         "chatStatus"
     ).textContent =
         "🔒 Zamknięta";
 
-
     document.getElementById(
         "closeConversationButton"
     ).style.display =
         "none";
 
-
     updateChatInput();
 
+    // Ponowne pobranie rozmów z bazy
 
     await loadConversations();
 
+    // Ponowne pobranie konkretnej rozmowy
+
+    const {
+        data: freshConversation,
+        error: freshError
+    } = await supabaseClient
+        .from("help_conversations")
+        .select("id, name, created_at, closed")
+        .eq(
+            "id",
+            currentConversationId
+        )
+        .single();
+
+    if (
+        freshError
+    ) {
+
+        console.error(
+            "Błąd odświeżania rozmowy:",
+            freshError
+        );
+
+        return;
+    }
+
+    currentConversationClosed =
+        freshConversation.closed === true;
+
+    document.getElementById(
+        "chatStatus"
+    ).textContent =
+        currentConversationClosed
+            ? "🔒 Zamknięta"
+            : "🟢 Aktywna";
+
+    updateChatInput();
 }
 
 
