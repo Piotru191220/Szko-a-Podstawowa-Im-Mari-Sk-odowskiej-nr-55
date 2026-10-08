@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Sekretariat | Szkoła Podstawowa nr 55</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+header {
+    background: linear-gradient(135deg, #1769e0, #4c8ff5);
+    color: white;
+    padding: 25px 20px;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin: 5px 0 0;
+    opacity: .85;
+}
+
+.logout {
+    border: none;
+    background: white;
+    color: #1769e0;
+    padding: 11px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+main {
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 0 15px;
+}
+
+.chat-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+    height: 650px;
+}
+
+/* LEWA STRONA */
+
+.conversations {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.07);
+    overflow: hidden;
+}
+
+.conversations-header {
+    padding: 20px;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.conversations-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+#conversationList {
+    height: calc(100% - 70px);
+    overflow-y: auto;
+}
+
+.conversation {
+    padding: 16px;
+    border-bottom: 1px solid #edf1f6;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.conversation:hover {
+    background: #f4f8ff;
+}
+
+.conversation.active {
+    background: #e7f0ff;
+    border-left: 4px solid #1769e0;
+}
+
+.conversation-name {
+    font-weight: bold;
+    color: #1769e0;
+    font-size: 16px;
+}
+
+.conversation-date {
+    color: #7b8798;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.empty {
+    padding: 25px;
+    text-align: center;
+    color: #777;
+}
+
+.loading {
+    padding: 25px;
+    text-align: center;
+    color: #1769e0;
+}
+
+/* CHAT */
+
+.chat {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #e8edf4;
+    background: white;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.chat-header span {
+    color: #7b8798;
+    font-size: 13px;
+}
+
+.messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f7f9fc;
+}
+
+.message {
+    max-width: 75%;
+    margin-bottom: 14px;
+    padding: 12px 15px;
+    border-radius: 14px;
+    line-height: 1.45;
+}
+
+.message.student {
+    background: white;
+    border: 1px solid #e1e7ef;
+    margin-right: auto;
+}
+
+.message.secretariat {
+    background: #1769e0;
+    color: white;
+    margin-left: auto;
+}
+
+.message-author {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    opacity: .75;
+}
+
+.message-time {
+    font-size: 10px;
+    margin-top: 6px;
+    opacity: .6;
+}
+
+/* ODPOWIADANIE */
+
+.reply {
+    padding: 15px;
+    border-top: 1px solid #e8edf4;
+    display: flex;
+    gap: 10px;
+}
+
+#replyInput {
+    flex: 1;
+    resize: none;
+    height: 55px;
+    padding: 12px;
+    border: 1px solid #ccd5e2;
+    border-radius: 10px;
+    font-family: Arial;
+    font-size: 15px;
+    outline: none;
+}
+
+#replyInput:focus {
+    border-color: #1769e0;
+}
+
+#sendButton {
+    border: none;
+    background: #1769e0;
+    color: white;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#sendButton:hover {
+    background: #1257bd;
+}
+
+#sendButton:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.no-chat {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7b8798;
+    text-align: center;
+    padding: 30px;
+}
+
+.status {
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.status.error {
+    color: #d93025;
+}
+
+.status.success {
+    color: #16803c;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 20px;
+    color: #1769e0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@media(max-width: 800px) {
+
+    .chat-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .conversations {
+        height: 300px;
+    }
+
+    #conversationList {
+        height: 230px;
+    }
+
+    .chat {
+        height: 600px;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .header-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="header-inner">
+
+<div>
+
+<h1>💬 Sekretariat</h1>
+
+<p>Centrum wiadomości z uczniami</p>
+
+</div>
+
+<button
+    class="logout"
+    id="logoutButton">
+
+    🚪 Wyloguj
+
+</button>
+
+</div>
+
+</header>
+
+
+<main>
+
+
+<div class="chat-layout">
+
+
+<!-- ================================= -->
+<!-- LISTA ROZMÓW -->
+<!-- ================================= -->
+
+<div class="conversations">
+
+<div class="conversations-header">
+
+<h2>💬 Rozmowy</h2>
+
+</div>
+
+
+<div id="conversationList">
+
+<div class="loading">
+    Ładowanie rozmów...
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================================= -->
+<!-- CHAT -->
+<!-- ================================= -->
+
+<div class="chat">
+
+
+<div class="chat-header">
+
+<h2 id="chatTitle">
+    Wybierz rozmowę
+</h2>
+
+<span id="chatSubtitle">
+    Wybierz ucznia z listy po lewej.
+</span>
+
+</div>
+
+
+<div
+    class="messages"
+    id="messages">
+
+<div class="no-chat">
+
+    <div>
+
+        <div style="font-size:50px;">
+            💬
+        </div>
+
+        <p>
+            Wybierz rozmowę,
+            aby zobaczyć wiadomości.
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div
+    class="reply"
+    id="replyBox"
+    style="display:none;">
+
+<textarea
+    id="replyInput"
+    placeholder="Napisz odpowiedź..."></textarea>
+
+
+<button
+    id="sendButton">
+
+    Wyślij
+
+</button>
+
+</div>
+
+
+<div
+    id="status"
+    class="status">
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<a
+    href="index.html"
+    class="back">
+
+    ← Wróć na stronę główną
+
+</a>
+
+
+</main>
+
+
+<script>
+
+
+// =====================================
+// SUPABASE
+// =====================================
+
+const SUPABASE_URL =
+    "https://vqilsuvpinnfmngrczlj.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+
+
+const ADMIN_EMAIL =
+    "pi.pu2@op.pl";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// =====================================
+// ZMIENNE
+// =====================================
+
+let currentConversationId = null;
+
+let currentConversationName = "";
+
+
+// =====================================
+// ELEMENTY
+// =====================================
+
+const conversationList =
+    document.getElementById(
+        "conversationList"
+    );
+
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+
+const chatTitle =
+    document.getElementById(
+        "chatTitle"
+    );
+
+
+const chatSubtitle =
+    document.getElementById(
+        "chatSubtitle"
+    );
+
+
+const replyBox =
+    document.getElementById(
+        "replyBox"
+    );
+
+
+const replyInput =
+    document.getElementById(
+        "replyInput"
+    );
+
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+
+const status =
+    document.getElementById(
+        "status"
+    );
+
+
+// =====================================
+// SPRAWDZENIE ADMINA
+// =====================================
+
+async function checkUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        document.body.innerHTML = `
+
+            <h1 style="text-align:center;margin-top:100px;">
+                ❌ Błąd
+            </h1>
+
+            <p style="text-align:center;">
+                Nie udało się sprawdzić logowania.
+            </p>
+
+        `;
+
+        return false;
+    }
+
+
+    const session =
+        data.session;
+
+
+    if (
+        !session ||
+        !session.user
+    ) {
+
+        window.location.href =
+            "logowanie.html";
+
+        return false;
+    }
+
+
+    const email =
+        session.user.email;
+
+
+    if (
+        email !== ADMIN_EMAIL
+    ) {
+
+        document.body.innerHTML = `
+
+            <h1 style="
+                text-align:center;
+                margin-top:100px;
+            ">
+                🚫 Brak dostępu
+            </h1>
+
+            <p style="text-align:center;">
+                Ta strona jest tylko dla sekretariatu.
+            </p>
+
+            <p style="text-align:center;">
+                Zalogowane konto:
+                <strong>${email}</strong>
+            </p>
+
+            <p style="text-align:center;">
+                <a href="index.html">
+                    Wróć na stronę główną
+                </a>
+            </p>
+
+        `;
+
+        return false;
+    }
+
+
+    return true;
+
+}
+
+
+// =====================================
+// POBIERANIE ROZMÓW
+// =====================================
+
+async function loadConversations() {
+
+    conversationList.innerHTML = `
+
+        <div class="loading">
+            Ładowanie rozmów...
+        </div>
+
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("help_conversations")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Błąd rozmów:",
+            error
+        );
+
+
+        conversationList.innerHTML = `
+
+            <div class="empty">
+
+                ❌ Nie udało się pobrać rozmów.
+
+                <br><br>
+
+                <small>
+                    ${error.message}
+                </small>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        conversationList.innerHTML = `
+
+            <div class="empty">
+
+                📭 Brak rozmów.
+
+                <br><br>
+
+                Gdy uczeń kliknie
+                „Potrzebuję pomocy!”,
+                rozmowa pojawi się tutaj.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    conversationList.innerHTML = "";
+
+
+    data.forEach(
+        conversation => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "conversation";
+
+
+            if (
+                conversation.id ===
+                currentConversationId
+            ) {
+
+                item.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "conversation-name";
+
+
+            name.textContent =
+                "👤 " +
+                (
+                    conversation.name ||
+                    "Uczeń"
+                );
+
+
+            const date =
+                document.createElement(
+                    "div"
+                );
+
+
+            date.className =
+                "conversation-date";
+
+
+            date.textContent =
+                formatDate(
+                    conversation.created_at
+                );
+
+
+            item.appendChild(
+                name
+            );
+
+
+            item.appendChild(
+                date
+            );
+
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    openConversation(
+                        conversation.id,
+                        conversation.name
+                    );
+
+                }
+            );
+
+
+            conversationList.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+// =====================================
+// OTWARCIE ROZMOWY
+// =====================================
+
+async function openConversation(
+    conversationId,
+    name
+) {
+
+    currentConversationId =
+        conversationId;
+
+
+    currentConversationName =
+        name || "Uczeń";
+
+
+    chatTitle.textContent =
+        "💬 " +
+        currentConversationName;
+
+
+    chatSubtitle.textContent =
+        "Rozmowa z uczniem";
+
+
+    replyBox.style.display =
+        "flex";
+
+
+    status.textContent =
+        "";
+
+
+    messages.innerHTML = `
+
+        <div class="loading">
+            Ładowanie wiadomości...
+        </div>
+
+    `;
+
+
+    await loadMessages();
+
+
+    // aktualizacja zaznaczenia
+
+    document
+        .querySelectorAll(".conversation")
+        .forEach(item => {
+
+            item.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    // ponowne pobranie listy,
+    // żeby zaznaczyć aktualną rozmowę
+
+    await loadConversations();
+
+}
+
+
+// =====================================
+// POBIERANIE WIADOMOŚCI
+// =====================================
+
+async function loadMessages() {
+
+    if (!currentConversationId) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("help_messages")
+            .select("*")
+            .eq(
+                "conversation_id",
+                currentConversationId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Błąd wiadomości:",
+            error
+        );
+
+
+        messages.innerHTML = `
+
+            <div class="empty">
+
+                ❌ Nie udało się pobrać wiadomości.
+
+                <br><br>
+
+                <small>
+                    ${error.message}
+                </small>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    messages.innerHTML = "";
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        messages.innerHTML = `
+
+            <div class="no-chat">
+
+                <div>
+
+                    <div style="font-size:45px;">
+                        💬
+                    </div>
+
+                    <p>
+                        Brak wiadomości.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    data.forEach(
+        message => {
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            const sender =
+                String(
+                    message.sender || ""
+                ).toLowerCase();
+
+
+            if (
+                sender === "secretariat" ||
+                sender === "sekretariat" ||
+                sender === "admin"
+            ) {
+
+                box.className =
+                    "message secretariat";
+
+            } else {
+
+                box.className =
+                    "message student";
+
+            }
+
+
+            const author =
+                document.createElement(
+                    "div"
+                );
+
+
+            author.className =
+                "message-author";
+
+
+            author.textContent =
+                (
+                    box.classList.contains(
+                        "secretariat"
+                    )
+                )
+                ? "Sekretariat"
+                : currentConversationName;
+
+
+            const text =
+                document.createElement(
+                    "div"
+                );
+
+
+            text.textContent =
+                message.message || "";
+
+
+            const time =
+                document.createElement(
+                    "div"
+                );
+
+
+            time.className =
+                "message-time";
+
+
+            time.textContent =
+                formatDate(
+                    message.created_at
+                );
+
+
+            box.appendChild(
+                author
+            );
+
+
+            box.appendChild(
+                text
+            );
+
+
+            box.appendChild(
+                time
+            );
+
+
+            messages.appendChild(
+                box
+            );
+
+        }
+    );
+
+
+    // przewiń na dół
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+// =====================================
+// WYSŁANIE ODPOWIEDZI
+// =====================================
+
+async function sendMessage() {
+
+    if (!currentConversationId) {
+
+        return;
+    }
+
+
+    const text =
+        replyInput.value.trim();
+
+
+    if (!text) {
+
+        return;
+    }
+
+
+    sendButton.disabled =
+        true;
+
+
+    status.textContent =
+        "⏳ Wysyłanie...";
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("help_messages")
+            .insert({
+
+                conversation_id:
+                    currentConversationId,
+
+                sender:
+                    "secretariat",
+
+                message:
+                    text
+
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Błąd wysyłania:",
+            error
+        );
+
+
+        status.textContent =
+            "❌ Nie udało się wysłać: " +
+            error.message;
+
+
+        status.className =
+            "status error";
+
+
+        sendButton.disabled =
+            false;
+
+
+        return;
+    }
+
+
+    replyInput.value =
+        "";
+
+
+    status.textContent =
+        "✅ Wiadomość wysłana";
+
+
+    status.className =
+        "status success";
+
+
+    await loadMessages();
+
+
+    sendButton.disabled =
+        false;
+
+
+    setTimeout(
+        () => {
+
+            status.textContent =
+                "";
+
+        },
+        2500
+    );
+
+}
+
+
+// =====================================
+// ENTER = WYŚLIJ
+// =====================================
+
+replyInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+// =====================================
+// PRZYCISK WYŚLIJ
+// =====================================
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+// =====================================
+// WYLOGOWANIE
+// =====================================
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "logowanie.html";
+
+        }
+    );
+
+
+// =====================================
+// DATA
+// =====================================
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    return date.toLocaleString(
+        "pl-PL",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+// =====================================
+// AUTOMATYCZNE ODŚWIEŻANIE
+// =====================================
+
+setInterval(
+    async function() {
+
+        await loadConversations();
+
+
+        if (currentConversationId) {
+
+            await loadMessages();
+
+        }
+
+    },
+    5000
+);
+
+
+// =====================================
+// START
+// =====================================
+
+async function start() {
+
+    const isAdmin =
+        await checkUser();
+
+
+    if (!isAdmin) {
+        return;
+    }
+
+
+    await loadConversations();
+
+}
+
+
+start();
+
+</script>
+
+</body>
+
+</html>
