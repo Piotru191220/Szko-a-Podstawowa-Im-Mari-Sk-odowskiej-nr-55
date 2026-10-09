@@ -1,20 +1,15 @@
+```html
 <!DOCTYPE html>
-
 <html lang="pl">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Panel administratora | Szkoła Podstawowa nr 55</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -30,9 +25,7 @@ header {
     padding: 40px 20px;
 }
 
-header h1 {
-    margin: 0 0 10px;
-}
+header h1 { margin: 0 0 10px; }
 
 main {
     max-width: 900px;
@@ -54,9 +47,7 @@ label {
     font-weight: bold;
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
     width: 100%;
     padding: 13px;
     margin-top: 8px;
@@ -73,6 +64,7 @@ textarea {
 }
 
 .add-button {
+    display: block;
     width: 100%;
     padding: 13px;
     border: none;
@@ -80,12 +72,20 @@ textarea {
     background: #1769e0;
     color: white;
     font-size: 16px;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
 }
 
-.add-button:hover {
-    background: #1257bd;
+.add-button:hover { background: #1257bd; }
+
+.secretariat-button {
+    background: #168653;
+    font-weight: bold;
+    padding: 16px;
 }
+
+.secretariat-button:hover { background: #106b41; }
 
 .message {
     margin-top: 20px;
@@ -104,9 +104,7 @@ textarea {
     border-radius: 10px;
 }
 
-.info {
-    flex: 1;
-}
+.info { flex: 1; }
 
 .item-title {
     font-weight: bold;
@@ -143,18 +141,10 @@ textarea {
     white-space: nowrap;
 }
 
-.delete-button:hover {
-    background: #b9231b;
-}
+.delete-button:hover { background: #b9231b; }
 
-.empty {
-    color: #777;
-    padding: 10px 0;
-}
-
-.loading {
-    color: #1769e0;
-}
+.empty { color: #777; padding: 10px 0; }
+.loading { color: #1769e0; }
 
 .back {
     display: inline-block;
@@ -165,916 +155,440 @@ textarea {
 }
 
 @media (max-width: 600px) {
-
     .item {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .delete-button {
-        width: 100%;
-    }
-
+    .delete-button { width: 100%; }
+    .box { padding: 20px; }
 }
-
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<h1>👨‍💼 Panel administratora</h1>
-
-<p>
-Zarządzanie aktualnościami i materiałami
-</p>
-
+    <h1>👨‍💼 Panel administratora</h1>
+    <p>Zarządzanie aktualnościami i materiałami</p>
 </header>
 
 <main>
 
-<!-- ==========================================
-     DODAWANIE AKTUALNOŚCI
-========================================== -->
+<!-- SEKRETARIAT -->
+<div class="box" style="text-align:center;">
+    <h2>💬 Sekretariat</h2>
+    <p>Przejdź do panelu rozmów z uczniami.</p>
+    <a href="sekretariat.html" class="add-button secretariat-button">
+        💬 Otwórz sekretariat
+    </a>
+</div>
 
+<!-- DODAWANIE AKTUALNOŚCI -->
 <div class="box">
+    <h2>📢 Dodaj aktualność</h2>
 
-<h2>📢 Dodaj aktualność</h2>
+    <label for="newsTitle">Tytuł aktualności</label>
+    <input type="text" id="newsTitle" placeholder="np. Apel szkolny">
 
-<label for="newsTitle">
-Tytuł aktualności
-</label>
+    <label for="newsContent">Treść aktualności</label>
+    <textarea id="newsContent" placeholder="np. W piątek odbędzie się apel szkolny."></textarea>
 
-<input
-type="text"
-id="newsTitle"
-placeholder="np. Apel szkolny"
+    <button class="add-button" id="addNewsButton">
+        📢 Dodaj aktualność
+    </button>
 
->
-
-<label for="newsContent">
-Treść aktualności
-</label>
-
-<textarea
-    id="newsContent"
-    placeholder="np. W piątek odbędzie się apel szkolny."
-></textarea>
-
-<button
-class="add-button"
-id="addNewsButton"
-
->
-
-📢 Dodaj aktualność </button>
-
-<div
-    id="newsMessage"
-    class="message"
-></div>
-
+    <div id="newsMessage" class="message"></div>
 </div>
 
-<!-- ==========================================
-     LISTA AKTUALNOŚCI
-========================================== -->
-
+<!-- LISTA AKTUALNOŚCI -->
 <div class="box">
-
-<h2>📢 Wszystkie aktualności</h2>
-
-<div id="newsList">
-
-<div class="loading">
-Ładowanie aktualności...
+    <h2>📢 Wszystkie aktualności</h2>
+    <div id="newsList">
+        <div class="loading">Ładowanie aktualności...</div>
+    </div>
 </div>
 
-</div>
-
-</div>
-
-<!-- ==========================================
-     DODAWANIE MATERIAŁU
-========================================== -->
-
+<!-- DODAWANIE MATERIAŁU -->
 <div class="box">
+    <h2>➕ Dodaj materiał</h2>
 
-<h2>➕ Dodaj materiał</h2>
+    <label for="subject">Przedmiot</label>
+    <select id="subject">
+        <option value="Matematyka">📐 Matematyka</option>
+        <option value="Język polski">📖 Język polski</option>
+        <option value="Język angielski">🇬🇧 Język angielski</option>
+        <option value="Biologia">🧪 Biologia</option>
+        <option value="Informatyka">💻 Informatyka</option>
+        <option value="Inne">📚 Inne</option>
+    </select>
 
-<label for="subject">
-Przedmiot
-</label>
+    <label for="title">Nazwa materiału</label>
+    <input type="text" id="title" placeholder="np. Zadania z ułamków">
 
-<select id="subject">
+    <label for="file">Plik</label>
+    <input type="file" id="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
 
-<option value="Matematyka">
-📐 Matematyka
-</option>
+    <button class="add-button" id="addButton">
+        ➕ Dodaj materiał
+    </button>
 
-<option value="Język polski">
-📖 Język polski
-</option>
-
-<option value="Język angielski">
-🇬🇧 Język angielski
-</option>
-
-<option value="Przyroda">
-🧪 Biologia
-</option>
-
-<option value="Informatyka">
-💻 Informatyka
-</option>
-
-<option value="Inne">
-📚 Inne
-</option>
-
-</select>
-
-<label for="title">
-Nazwa materiału
-</label>
-
-<input
-type="text"
-id="title"
-placeholder="np. Zadania z ułamków"
-
->
-
-<label for="file">
-Plik
-</label>
-
-<input
-type="file"
-id="file"
-accept=".pdf,.doc,.docx,.ppt,.pptx"
-
->
-
-<button
-class="add-button"
-id="addButton"
-
->
-
-➕ Dodaj materiał </button>
-
-<div
-    id="message"
-    class="message"
-></div>
-
+    <div id="message" class="message"></div>
 </div>
 
-<!-- ==========================================
-     LISTA MATERIAŁÓW
-========================================== -->
-
+<!-- LISTA MATERIAŁÓW -->
 <div class="box">
-
-<h2>📚 Wszystkie materiały</h2>
-
-<div id="materialsList">
-
-<div class="loading">
-Ładowanie materiałów...
+    <h2>📚 Wszystkie materiały</h2>
+    <div id="materialsList">
+        <div class="loading">Ładowanie materiałów...</div>
+    </div>
 </div>
 
-</div>
-
-</div>
-
-<a
-class="back"
-href="index.html"
-
->
-
-← Wróć na stronę główną </a>
+<a class="back" href="index.html">← Wróć na stronę główną</a>
 
 </main>
 
 <script>
-
 // ==========================================
 // SUPABASE
 // ==========================================
 
-const SUPABASE_URL =
-    "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
+const ADMIN_EMAIL = "pi.pu2@op.pl";
 
-const SUPABASE_KEY =
-    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const ADMIN_EMAIL =
-    "pi.pu2@op.pl";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 // ==========================================
 // SPRAWDZENIE ADMINA
 // ==========================================
 
 async function checkUser() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getSession();
+    const { data, error } = await supabaseClient.auth.getSession();
 
     if (error) {
-
         console.error(error);
-
         document.body.innerHTML = `
-            <h1 style="text-align:center;margin-top:100px;">
-                ❌ Błąd
-            </h1>
-
-            <p style="text-align:center;">
-                Nie udało się sprawdzić logowania.
-            </p>
+            <h1 style="text-align:center;margin-top:100px;">❌ Błąd</h1>
+            <p style="text-align:center;">Nie udało się sprawdzić logowania.</p>
         `;
-
         return false;
     }
 
     const session = data.session;
 
     if (!session || !session.user) {
-
-        window.location.href =
-            "logowanie.html";
-
+        window.location.href = "logowanie.html";
         return false;
     }
 
-    if (
-        session.user.email !== ADMIN_EMAIL
-    ) {
-
+    if (session.user.email !== ADMIN_EMAIL) {
         document.body.innerHTML = `
-
-            <h1 style="
-                text-align:center;
-                margin-top:100px;
-            ">
-                🚫 Brak dostępu
-            </h1>
-
+            <h1 style="text-align:center;margin-top:100px;">🚫 Brak dostępu</h1>
+            <p style="text-align:center;">Ta strona jest tylko dla administratora.</p>
             <p style="text-align:center;">
-                Ta strona jest tylko dla administratora.
+                Zalogowane konto: <strong>${session.user.email}</strong>
             </p>
-
             <p style="text-align:center;">
-                Zalogowane konto:
-                <strong>${session.user.email}</strong>
+                <a href="index.html">Wróć na stronę główną</a>
             </p>
-
-            <p style="text-align:center;">
-                <a href="index.html">
-                    Wróć na stronę główną
-                </a>
-            </p>
-
         `;
-
         return false;
     }
 
     return true;
 }
 
-
 // ==========================================
 // AKTUALNOŚCI — POBIERANIE
 // ==========================================
 
 async function loadNews() {
+    const list = document.getElementById("newsList");
+    list.innerHTML = '<div class="loading">Ładowanie aktualności...</div>';
 
-    const list =
-        document.getElementById("newsList");
-
-    list.innerHTML =
-        '<div class="loading">Ładowanie aktualności...</div>';
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("news")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+    const { data, error } = await supabaseClient
+        .from("news")
+        .select("*")
+        .order("created_at", { ascending: false });
 
     if (error) {
-
-        console.error(
-            "Błąd aktualności:",
-            error
-        );
-
-        list.innerHTML =
-            '<div class="empty">❌ Nie udało się pobrać aktualności.<br>' +
-            error.message +
-            '</div>';
-
+        console.error("Błąd aktualności:", error);
+        list.textContent = "❌ Nie udało się pobrać aktualności: " + error.message;
         return;
     }
 
     if (!data || data.length === 0) {
-
-        list.innerHTML =
-            '<div class="empty">Brak aktualności.</div>';
-
+        list.innerHTML = '<div class="empty">Brak aktualności.</div>';
         return;
     }
 
     list.innerHTML = "";
 
     data.forEach(news => {
+        const item = document.createElement("div");
+        item.className = "item";
 
-        const item =
-            document.createElement("div");
+        const info = document.createElement("div");
+        info.className = "info";
 
-        item.className =
-            "item";
+        const title = document.createElement("div");
+        title.className = "item-title";
+        title.textContent = "📢 " + news.title;
 
-        const info =
-            document.createElement("div");
+        const content = document.createElement("div");
+        content.className = "item-text";
+        content.textContent = news.content;
 
-        info.className =
-            "info";
-
-        const title =
-            document.createElement("div");
-
-        title.className =
-            "item-title";
-
-        title.textContent =
-            "📢 " + news.title;
-
-        const content =
-            document.createElement("div");
-
-        content.className =
-            "item-text";
-
-        content.textContent =
-            news.content;
-
-        const date =
-            document.createElement("div");
-
-        date.className =
-            "item-date";
+        const date = document.createElement("div");
+        date.className = "item-date";
 
         if (news.created_at) {
-
-            date.textContent =
-                "Dodano: " +
-                new Date(
-                    news.created_at
-                ).toLocaleString(
-                    "pl-PL",
-                    {
-                        dateStyle: "medium",
-                        timeStyle: "short"
-                    }
-                );
-
+            date.textContent = "Dodano: " + new Date(news.created_at).toLocaleString(
+                "pl-PL",
+                { dateStyle: "medium", timeStyle: "short" }
+            );
         }
 
-        info.appendChild(title);
-        info.appendChild(content);
-        info.appendChild(date);
+        info.append(title, content, date);
 
-        const deleteButton =
-            document.createElement("button");
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "🗑️ Usuń";
+        deleteButton.addEventListener("click", () => deleteNews(news.id, news.title));
 
-        deleteButton.className =
-            "delete-button";
-
-        deleteButton.textContent =
-            "🗑️ Usuń";
-
-        deleteButton.addEventListener(
-            "click",
-            () => {
-
-                deleteNews(
-                    news.id,
-                    news.title
-                );
-
-            }
-        );
-
-        item.appendChild(info);
-        item.appendChild(deleteButton);
-
+        item.append(info, deleteButton);
         list.appendChild(item);
-
     });
-
 }
-
 
 // ==========================================
 // AKTUALNOŚCI — DODAWANIE
 // ==========================================
 
-document
-    .getElementById("addNewsButton")
-    .addEventListener(
-        "click",
-        async function() {
+document.getElementById("addNewsButton").addEventListener("click", async function() {
+    const titleInput = document.getElementById("newsTitle");
+    const contentInput = document.getElementById("newsContent");
+    const message = document.getElementById("newsMessage");
 
-            const titleInput =
-                document.getElementById(
-                    "newsTitle"
-                );
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
 
-            const contentInput =
-                document.getElementById(
-                    "newsContent"
-                );
+    if (!title || !content) {
+        message.textContent = "❌ Wpisz tytuł i treść aktualności.";
+        message.style.color = "red";
+        return;
+    }
 
-            const message =
-                document.getElementById(
-                    "newsMessage"
-                );
+    message.textContent = "⏳ Dodawanie aktualności...";
+    message.style.color = "#1769e0";
 
-            const title =
-                titleInput.value.trim();
+    const { error } = await supabaseClient
+        .from("news")
+        .insert({ title, content });
 
-            const content =
-                contentInput.value.trim();
+    if (error) {
+        console.error("Błąd dodawania aktualności:", error);
+        message.textContent = "❌ Błąd: " + error.message;
+        message.style.color = "red";
+        return;
+    }
 
-            if (!title || !content) {
+    message.textContent = "✅ Aktualność została dodana!";
+    message.style.color = "green";
 
-                message.textContent =
-                    "❌ Wpisz tytuł i treść aktualności.";
+    titleInput.value = "";
+    contentInput.value = "";
 
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-            message.textContent =
-                "⏳ Dodawanie aktualności...";
-
-            message.style.color =
-                "#1769e0";
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .from("news")
-                    .insert({
-                        title: title,
-                        content: content
-                    });
-
-            if (error) {
-
-                console.error(
-                    "Błąd dodawania aktualności:",
-                    error
-                );
-
-                message.textContent =
-                    "❌ Błąd: " +
-                    error.message;
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-            message.textContent =
-                "✅ Aktualność została dodana!";
-
-            message.style.color =
-                "green";
-
-            titleInput.value = "";
-            contentInput.value = "";
-
-            await loadNews();
-
-        }
-    );
-
+    await loadNews();
+});
 
 // ==========================================
 // AKTUALNOŚCI — USUWANIE
 // ==========================================
 
-async function deleteNews(
-    id,
-    title
-) {
-
-    const confirmed =
-        confirm(
-            'Czy na pewno chcesz usunąć aktualność "' +
-            title +
-            '"?'
-        );
-
-    if (!confirmed) {
+async function deleteNews(id, title) {
+    if (!confirm('Czy na pewno chcesz usunąć aktualność "' + title + '"?')) {
         return;
     }
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("news")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
+    const { error } = await supabaseClient
+        .from("news")
+        .delete()
+        .eq("id", id);
 
     if (error) {
-
-        alert(
-            "❌ Nie udało się usunąć aktualności:\n" +
-            error.message
-        );
-
+        alert("❌ Nie udało się usunąć aktualności:\n" + error.message);
         return;
     }
 
     await loadNews();
-
 }
-
 
 // ==========================================
 // MATERIAŁY — POBIERANIE
 // ==========================================
 
 async function loadMaterials() {
+    const list = document.getElementById("materialsList");
+    list.innerHTML = '<div class="loading">Ładowanie materiałów...</div>';
 
-    const list =
-        document.getElementById(
-            "materialsList"
-        );
-
-    list.innerHTML =
-        '<div class="loading">Ładowanie materiałów...</div>';
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("materials")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+    const { data, error } = await supabaseClient
+        .from("materials")
+        .select("*")
+        .order("created_at", { ascending: false });
 
     if (error) {
-
         console.error(error);
-
-        list.innerHTML =
-            '<div class="empty">❌ Nie udało się pobrać materiałów.<br>' +
-            error.message +
-            '</div>';
-
+        list.textContent = "❌ Nie udało się pobrać materiałów: " + error.message;
         return;
     }
 
     if (!data || data.length === 0) {
-
-        list.innerHTML =
-            '<div class="empty">Brak materiałów.</div>';
-
+        list.innerHTML = '<div class="empty">Brak materiałów.</div>';
         return;
     }
 
     list.innerHTML = "";
 
     data.forEach(material => {
+        const item = document.createElement("div");
+        item.className = "item";
 
-        const item =
-            document.createElement("div");
+        const info = document.createElement("div");
+        info.className = "info";
 
-        item.className =
-            "item";
+        const title = document.createElement("div");
+        title.className = "item-title";
+        title.textContent = "📄 " + material.title;
 
-        const info =
-            document.createElement("div");
+        const subject = document.createElement("div");
+        subject.className = "item-subject";
+        subject.textContent = "Przedmiot: " + material.subject;
 
-        info.className =
-            "info";
+        info.append(title, subject);
 
-        const title =
-            document.createElement("div");
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "🗑️ Usuń";
+        deleteButton.addEventListener("click", () => {
+            deleteMaterial(material.id, material.file_url, material.title);
+        });
 
-        title.className =
-            "item-title";
-
-        title.textContent =
-            "📄 " + material.title;
-
-        const subject =
-            document.createElement("div");
-
-        subject.className =
-            "item-subject";
-
-        subject.textContent =
-            "Przedmiot: " +
-            material.subject;
-
-        info.appendChild(title);
-        info.appendChild(subject);
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-button";
-
-        deleteButton.textContent =
-            "🗑️ Usuń";
-
-        deleteButton.addEventListener(
-            "click",
-            () => {
-
-                deleteMaterial(
-                    material.id,
-                    material.file_url,
-                    material.title
-                );
-
-            }
-        );
-
-        item.appendChild(info);
-        item.appendChild(deleteButton);
-
+        item.append(info, deleteButton);
         list.appendChild(item);
-
     });
-
 }
-
 
 // ==========================================
 // MATERIAŁY — USUWANIE
 // ==========================================
 
-async function deleteMaterial(
-    id,
-    filePath,
-    title
-) {
-
-    const confirmed =
-        confirm(
-            'Czy na pewno chcesz usunąć materiał "' +
-            title +
-            '"?'
-        );
-
-    if (!confirmed) {
+async function deleteMaterial(id, filePath, title) {
+    if (!confirm('Czy na pewno chcesz usunąć materiał "' + title + '"?')) {
         return;
     }
 
     if (filePath) {
-
-        const {
-            error: storageError
-        } =
-            await supabaseClient
-                .storage
-                .from("materials")
-                .remove([
-                    filePath
-                ]);
+        const { error: storageError } = await supabaseClient
+            .storage
+            .from("materials")
+            .remove([filePath]);
 
         if (storageError) {
-
-            alert(
-                "❌ Nie udało się usunąć pliku:\n" +
-                storageError.message
-            );
-
+            alert("❌ Nie udało się usunąć pliku:\n" + storageError.message);
             return;
         }
-
     }
 
-    const {
-        error: databaseError
-    } =
-        await supabaseClient
-            .from("materials")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
+    const { error: databaseError } = await supabaseClient
+        .from("materials")
+        .delete()
+        .eq("id", id);
 
     if (databaseError) {
-
-        alert(
-            "❌ Nie udało się usunąć wpisu:\n" +
-            databaseError.message
-        );
-
+        alert("❌ Nie udało się usunąć wpisu:\n" + databaseError.message);
         return;
     }
 
     await loadMaterials();
-
 }
-
 
 // ==========================================
 // MATERIAŁY — DODAWANIE
 // ==========================================
 
-document
-    .getElementById("addButton")
-    .addEventListener(
-        "click",
-        async function() {
+document.getElementById("addButton").addEventListener("click", async function() {
+    const message = document.getElementById("message");
+    const subject = document.getElementById("subject").value;
+    const title = document.getElementById("title").value.trim();
+    const file = document.getElementById("file").files[0];
 
-            const message =
-                document.getElementById(
-                    "message"
-                );
+    if (!title || !file) {
+        message.textContent = "❌ Uzupełnij nazwę i wybierz plik.";
+        message.style.color = "red";
+        return;
+    }
 
-            const subject =
-                document.getElementById(
-                    "subject"
-                ).value;
+    message.textContent = "⏳ Przesyłanie pliku...";
+    message.style.color = "#1769e0";
 
-            const title =
-                document.getElementById(
-                    "title"
-                ).value.trim();
+    const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const filePath = Date.now() + "_" + safeFileName;
 
-            const file =
-                document.getElementById(
-                    "file"
-                ).files[0];
+    const { error: uploadError } = await supabaseClient
+        .storage
+        .from("materials")
+        .upload(filePath, file);
 
-            if (!title || !file) {
+    if (uploadError) {
+        console.error("Błąd uploadu:", uploadError);
+        message.textContent = "❌ Błąd przesyłania: " + uploadError.message;
+        message.style.color = "red";
+        return;
+    }
 
-                message.textContent =
-                    "❌ Uzupełnij nazwę i wybierz plik.";
+    message.textContent = "⏳ Zapisywanie materiału...";
 
-                message.style.color =
-                    "red";
+    const { error: databaseError } = await supabaseClient
+        .from("materials")
+        .insert({
+            title: title,
+            subject: subject,
+            file_url: filePath
+        });
 
-                return;
-            }
+    if (databaseError) {
+        console.error("Błąd bazy:", databaseError);
 
-            message.textContent =
-                "⏳ Przesyłanie pliku...";
+        await supabaseClient
+            .storage
+            .from("materials")
+            .remove([filePath]);
 
-            message.style.color =
-                "#1769e0";
+        message.textContent = "❌ Błąd bazy danych: " + databaseError.message;
+        message.style.color = "red";
+        return;
+    }
 
-            const safeFileName =
-                file.name.replace(
-                    /[^a-zA-Z0-9._-]/g,
-                    "_"
-                );
+    message.textContent = "✅ Materiał został dodany!";
+    message.style.color = "green";
 
-            const filePath =
-                Date.now() +
-                "_" +
-                safeFileName;
+    document.getElementById("title").value = "";
+    document.getElementById("file").value = "";
 
-            const {
-                error: uploadError
-            } =
-                await supabaseClient
-                    .storage
-                    .from("materials")
-                    .upload(
-                        filePath,
-                        file
-                    );
-
-            if (uploadError) {
-
-                console.error(
-                    "Błąd uploadu:",
-                    uploadError
-                );
-
-                message.textContent =
-                    "❌ Błąd przesyłania: " +
-                    uploadError.message;
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-            message.textContent =
-                "⏳ Zapisywanie materiału...";
-
-            const {
-                error: databaseError
-            } =
-                await supabaseClient
-                    .from("materials")
-                    .insert({
-                        title: title,
-                        subject: subject,
-                        file_url: filePath
-                    });
-
-            if (databaseError) {
-
-                console.error(
-                    "Błąd bazy:",
-                    databaseError
-                );
-
-                await supabaseClient
-                    .storage
-                    .from("materials")
-                    .remove([
-                        filePath
-                    ]);
-
-                message.textContent =
-                    "❌ Błąd bazy danych: " +
-                    databaseError.message;
-
-                message.style.color =
-                    "red";
-
-                return;
-            }
-
-            message.textContent =
-                "✅ Materiał został dodany!";
-
-            message.style.color =
-                "green";
-
-            document.getElementById(
-                "title"
-            ).value = "";
-
-            document.getElementById(
-                "file"
-            ).value = "";
-
-            await loadMaterials();
-
-        }
-    );
-
+    await loadMaterials();
+});
 
 // ==========================================
 // START
 // ==========================================
 
 async function start() {
-
-    const isAdmin =
-        await checkUser();
+    const isAdmin = await checkUser();
 
     if (!isAdmin) {
         return;
@@ -1082,12 +596,11 @@ async function start() {
 
     await loadNews();
     await loadMaterials();
-
 }
 
 start();
-
 </script>
 
 </body>
 </html>
+```
