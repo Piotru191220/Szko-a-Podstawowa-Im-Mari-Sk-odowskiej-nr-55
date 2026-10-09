@@ -1,0 +1,147 @@
+```html
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dokumenty | Szkoła Podstawowa nr 55</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8fd;
+            color: #0d2342;
+            line-height: 1.6;
+        }
+
+        header {
+            background: white;
+            padding: 22px 5%;
+            box-shadow: 0 3px 15px rgba(0,0,0,.06);
+        }
+
+        header a {
+            color: #1769e0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            width: min(900px, 92%);
+            margin: 60px auto;
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 46px);
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #536176;
+            margin-bottom: 35px;
+        }
+
+        .document {
+            background: white;
+            border: 1px solid #e2eaf4;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .document h2 {
+            font-size: 19px;
+            margin-bottom: 5px;
+        }
+
+        .document p {
+            color: #536176;
+            font-size: 14px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #1769e0;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #0b203d;
+            color: white;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html">← Powrót na stronę główną</a>
+</header>
+
+<main>
+    <h1>📄 Dokumenty</h1>
+
+    <p class="description">
+        W tym miejscu znajdziesz ważne dokumenty,
+        regulaminy i informacje dla uczniów oraz rodziców.
+    </p>
+
+    <div class="document">
+        <div>
+            <h2>📘 Statut szkoły</h2>
+            <p>Statut Szkoły Podstawowej nr 55.</p>
+        </div>
+        <a class="button" href="dokumenty/statut.pdf" target="_blank">
+            Otwórz PDF
+        </a>
+    </div>
+
+    <div class="document">
+        <div>
+            <h2>📋 Regulamin szkoły</h2>
+            <p>Regulaminy obowiązujące w szkole.</p>
+        </div>
+        <a class="button" href="dokumenty/regulamin.pdf" target="_blank">
+            Otwórz PDF
+        </a>
+    </div>
+
+    <div class="document">
+        <div>
+            <h2>📝 Wnioski i formularze</h2>
+            <p>Dokumenty do pobrania dla rodziców i uczniów.</p>
+        </div>
+        <a class="button" href="dokumenty/wnioski.pdf" target="_blank">
+            Otwórz PDF
+        </a>
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Szkoła Podstawowa nr 55. Wszystkie prawa zastrzeżone.
+</footer>
+
+</body>
+</html>
+```
