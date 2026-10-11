@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekrutacja do szkoły</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 15px;
+    background: #f0f4f8;
+    color: #1e293b;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 8px 35px #00000012;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header .symbol {
+    font-size: 45px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    color: #164e8a;
+    font-size: 30px;
+}
+
+.subtitle {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+h2 {
+    color: #164e8a;
+    font-size: 19px;
+    border-bottom: 1px solid #dbeafe;
+    padding-bottom: 12px;
+    margin-top: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-size: 15px;
+    background: white;
+}
+
+input:focus, select:focus {
+    outline: 2px solid #93c5fd;
+    border-color: #2563eb;
+}
+
+.consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 25px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.consent input {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #1762ad;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #104b88;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+#komunikat {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 9px;
+    line-height: 1.5;
+}
+
+.success {
+    display: block !important;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.error {
+    display: block !important;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.notice {
+    margin-top: 25px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 22px 17px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="symbol">🏫</div>
+        <h1>Zapisy do szkoły</h1>
+        <p class="subtitle">
+            Formularz zgłoszeniowy dziecka do szkoły podstawowej.
+            Prosimy o dokładne wypełnienie wszystkich wymaganych pól.
+        </p>
+    </div>
+
+    <form id="formularz">
+
+        <h2>1. Dane dziecka</h2>
+
+        <div class="grid">
+            <div class="field">
+                <label for="imie_dziecka">Imię dziecka *</label>
+                <input id="imie_dziecka" name="imie_dziecka"
+                    maxlength="100" autocomplete="given-name" required>
+            </div>
+
+            <div class="field">
+                <label for="nazwisko_dziecka">Nazwisko dziecka *</label>
+                <input id="nazwisko_dziecka" name="nazwisko_dziecka"
+                    maxlength="100" autocomplete="family-name" required>
+            </div>
+
+            <div class="field">
+                <label for="data_urodzenia">Data urodzenia *</label>
+                <input type="date" id="data_urodzenia"
+                    name="data_urodzenia" required>
+            </div>
+
+            <div class="field">
+                <label for="pesel">PESEL dziecka *</label>
+                <input id="pesel" name="pesel" type="text"
+                    inputmode="numeric" pattern="[0-9]{11}"
+                    minlength="11" maxlength="11"
+                    placeholder="11 cyfr" required>
+            </div>
+
+            <div class="field full">
+                <label for="adres_dziecka">Adres zamieszkania dziecka *</label>
+                <input id="adres_dziecka" name="adres_dziecka"
+                    maxlength="250" autocomplete="street-address" required>
+            </div>
+
+            <div class="field full">
+                <label for="klasa">Klasa, do której zgłaszane jest dziecko *</label>
+                <select id="klasa" name="klasa" required>
+                    <option value="">Wybierz klasę</option>
+                    <option value="1">Klasa 1</option>
+                    <option value="2">Klasa 2</option>
+                    <option value="3">Klasa 3</option>
+                    <option value="4">Klasa 4</option>
+                    <option value="5">Klasa 5</option>
+                    <option value="6">Klasa 6</option>
+                    <option value="7">Klasa 7</option>
+                    <option value="8">Klasa 8</option>
+                </select>
+            </div>
+        </div>
+
+        <h2>2. Dane rodzica lub opiekuna prawnego</h2>
+
+        <div class="grid">
+            <div class="field">
+                <label for="imie_rodzica">Imię rodzica *</label>
+                <input id="imie_rodzica" name="imie_rodzica"
+                    maxlength="100" autocomplete="given-name" required>
+            </div>
+
+            <div class="field">
+                <label for="nazwisko_rodzica">Nazwisko rodzica *</label>
+                <input id="nazwisko_rodzica" name="nazwisko_rodzica"
+                    maxlength="100" autocomplete="family-name" required>
+            </div>
+
+            <div class="field">
+                <label for="telefon">Numer telefonu *</label>
+                <input id="telefon" name="telefon" type="tel"
+                    maxlength="30" autocomplete="tel" required>
+            </div>
+
+            <div class="field">
+                <label for="email">Adres e-mail *</label>
+                <input id="email" name="email" type="email"
+                    maxlength="254" autocomplete="email" required>
+            </div>
+        </div>
+
+        <label class="consent">
+            <input type="checkbox" id="zgoda" required>
+            <span>
+                Potwierdzam, że jestem rodzicem lub opiekunem prawnym
+                dziecka i zapoznałem(-am) się z informacją o przetwarzaniu
+                danych osobowych. *
+            </span>
+        </label>
+
+        <button type="submit" id="wyslij">
+            Wyślij zgłoszenie
+        </button>
+
+        <div id="komunikat" role="status" aria-live="polite"></div>
+
+        <p class="notice">
+            * Pola wymagane. Wysłanie formularza nie oznacza automatycznego
+            przyjęcia dziecka do szkoły. Przed uruchomieniem formularza
+            należy uzupełnić informację RODO, wskazać administratora danych,
+            cel i podstawę prawną przetwarzania oraz okres przechowywania
+            danych.
+        </p>
+
+    </form>
+</div>
+
+<script>
+const SUPABASE_URL = "TWOJ_URL_SUPABASE";
+const SUPABASE_KEY = "TWOJ_KLUCZ_PUBLICZNY";
+
+const formularz = document.getElementById("formularz");
+const przycisk = document.getElementById("wyslij");
+const komunikat = document.getElementById("komunikat");
+
+const konfiguracjaUzupelniona =
+    SUPABASE_URL.startsWith("https://") &&
+    !SUPABASE_URL.includes("TWOJ_URL") &&
+    SUPABASE_KEY.length > 20 &&
+    !SUPABASE_KEY.includes("TWOJ_KLUCZ");
+
+let supabaseClient = null;
+
+if (konfiguracjaUzupelniona && window.supabase) {
+    supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+}
+
+function pokazKomunikat(tresc, typ) {
+    komunikat.textContent = tresc;
+    komunikat.className = typ;
+}
+
+formularz.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    if (!supabaseClient) {
+        pokazKomunikat(
+            "Najpierw skonfiguruj adres URL i klucz publiczny Supabase w kodzie strony.",
+            "error"
+        );
+        return;
+    }
+
+    if (!formularz.reportValidity()) return;
+
+    const pesel = document.getElementById("pesel").value.trim();
+
+    if (!/^[0-9]{11}$/.test(pesel)) {
+        pokazKomunikat("PESEL musi zawierać dokładnie 11 cyfr.", "error");
+        return;
+    }
+
+    const dataUrodzenia =
+        document.getElementById("data_urodzenia").value;
+
+    if (dataUrodzenia > new Date().toISOString().slice(0, 10)) {
+        pokazKomunikat("Data urodzenia nie może być datą przyszłą.", "error");
+        return;
+    }
+
+    const dane = {
+        imie_dziecka:
+            document.getElementById("imie_dziecka").value.trim(),
+        nazwisko_dziecka:
+            document.getElementById("nazwisko_dziecka").value.trim(),
+        data_urodzenia: dataUrodzenia,
+        pesel: pesel,
+        adres_dziecka:
+            document.getElementById("adres_dziecka").value.trim(),
+        klasa: document.getElementById("klasa").value,
+        imie_rodzica:
+            document.getElementById("imie_rodzica").value.trim(),
+        nazwisko_rodzica:
+            document.getElementById("nazwisko_rodzica").value.trim(),
+        telefon: document.getElementById("telefon").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        zgoda: document.getElementById("zgoda").checked
+    };
+
+    if (!dane.zgoda) {
+        pokazKomunikat("Zaznacz wymagane potwierdzenie.", "error");
+        return;
+    }
+
+    przycisk.disabled = true;
+    przycisk.textContent = "Wysyłanie...";
+    komunikat.className = "";
+    komunikat.style.display = "none";
+
+    try {
+        const { error } = await supabaseClient
+            .from("zgloszenia_szkolne")
+            .insert([dane]);
+
+        if (error) throw error;
+
+        formularz.reset();
+
+        pokazKomunikat(
+            "Zgłoszenie zostało wysłane. Dziękujemy! Szkoła może teraz zweryfikować zgłoszenie.",
+            "success"
+        );
+    } catch (error) {
+        console.error("Błąd wysyłania zgłoszenia:", error);
+
+        pokazKomunikat(
+            "Nie udało się wysłać zgłoszenia. Sprawdź połączenie, konfigurację Supabase i uprawnienia tabeli. Spróbuj ponownie później.",
+            "error"
+        );
+    } finally {
+        przycisk.disabled = false;
+        przycisk.textContent = "Wyślij zgłoszenie";
+    }
+});
+</script>
+
+</body>
+</html>
