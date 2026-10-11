@@ -1,20 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Pomoc | Szkoła Podstawowa nr 55</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -30,9 +25,7 @@ header {
     padding: 35px 20px;
 }
 
-header h1 {
-    margin: 0 0 8px;
-}
+header h1 { margin: 0 0 8px; }
 
 main {
     max-width: 750px;
@@ -54,8 +47,7 @@ label {
     margin-bottom: 8px;
 }
 
-input,
-textarea {
+input, textarea {
     width: 100%;
     padding: 13px;
     border: 1px solid #ccc;
@@ -82,9 +74,8 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background: #1257bd;
-}
+button:hover { background: #1257bd; }
+button:disabled { opacity: .6; cursor: wait; }
 
 .message {
     margin-top: 15px;
@@ -92,9 +83,7 @@ button:hover {
     font-weight: bold;
 }
 
-.chat {
-    display: none;
-}
+.chat { display: none; }
 
 .messages {
     height: 400px;
@@ -111,15 +100,11 @@ button:hover {
     border-radius: 12px;
     margin-bottom: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    overflow-wrap: anywhere;
 }
 
-.chat-message strong {
-    color: #1769e0;
-}
-
-.chat-message.secretariat strong {
-    color: #15926f;
-}
+.chat-message strong { color: #1769e0; }
+.chat-message.secretariat strong { color: #15926f; }
 
 .chat-date {
     display: block;
@@ -145,506 +130,377 @@ button:hover {
     font-size: 14px;
 }
 
-</style>
+.close-chat {
+    background: #d93636;
+}
 
+.close-chat:hover { background: #b92525; }
+
+</style>
 </head>
 
 <body>
-
 <header>
-
-<h1>🆘 Potrzebuję pomocy</h1>
-
-<p>Kontakt z sekretariatem szkoły</p>
-
+    <h1>🆘 Potrzebuję pomocy</h1>
+    <p>Kontakt z sekretariatem szkoły</p>
 </header>
 
-
 <main>
+    <div class="box" id="nameBox">
+        <h2>👋 Zanim zaczniemy</h2>
 
+        <div class="notice">
+            Podaj swoje imię lub pseudonim.
+            Nie wpisuj tutaj hasła, numeru telefonu ani adresu.
+        </div>
 
-<!-- =========================
-     PODANIE IMIENIA
-========================= -->
+        <label for="nickname">Imię lub pseudonim</label>
+        <input
+            type="text"
+            id="nickname"
+            maxlength="40"
+            placeholder="np. Kuba albo SuperKuba"
+        >
 
-<div class="box" id="nameBox">
+        <button id="startButton">💬 Rozpocznij rozmowę</button>
+        <p id="nameMessage" class="message"></p>
+    </div>
 
-<h2>👋 Zanim zaczniemy</h2>
+    <div class="box chat" id="chatBox">
+        <h2>💬 Rozmowa z sekretariatem</h2>
 
-<div class="notice">
+        <p>Rozmawiasz jako: <strong id="userName"></strong></p>
 
-Podaj swoje imię lub pseudonim.
-Nie wpisuj tutaj hasła, numeru telefonu ani adresu.
+        <div class="messages" id="messages"></div>
 
-</div>
+        <label for="messageInput">Wiadomość</label>
+        <textarea
+            id="messageInput"
+            maxlength="1000"
+            placeholder="Napisz wiadomość..."
+        ></textarea>
 
-<label for="nickname">
-Imię lub pseudonim
-</label>
+        <button id="sendButton">📤 Wyślij wiadomość</button>
+        <p id="sendMessage" class="message"></p>
 
-<input
-    type="text"
-    id="nickname"
-    maxlength="40"
-    placeholder="np. Kuba albo SuperKuba"
->
+        <button id="closeChatButton" class="close-chat">
+            Zamknij rozmowę na tym urządzeniu
+        </button>
+        <p class="notice">
+            Zamknięcie usuwa zapis czatu z tej przeglądarki.
+            Nie usuwa wiadomości z bazy szkoły.
+        </p>
+    </div>
 
-<button id="startButton">
-    💬 Rozpocznij rozmowę
-</button>
-
-<p id="nameMessage" class="message"></p>
-
-</div>
-
-
-<!-- =========================
-     CZAT
-========================= -->
-
-<div class="box chat" id="chatBox">
-
-<h2>
-    💬 Rozmowa z sekretariatem
-</h2>
-
-<p>
-    Rozmawiasz jako:
-    <strong id="userName"></strong>
-</p>
-
-
-<div
-    class="messages"
-    id="messages"
->
-
-</div>
-
-
-<label for="messageInput">
-Wiadomość
-</label>
-
-<textarea
-    id="messageInput"
-    maxlength="1000"
-    placeholder="Napisz wiadomość..."
-></textarea>
-
-
-<button id="sendButton">
-    📤 Wyślij wiadomość
-</button>
-
-
-<p
-    id="sendMessage"
-    class="message"
-></p>
-
-</div>
-
-
-<a
-    href="index.html"
-    class="back"
->
-    ← Wróć na stronę główną
-</a>
-
+    <a href="index.html" class="back">← Wróć na stronę główną</a>
 </main>
 
-
 <script>
+"use strict";
 
-/* =========================
-   SUPABASE
-========================= */
+/* SUPABASE */
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 
-const SUPABASE_URL =
-    "https://vqilsuvpinnfmngrczlj.supabase.co";
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-const SUPABASE_KEY =
-    "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================
-   ZMIENNE
-========================= */
+/* ZAPIS SESJI W PRZEGLĄDARCE */
+const STORAGE_KEY = "school_help_active_chat";
 
 let nickname = "";
-
 let conversationId = null;
+let loadingMessages = false;
+let sendingMessage = false;
 
+const nameBox = document.getElementById("nameBox");
+const chatBox = document.getElementById("chatBox");
+const nicknameInput = document.getElementById("nickname");
+const nameMessage = document.getElementById("nameMessage");
+const userName = document.getElementById("userName");
+const messagesBox = document.getElementById("messages");
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const sendMessage = document.getElementById("sendMessage");
+const startButton = document.getElementById("startButton");
 
-/* =========================
-   ROZPOCZĘCIE CZATU
-========================= */
+function saveSession() {
+    if (!nickname || !conversationId) return;
 
-document
-.getElementById("startButton")
-.addEventListener("click", async function() {
-
-    const input =
-        document.getElementById("nickname");
-
-    const message =
-        document.getElementById("nameMessage");
-
-    nickname =
-        input.value.trim();
-
-
-    if (!nickname) {
-
-        message.textContent =
-            "❌ Wpisz imię lub pseudonim.";
-
-        message.style.color = "red";
-
-        return;
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            nickname: nickname,
+            conversationId: conversationId
+        }));
+    } catch (error) {
+        console.error("Nie udało się zapisać sesji:", error);
     }
-
-
-    if (nickname.length < 2) {
-
-        message.textContent =
-            "❌ Imię lub pseudonim jest za krótki.";
-
-        message.style.color = "red";
-
-        return;
-    }
-
-
-    message.textContent =
-        "⏳ Otwieranie rozmowy...";
-
-    message.style.color = "#1769e0";
-
-
-    /*
-       Tworzymy nową rozmowę
-    */
-
-    const { data, error } =
-        await supabaseClient
-        .from("help_conversations")
-        .insert({
-            nickname: nickname
-        })
-        .select()
-        .single();
-
-
-    if (error) {
-
-        console.error(error);
-
-        message.textContent =
-            "❌ Nie udało się rozpocząć rozmowy: " +
-            error.message;
-
-        message.style.color = "red";
-
-        return;
-    }
-
-
-    conversationId =
-        data.id;
-
-
-    document
-        .getElementById("nameBox")
-        .style.display = "none";
-
-
-    document
-        .getElementById("chatBox")
-        .style.display = "block";
-
-
-    document
-        .getElementById("userName")
-        .textContent = nickname;
-
-
-    await loadMessages();
-
-});
-
-
-/* =========================
-   POBIERANIE WIADOMOŚCI
-========================= */
-
-async function loadMessages() {
-
-    if (!conversationId) {
-        return;
-    }
-
-
-    const messages =
-        document.getElementById("messages");
-
-
-    const { data, error } =
-        await supabaseClient
-        .from("help_messages")
-        .select("*")
-        .eq(
-            "conversation_id",
-            conversationId
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
-
-
-    if (error) {
-
-        console.error(error);
-
-        messages.innerHTML =
-            "<p>❌ Nie udało się pobrać wiadomości.</p>";
-
-        return;
-    }
-
-
-    messages.innerHTML = "";
-
-
-    if (!data || data.length === 0) {
-
-        messages.innerHTML =
-            "<p style='color:#777'>Napisz pierwszą wiadomość.</p>";
-
-        return;
-    }
-
-
-    data.forEach(item => {
-
-        const div =
-            document.createElement("div");
-
-
-        div.className =
-            "chat-message";
-
-
-        if (item.sender === "secretariat") {
-
-            div.classList.add(
-                "secretariat"
-            );
-
-        }
-
-
-        const sender =
-            document.createElement("strong");
-
-
-        sender.textContent =
-            item.sender === "secretariat"
-                ? "🏫 Sekretariat"
-                : nickname;
-
-
-        const text =
-            document.createElement("div");
-
-
-        text.textContent =
-            item.message;
-
-
-        const date =
-            document.createElement("span");
-
-
-        date.className =
-            "chat-date";
-
-
-        date.textContent =
-            new Date(
-                item.created_at
-            ).toLocaleString(
-                "pl-PL"
-            );
-
-
-        div.appendChild(sender);
-
-        div.appendChild(text);
-
-        div.appendChild(date);
-
-
-        messages.appendChild(div);
-
-    });
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
 }
 
+function showNameForm() {
+    nameBox.style.display = "block";
+    chatBox.style.display = "none";
+}
 
-/* =========================
-   WYSYŁANIE WIADOMOŚCI
-========================= */
+function showChat() {
+    nameBox.style.display = "none";
+    chatBox.style.display = "block";
+    userName.textContent = nickname;
+}
 
-document
-.getElementById("sendButton")
-.addEventListener("click", async function() {
+function clearLocalSession() {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+        console.error("Nie udało się usunąć sesji:", error);
+    }
 
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
+    nickname = "";
+    conversationId = null;
+    messagesBox.innerHTML = "";
+    messageInput.value = "";
+    sendMessage.textContent = "";
+    nicknameInput.value = "";
 
-    const status =
-        document.getElementById(
-            "sendMessage"
-        );
+    showNameForm();
+}
 
+/* PRZYWRACANIE ROZMOWY PO F5 */
+function restoreSession() {
+    let saved;
 
-    const text =
-        input.value.trim();
-
-
-    if (!text) {
-
-        status.textContent =
-            "❌ Wpisz wiadomość.";
-
-        status.style.color = "red";
-
+    try {
+        saved = localStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+        console.error("Nie można odczytać zapisanej sesji:", error);
+        showNameForm();
         return;
     }
 
-
-    if (!conversationId) {
-
-        status.textContent =
-            "❌ Rozmowa nie została rozpoczęta.";
-
-        status.style.color = "red";
-
+    if (!saved) {
+        showNameForm();
         return;
     }
 
+    try {
+        const session = JSON.parse(saved);
 
-    status.textContent =
-        "⏳ Wysyłanie...";
-
-    status.style.color =
-        "#1769e0";
-
-
-    const { error } =
-        await supabaseClient
-        .from("help_messages")
-        .insert({
-
-            conversation_id:
-                conversationId,
-
-            sender:
-                "student",
-
-            message:
-                text
-
-        });
-
-
-    if (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "❌ Nie udało się wysłać wiadomości: " +
-            error.message;
-
-        status.style.color =
-            "red";
-
-        return;
-    }
-
-
-    input.value = "";
-
-    status.textContent =
-        "✅ Wiadomość wysłana.";
-
-    status.style.color =
-        "green";
-
-
-    await loadMessages();
-
-});
-
-
-/* =========================
-   ENTER = WYŚLIJ
-========================= */
-
-document
-.getElementById("messageInput")
-.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            document
-                .getElementById(
-                    "sendButton"
-                )
-                .click();
-
+        if (!session.nickname || !session.conversationId) {
+            clearLocalSession();
+            return;
         }
 
+        nickname = session.nickname;
+        conversationId = session.conversationId;
+
+        nicknameInput.value = nickname;
+        showChat();
+        loadMessages();
+    } catch (error) {
+        console.error("Nieprawidłowa zapisana sesja:", error);
+        clearLocalSession();
     }
-);
+}
 
+/* ROZPOCZĘCIE NOWEJ ROZMOWY */
+startButton.addEventListener("click", async function () {
+    const enteredNickname = nicknameInput.value.trim();
 
-/* =========================
-   AUTOMATYCZNE ODŚWIEŻANIE
-========================= */
+    if (enteredNickname.length < 2) {
+        nameMessage.textContent =
+            "❌ Wpisz imię lub pseudonim (minimum 2 znaki).";
+        nameMessage.style.color = "red";
+        return;
+    }
 
-setInterval(
-    loadMessages,
-    5000
-);
+    startButton.disabled = true;
+    nameMessage.textContent = "⏳ Otwieranie rozmowy...";
+    nameMessage.style.color = "#1769e0";
 
+    try {
+        const { data, error } = await supabaseClient
+            .from("help_conversations")
+            .insert({ nickname: enteredNickname })
+            .select("id, nickname")
+            .single();
+
+        if (error) throw error;
+
+        nickname = enteredNickname;
+        conversationId = data.id;
+
+        saveSession();
+        showChat();
+        nameMessage.textContent = "";
+
+        await loadMessages();
+    } catch (error) {
+        console.error("Błąd rozpoczynania rozmowy:", error);
+
+        nameMessage.textContent =
+            "❌ Nie udało się rozpocząć rozmowy: " +
+            (error.message || "sprawdź połączenie");
+        nameMessage.style.color = "red";
+    } finally {
+        startButton.disabled = false;
+    }
+});
+
+/* POBIERANIE WIADOMOŚCI */
+async function loadMessages() {
+    if (!conversationId || loadingMessages) return;
+
+    loadingMessages = true;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("help_messages")
+            .select("*")
+            .eq("conversation_id", conversationId)
+            .order("created_at", { ascending: true });
+
+        if (error) throw error;
+
+        const wasNearBottom =
+            messagesBox.scrollHeight -
+            messagesBox.scrollTop -
+            messagesBox.clientHeight < 80;
+
+        messagesBox.innerHTML = "";
+
+        if (!data || data.length === 0) {
+            messagesBox.innerHTML =
+                "<p style='color:#777'>Napisz pierwszą wiadomość.</p>";
+            return;
+        }
+
+        data.forEach(function (item) {
+            const div = document.createElement("div");
+            div.className = "chat-message";
+
+            if (item.sender === "secretariat") {
+                div.classList.add("secretariat");
+            }
+
+            const sender = document.createElement("strong");
+            sender.textContent =
+                item.sender === "secretariat"
+                    ? "🏫 Sekretariat"
+                    : nickname;
+
+            const text = document.createElement("div");
+            text.textContent = item.message;
+
+            const date = document.createElement("span");
+            date.className = "chat-date";
+            date.textContent = item.created_at
+                ? new Date(item.created_at).toLocaleString("pl-PL")
+                : "";
+
+            div.appendChild(sender);
+            div.appendChild(text);
+            div.appendChild(date);
+            messagesBox.appendChild(div);
+        });
+
+        if (wasNearBottom) {
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+    } catch (error) {
+        console.error("Błąd pobierania wiadomości:", error);
+        messagesBox.innerHTML =
+            "<p>❌ Nie udało się pobrać wiadomości. Spróbuj ponownie.</p>";
+    } finally {
+        loadingMessages = false;
+    }
+}
+
+/* WYSYŁANIE WIADOMOŚCI */
+sendButton.addEventListener("click", async function () {
+    const text = messageInput.value.trim();
+
+    if (!text) {
+        sendMessage.textContent = "❌ Wpisz wiadomość.";
+        sendMessage.style.color = "red";
+        return;
+    }
+
+    if (!conversationId) {
+        sendMessage.textContent = "❌ Rozmowa nie została rozpoczęta.";
+        sendMessage.style.color = "red";
+        return;
+    }
+
+    if (sendingMessage) return;
+
+    sendingMessage = true;
+    sendButton.disabled = true;
+    sendMessage.textContent = "⏳ Wysyłanie...";
+    sendMessage.style.color = "#1769e0";
+
+    try {
+        const { error } = await supabaseClient
+            .from("help_messages")
+            .insert({
+                conversation_id: conversationId,
+                sender: "student",
+                message: text
+            });
+
+        if (error) throw error;
+
+        messageInput.value = "";
+        sendMessage.textContent = "✅ Wiadomość wysłana.";
+        sendMessage.style.color = "green";
+
+        await loadMessages();
+    } catch (error) {
+        console.error("Błąd wysyłania wiadomości:", error);
+
+        sendMessage.textContent =
+            "❌ Nie udało się wysłać wiadomości: " +
+            (error.message || "sprawdź połączenie");
+        sendMessage.style.color = "red";
+    } finally {
+        sendingMessage = false;
+        sendButton.disabled = false;
+    }
+});
+
+/* ENTER WYSYŁA, SHIFT+ENTER NOWA LINIA */
+messageInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendButton.click();
+    }
+});
+
+/* ZAMKNIĘCIE LOKALNEJ SESJI */
+document
+    .getElementById("closeChatButton")
+    .addEventListener("click", function () {
+        const confirmed = confirm(
+            "Zamknąć rozmowę na tym urządzeniu? " +
+            "Wiadomości pozostaną w bazie szkoły."
+        );
+
+        if (!confirmed) return;
+
+        clearLocalSession();
+    });
+
+/* ODŚWIEŻANIE WIADOMOŚCI CO 5 SEKUND */
+setInterval(function () {
+    if (conversationId) {
+        loadMessages();
+    }
+}, 5000);
+
+/* START */
+restoreSession();
 </script>
 
 </body>
-
 </html>
