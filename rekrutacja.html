@@ -395,14 +395,16 @@ formularz.addEventListener("submit", async function(event) {
             "Zgłoszenie zostało wysłane. Dziękujemy! Szkoła może teraz zweryfikować zgłoszenie.",
             "success"
         );
-    } catch (error) {
-        console.error("Błąd wysyłania zgłoszenia:", error);
+} catch (error) {
+    console.error("Błąd wysyłania zgłoszenia:", error);
 
-        pokazKomunikat(
-            "Nie udało się wysłać zgłoszenia. Sprawdź połączenie, konfigurację Supabase i uprawnienia tabeli. Spróbuj ponownie później.",
-            "error"
-        );
-    } finally {
+    pokazKomunikat(
+        "Błąd Supabase: " +
+        (error.message || JSON.stringify(error)) +
+        (error.code ? " | Kod: " + error.code : ""),
+        "error"
+    );
+} finally {
         przycisk.disabled = false;
         przycisk.textContent = "Wyślij zgłoszenie";
     }
