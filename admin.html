@@ -1,279 +1,193 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel administratora | Szkoła Podstawowa nr 55</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #222;
-}
-
-header {
-    background: linear-gradient(135deg, #1769e0, #4c8ff5);
-    color: white;
-    text-align: center;
-    padding: 40px 20px;
-}
-
-header h1 { margin: 0 0 10px; }
-
-main {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-.box {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-input, select, textarea {
-    width: 100%;
-    padding: 13px;
-    margin-top: 8px;
-    margin-bottom: 18px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-}
-
-textarea {
-    min-height: 130px;
-    resize: vertical;
-}
-
-.add-button {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #1769e0;
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.add-button:hover { background: #1257bd; }
-
-.secretariat-button {
-    background: #168653;
-    font-weight: bold;
-    padding: 16px;
-}
-
-.secretariat-button:hover { background: #106b41; }
-
-.message {
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 15px;
-    margin-top: 10px;
-    background: #f4f7fb;
-    border-radius: 10px;
-}
-
-.info { flex: 1; }
-
-.item-title {
-    font-weight: bold;
-    color: #1769e0;
-    font-size: 18px;
-}
-
-.item-text {
-    margin-top: 7px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-}
-
-.item-subject {
-    font-size: 14px;
-    color: #666;
-    margin-top: 5px;
-}
-
-.item-date {
-    font-size: 13px;
-    color: #777;
-    margin-top: 7px;
-}
-
-.delete-button {
-    border: none;
-    background: #d93025;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-.delete-button:hover { background: #b9231b; }
-
-.empty { color: #777; padding: 10px 0; }
-.loading { color: #1769e0; }
-
-.back {
-    display: inline-block;
-    margin-top: 5px;
-    text-decoration: none;
-    color: #1769e0;
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .item {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .delete-button { width: 100%; }
-    .box { padding: 20px; }
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#222}
+header{background:linear-gradient(135deg,#1769e0,#4c8ff5);color:white;text-align:center;padding:35px 20px}
+header h1{margin:0 0 10px}
+main{max-width:1050px;margin:30px auto;padding:15px}
+.box{background:white;padding:25px;border-radius:16px;box-shadow:0 8px 25px #0000000d;margin-bottom:25px}
+label{display:block;margin-top:15px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;margin-top:8px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:15px;font-family:Arial,sans-serif}
+textarea{min-height:110px;resize:vertical}
+button,.add-button{padding:12px 15px;border:0;border-radius:8px;background:#1769e0;color:white;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.add-button:hover{filter:brightness(.9)}
+.add-button{display:block;text-align:center;width:100%}
+.secretariat-button{background:#168653;font-weight:bold;padding:15px}
+.delete-button{background:#d93025}
+.detail-button{background:#1769e0}
+.item{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:15px;margin-top:10px;background:#f4f7fb;border-radius:10px}
+.info{flex:1;min-width:0}
+.item-title{font-weight:bold;color:#1769e0;font-size:17px;overflow-wrap:anywhere}
+.item-text{margin-top:7px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.item-subject,.item-date{font-size:13px;color:#666;margin-top:7px}
+.message{text-align:center;font-weight:bold;margin-top:15px}
+.empty{color:#777;padding:12px 0}
+.loading{color:#1769e0;padding:12px 0}
+.back{display:inline-block;margin:5px 0 20px;color:#1769e0;font-weight:bold;text-decoration:none}
+.filters{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.filters input,.filters select{margin-bottom:8px}
+.stats{padding:12px;background:#eaf2ff;border-radius:9px;color:#164e8a;font-weight:bold;margin:15px 0}
+details{margin-top:12px}
+details summary{cursor:pointer;color:#1769e0;font-weight:bold;padding:8px 0}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.detail-cell{background:white;border:1px solid #e5e7eb;border-radius:8px;padding:12px;overflow-wrap:anywhere}
+.detail-label{font-size:12px;color:#64748b;margin-bottom:5px}
+.detail-value{font-size:14px;white-space:pre-wrap}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{font-size:13px}
+@media(max-width:600px){
+ main{padding:10px}
+ .box{padding:18px}
+ .item{flex-direction:column}
+ .item>.actions,.item>.delete-button{width:100%}
+ .filters,.detail-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-    <h1>👨‍💼 Panel administratora</h1>
-    <p>Zarządzanie aktualnościami i materiałami</p>
+<h1>👨‍💼 Panel administratora</h1>
+<p>Zarządzanie szkołą, aktualnościami, materiałami i rekrutacją</p>
 </header>
 
 <main>
 
-<!-- SEKRETARIAT -->
-<div class="box" style="text-align:center;">
-    <h2>💬 Sekretariat</h2>
-    <p>Przejdź do panelu rozmów z uczniami.</p>
-    <a href="sekretariat.html" class="add-button secretariat-button">
-        💬 Otwórz sekretariat
-    </a>
+<div class="box" style="text-align:center">
+<h2>💬 Sekretariat</h2>
+<p>Przejdź do panelu rozmów z uczniami.</p>
+<a href="sekretariat.html" class="add-button secretariat-button">💬 Otwórz sekretariat</a>
+</div>
+
+<!-- ZGŁOSZENIA DO SZKOŁY -->
+<div class="box" id="rekrutacja">
+<h2>🎓 Zgłoszenia do szkoły</h2>
+<p>Przeglądaj zgłoszenia dzieci przesłane przez formularz rekrutacyjny.</p>
+
+<div class="filters">
+<input id="searchApplication" type="search" placeholder="Szukaj po nazwisku, imieniu lub PESEL...">
+<select id="filterClass">
+<option value="">Wszystkie klasy</option>
+<option value="1">Klasa 1</option>
+<option value="2">Klasa 2</option>
+<option value="3">Klasa 3</option>
+<option value="4">Klasa 4</option>
+<option value="5">Klasa 5</option>
+<option value="6">Klasa 6</option>
+<option value="7">Klasa 7</option>
+<option value="8">Klasa 8</option>
+</select>
+</div>
+
+<button id="refreshApplications" type="button">🔄 Odśwież zgłoszenia</button>
+<div id="applicationStats" class="stats">Ładowanie zgłoszeń...</div>
+<div id="applicationsList" aria-live="polite">
+<div class="loading">Sprawdzanie zgłoszeń...</div>
+</div>
+<div id="applicationMessage" class="message" role="status"></div>
 </div>
 
 <!-- DODAWANIE AKTUALNOŚCI -->
 <div class="box">
-    <h2>📢 Dodaj aktualność</h2>
-
-    <label for="newsTitle">Tytuł aktualności</label>
-    <input type="text" id="newsTitle" placeholder="np. Apel szkolny">
-
-    <label for="newsContent">Treść aktualności</label>
-    <textarea id="newsContent" placeholder="np. W piątek odbędzie się apel szkolny."></textarea>
-
-    <button class="add-button" id="addNewsButton">
-        📢 Dodaj aktualność
-    </button>
-
-    <div id="newsMessage" class="message"></div>
+<h2>📢 Dodaj aktualność</h2>
+<label for="newsTitle">Tytuł aktualności</label>
+<input id="newsTitle" type="text" placeholder="np. Apel szkolny">
+<label for="newsContent">Treść aktualności</label>
+<textarea id="newsContent" placeholder="Treść aktualności..."></textarea>
+<button class="add-button" id="addNewsButton" type="button">📢 Dodaj aktualność</button>
+<div id="newsMessage" class="message"></div>
 </div>
 
 <!-- LISTA AKTUALNOŚCI -->
 <div class="box">
-    <h2>📢 Wszystkie aktualności</h2>
-    <div id="newsList">
-        <div class="loading">Ładowanie aktualności...</div>
-    </div>
+<h2>📢 Wszystkie aktualności</h2>
+<div id="newsList"><div class="loading">Ładowanie aktualności...</div></div>
 </div>
 
 <!-- DODAWANIE MATERIAŁU -->
 <div class="box">
-    <h2>➕ Dodaj materiał</h2>
-
-    <label for="subject">Przedmiot</label>
-    <select id="subject">
-        <option value="Matematyka">📐 Matematyka</option>
-        <option value="Język polski">📖 Język polski</option>
-        <option value="Język angielski">🇬🇧 Język angielski</option>
-        <option value="Biologia">🧪 Biologia</option>
-        <option value="Informatyka">💻 Informatyka</option>
-        <option value="Inne">📚 Inne</option>
-    </select>
-
-    <label for="title">Nazwa materiału</label>
-    <input type="text" id="title" placeholder="np. Zadania z ułamków">
-
-    <label for="file">Plik</label>
-    <input type="file" id="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
-
-    <button class="add-button" id="addButton">
-        ➕ Dodaj materiał
-    </button>
-
-    <div id="message" class="message"></div>
+<h2>➕ Dodaj materiał</h2>
+<label for="subject">Przedmiot</label>
+<select id="subject">
+<option value="Matematyka">📐 Matematyka</option>
+<option value="Język polski">📖 Język polski</option>
+<option value="Język angielski">🇬🇧 Język angielski</option>
+<option value="Biologia">🧪 Biologia</option>
+<option value="Informatyka">💻 Informatyka</option>
+<option value="Inne">📚 Inne</option>
+</select>
+<label for="title">Nazwa materiału</label>
+<input id="title" type="text" placeholder="np. Zadania z ułamków">
+<label for="file">Plik</label>
+<input id="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
+<button class="add-button" id="addButton" type="button">➕ Dodaj materiał</button>
+<div id="message" class="message"></div>
 </div>
 
 <!-- LISTA MATERIAŁÓW -->
 <div class="box">
-    <h2>📚 Wszystkie materiały</h2>
-    <div id="materialsList">
-        <div class="loading">Ładowanie materiałów...</div>
-    </div>
+<h2>📚 Wszystkie materiały</h2>
+<div id="materialsList"><div class="loading">Ładowanie materiałów...</div></div>
 </div>
 
 <a class="back" href="index.html">← Wróć na stronę główną</a>
-
 </main>
 
 <script>
-// ==========================================
-// SUPABASE
-// ==========================================
-
 const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 const ADMIN_EMAIL = "pi.pu2@op.pl";
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ==========================================
-// SPRAWDZENIE ADMINA
-// ==========================================
+let applications = [];
+
+const $ = id => document.getElementById(id);
+
+function safeText(value) {
+    return value == null || value === "" ? "—" : String(value);
+}
+
+function formatDate(value) {
+    if (!value) return "—";
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? String(value) :
+        date.toLocaleString("pl-PL", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
+}
+
+function addField(parent, label, value) {
+    const cell = document.createElement("div");
+    cell.className = "detail-cell";
+
+    const caption = document.createElement("div");
+    caption.className = "detail-label";
+    caption.textContent = label;
+
+    const content = document.createElement("div");
+    content.className = "detail-value";
+    content.textContent = safeText(value);
+
+    cell.append(caption, content);
+    parent.appendChild(cell);
+}
 
 async function checkUser() {
     const { data, error } = await supabaseClient.auth.getSession();
 
     if (error) {
-        console.error(error);
-        document.body.innerHTML = `
-            <h1 style="text-align:center;margin-top:100px;">❌ Błąd</h1>
-            <p style="text-align:center;">Nie udało się sprawdzić logowania.</p>
-        `;
+        document.body.innerHTML =
+            "<h2 style='text-align:center;margin-top:100px'>Błąd sprawdzania logowania.</h2>";
         return false;
     }
 
@@ -286,28 +200,169 @@ async function checkUser() {
 
     if (session.user.email !== ADMIN_EMAIL) {
         document.body.innerHTML = `
-            <h1 style="text-align:center;margin-top:100px;">🚫 Brak dostępu</h1>
-            <p style="text-align:center;">Ta strona jest tylko dla administratora.</p>
-            <p style="text-align:center;">
-                Zalogowane konto: <strong>${session.user.email}</strong>
-            </p>
-            <p style="text-align:center;">
-                <a href="index.html">Wróć na stronę główną</a>
-            </p>
-        `;
+            <h1 style="text-align:center;margin-top:100px">🚫 Brak dostępu</h1>
+            <p style="text-align:center">Ta strona jest tylko dla administratora.</p>
+            <p style="text-align:center">Zalogowane konto: ${safeText(session.user.email)}</p>
+            <p style="text-align:center"><a href="index.html">Wróć na stronę główną</a></p>`;
         return false;
     }
 
     return true;
 }
 
-// ==========================================
-// AKTUALNOŚCI — POBIERANIE
-// ==========================================
+/* =========================
+   ZGŁOSZENIA REKRUTACYJNE
+========================= */
+
+async function loadApplications() {
+    const list = $("applicationsList");
+    const stats = $("applicationStats");
+
+    list.textContent = "Ładowanie zgłoszeń...";
+    stats.textContent = "Pobieranie danych...";
+
+    const { data, error } = await supabaseClient
+        .from("zgloszenia_szkolne")
+        .select("id,created_at,imie_dziecka,nazwisko_dziecka,data_urodzenia,pesel,adres_dziecka,klasa,imie_rodzica,nazwisko_rodzica,telefon,email,zgoda")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Błąd pobierania zgłoszeń:", error);
+        list.textContent =
+            "Nie udało się pobrać zgłoszeń. Sprawdź uprawnienia RLS i konfigurację tabeli.";
+        stats.textContent = "Błąd pobierania danych";
+        return;
+    }
+
+    applications = data || [];
+    renderApplications();
+}
+
+function renderApplications() {
+    const list = $("applicationsList");
+    const search = $("searchApplication").value.trim().toLocaleLowerCase("pl");
+    const selectedClass = $("filterClass").value;
+
+    const filtered = applications.filter(app => {
+        const fullText = [
+            app.imie_dziecka,
+            app.nazwisko_dziecka,
+            app.pesel,
+            app.imie_rodzica,
+            app.nazwisko_rodzica,
+            app.email,
+            app.telefon
+        ].join(" ").toLocaleLowerCase("pl");
+
+        return fullText.includes(search) &&
+            (!selectedClass || String(app.klasa) === selectedClass);
+    });
+
+    $("applicationStats").textContent =
+        `Wszystkie zgłoszenia: ${applications.length} | Wyświetlane: ${filtered.length}`;
+
+    list.replaceChildren();
+
+    if (filtered.length === 0) {
+        list.textContent = applications.length
+            ? "Brak zgłoszeń pasujących do wyszukiwania."
+            : "Nie ma jeszcze żadnych zgłoszeń.";
+        return;
+    }
+
+    filtered.forEach(app => {
+        const item = document.createElement("div");
+        item.className = "item";
+
+        const info = document.createElement("div");
+        info.className = "info";
+
+        const title = document.createElement("div");
+        title.className = "item-title";
+        title.textContent =
+            `🎓 ${safeText(app.imie_dziecka)} ${safeText(app.nazwisko_dziecka)}`;
+
+        const classInfo = document.createElement("div");
+        classInfo.className = "item-subject";
+        classInfo.textContent = `Klasa: ${safeText(app.klasa)}`;
+
+        const date = document.createElement("div");
+        date.className = "item-date";
+        date.textContent = "Data zgłoszenia: " + formatDate(app.created_at);
+
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = "👁️ Zobacz pełne zgłoszenie";
+
+        const grid = document.createElement("div");
+        grid.className = "detail-grid";
+
+        addField(grid, "Imię dziecka", app.imie_dziecka);
+        addField(grid, "Nazwisko dziecka", app.nazwisko_dziecka);
+        addField(grid, "Data urodzenia", app.data_urodzenia);
+        addField(grid, "PESEL", app.pesel);
+        addField(grid, "Adres zamieszkania", app.adres_dziecka);
+        addField(grid, "Klasa", app.klasa);
+        addField(grid, "Imię rodzica", app.imie_rodzica);
+        addField(grid, "Nazwisko rodzica", app.nazwisko_rodzica);
+        addField(grid, "Telefon", app.telefon);
+        addField(grid, "E-mail", app.email);
+        addField(grid, "Potwierdzenie formularza", app.zgoda ? "Tak" : "Nie");
+        addField(grid, "Data przesłania", formatDate(app.created_at));
+
+        details.append(summary, grid);
+        info.append(title, classInfo, date, details);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "🗑️ Usuń zgłoszenie";
+        deleteButton.addEventListener("click", () =>
+            deleteApplication(app.id, app.imie_dziecka, app.nazwisko_dziecka)
+        );
+
+        actions.appendChild(deleteButton);
+        item.append(info, actions);
+        list.appendChild(item);
+    });
+}
+
+async function deleteApplication(id, firstName, lastName) {
+    const confirmed = confirm(
+        `Czy na pewno usunąć zgłoszenie dziecka ${firstName} ${lastName}?\nTej operacji nie można cofnąć.`
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabaseClient
+        .from("zgloszenia_szkolne")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error("Błąd usuwania zgłoszenia:", error);
+        alert("Nie udało się usunąć zgłoszenia. Sprawdź uprawnienia administratora.");
+        return;
+    }
+
+    applications = applications.filter(app => app.id !== id);
+    renderApplications();
+    $("applicationMessage").textContent = "Zgłoszenie zostało usunięte.";
+}
+
+$("searchApplication").addEventListener("input", renderApplications);
+$("filterClass").addEventListener("change", renderApplications);
+$("refreshApplications").addEventListener("click", loadApplications);
+
+/* =========================
+   AKTUALNOŚCI
+========================= */
 
 async function loadNews() {
-    const list = document.getElementById("newsList");
-    list.innerHTML = '<div class="loading">Ładowanie aktualności...</div>';
+    const list = $("newsList");
+    list.textContent = "Ładowanie aktualności...";
 
     const { data, error } = await supabaseClient
         .from("news")
@@ -315,17 +370,16 @@ async function loadNews() {
         .order("created_at", { ascending: false });
 
     if (error) {
-        console.error("Błąd aktualności:", error);
-        list.textContent = "❌ Nie udało się pobrać aktualności: " + error.message;
+        list.textContent = "Błąd pobierania aktualności: " + error.message;
         return;
     }
 
-    if (!data || data.length === 0) {
-        list.innerHTML = '<div class="empty">Brak aktualności.</div>';
+    list.replaceChildren();
+
+    if (!data || !data.length) {
+        list.textContent = "Brak aktualności.";
         return;
     }
-
-    list.innerHTML = "";
 
     data.forEach(news => {
         const item = document.createElement("div");
@@ -336,104 +390,73 @@ async function loadNews() {
 
         const title = document.createElement("div");
         title.className = "item-title";
-        title.textContent = "📢 " + news.title;
+        title.textContent = "📢 " + safeText(news.title);
 
         const content = document.createElement("div");
         content.className = "item-text";
-        content.textContent = news.content;
+        content.textContent = safeText(news.content);
 
         const date = document.createElement("div");
         date.className = "item-date";
-
-        if (news.created_at) {
-            date.textContent = "Dodano: " + new Date(news.created_at).toLocaleString(
-                "pl-PL",
-                { dateStyle: "medium", timeStyle: "short" }
-            );
-        }
+        date.textContent = "Dodano: " + formatDate(news.created_at);
 
         info.append(title, content, date);
 
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.textContent = "🗑️ Usuń";
-        deleteButton.addEventListener("click", () => deleteNews(news.id, news.title));
+        const btn = document.createElement("button");
+        btn.className = "delete-button";
+        btn.textContent = "🗑️ Usuń";
+        btn.addEventListener("click", async () => {
+            if (!confirm("Usunąć aktualność: " + news.title + "?")) return;
 
-        item.append(info, deleteButton);
+            const { error } = await supabaseClient
+                .from("news").delete().eq("id", news.id);
+
+            if (error) {
+                alert("Nie udało się usunąć aktualności: " + error.message);
+                return;
+            }
+            loadNews();
+        });
+
+        item.append(info, btn);
         list.appendChild(item);
     });
 }
 
-// ==========================================
-// AKTUALNOŚCI — DODAWANIE
-// ==========================================
-
-document.getElementById("addNewsButton").addEventListener("click", async function() {
-    const titleInput = document.getElementById("newsTitle");
-    const contentInput = document.getElementById("newsContent");
-    const message = document.getElementById("newsMessage");
-
-    const title = titleInput.value.trim();
-    const content = contentInput.value.trim();
+$("addNewsButton").addEventListener("click", async () => {
+    const title = $("newsTitle").value.trim();
+    const content = $("newsContent").value.trim();
+    const message = $("newsMessage");
 
     if (!title || !content) {
-        message.textContent = "❌ Wpisz tytuł i treść aktualności.";
+        message.textContent = "Wpisz tytuł i treść aktualności.";
         message.style.color = "red";
         return;
     }
-
-    message.textContent = "⏳ Dodawanie aktualności...";
-    message.style.color = "#1769e0";
 
     const { error } = await supabaseClient
-        .from("news")
-        .insert({ title, content });
+        .from("news").insert({ title, content });
 
     if (error) {
-        console.error("Błąd dodawania aktualności:", error);
-        message.textContent = "❌ Błąd: " + error.message;
+        message.textContent = "Błąd: " + error.message;
         message.style.color = "red";
         return;
     }
 
-    message.textContent = "✅ Aktualność została dodana!";
+    message.textContent = "Aktualność została dodana.";
     message.style.color = "green";
-
-    titleInput.value = "";
-    contentInput.value = "";
-
+    $("newsTitle").value = "";
+    $("newsContent").value = "";
     await loadNews();
 });
 
-// ==========================================
-// AKTUALNOŚCI — USUWANIE
-// ==========================================
-
-async function deleteNews(id, title) {
-    if (!confirm('Czy na pewno chcesz usunąć aktualność "' + title + '"?')) {
-        return;
-    }
-
-    const { error } = await supabaseClient
-        .from("news")
-        .delete()
-        .eq("id", id);
-
-    if (error) {
-        alert("❌ Nie udało się usunąć aktualności:\n" + error.message);
-        return;
-    }
-
-    await loadNews();
-}
-
-// ==========================================
-// MATERIAŁY — POBIERANIE
-// ==========================================
+/* =========================
+   MATERIAŁY
+========================= */
 
 async function loadMaterials() {
-    const list = document.getElementById("materialsList");
-    list.innerHTML = '<div class="loading">Ładowanie materiałów...</div>';
+    const list = $("materialsList");
+    list.textContent = "Ładowanie materiałów...";
 
     const { data, error } = await supabaseClient
         .from("materials")
@@ -441,17 +464,16 @@ async function loadMaterials() {
         .order("created_at", { ascending: false });
 
     if (error) {
-        console.error(error);
-        list.textContent = "❌ Nie udało się pobrać materiałów: " + error.message;
+        list.textContent = "Błąd pobierania materiałów: " + error.message;
         return;
     }
 
-    if (!data || data.length === 0) {
-        list.innerHTML = '<div class="empty">Brak materiałów.</div>';
+    list.replaceChildren();
+
+    if (!data || !data.length) {
+        list.textContent = "Brak materiałów.";
         return;
     }
-
-    list.innerHTML = "";
 
     data.forEach(material => {
         const item = document.createElement("div");
@@ -462,143 +484,110 @@ async function loadMaterials() {
 
         const title = document.createElement("div");
         title.className = "item-title";
-        title.textContent = "📄 " + material.title;
+        title.textContent = "📄 " + safeText(material.title);
 
         const subject = document.createElement("div");
         subject.className = "item-subject";
-        subject.textContent = "Przedmiot: " + material.subject;
+        subject.textContent = "Przedmiot: " + safeText(material.subject);
 
         info.append(title, subject);
 
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.textContent = "🗑️ Usuń";
-        deleteButton.addEventListener("click", () => {
-            deleteMaterial(material.id, material.file_url, material.title);
-        });
+        const btn = document.createElement("button");
+        btn.className = "delete-button";
+        btn.textContent = "🗑️ Usuń";
+        btn.addEventListener("click", () =>
+            deleteMaterial(material.id, material.file_url, material.title)
+        );
 
-        item.append(info, deleteButton);
+        item.append(info, btn);
         list.appendChild(item);
     });
 }
 
-// ==========================================
-// MATERIAŁY — USUWANIE
-// ==========================================
-
 async function deleteMaterial(id, filePath, title) {
-    if (!confirm('Czy na pewno chcesz usunąć materiał "' + title + '"?')) {
-        return;
-    }
+    if (!confirm('Czy usunąć materiał "' + title + '"?')) return;
 
     if (filePath) {
-        const { error: storageError } = await supabaseClient
-            .storage
-            .from("materials")
-            .remove([filePath]);
+        const { error } = await supabaseClient
+            .storage.from("materials").remove([filePath]);
 
-        if (storageError) {
-            alert("❌ Nie udało się usunąć pliku:\n" + storageError.message);
+        if (error) {
+            alert("Nie udało się usunąć pliku: " + error.message);
             return;
         }
     }
 
-    const { error: databaseError } = await supabaseClient
-        .from("materials")
-        .delete()
-        .eq("id", id);
+    const { error } = await supabaseClient
+        .from("materials").delete().eq("id", id);
 
-    if (databaseError) {
-        alert("❌ Nie udało się usunąć wpisu:\n" + databaseError.message);
+    if (error) {
+        alert("Nie udało się usunąć wpisu: " + error.message);
         return;
     }
 
     await loadMaterials();
 }
 
-// ==========================================
-// MATERIAŁY — DODAWANIE
-// ==========================================
-
-document.getElementById("addButton").addEventListener("click", async function() {
-    const message = document.getElementById("message");
-    const subject = document.getElementById("subject").value;
-    const title = document.getElementById("title").value.trim();
-    const file = document.getElementById("file").files[0];
+$("addButton").addEventListener("click", async () => {
+    const message = $("message");
+    const subject = $("subject").value;
+    const title = $("title").value.trim();
+    const file = $("file").files[0];
 
     if (!title || !file) {
-        message.textContent = "❌ Uzupełnij nazwę i wybierz plik.";
+        message.textContent = "Uzupełnij nazwę i wybierz plik.";
         message.style.color = "red";
         return;
     }
 
-    message.textContent = "⏳ Przesyłanie pliku...";
+    message.textContent = "Przesyłanie pliku...";
     message.style.color = "#1769e0";
 
-    const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const filePath = Date.now() + "_" + safeFileName;
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = Date.now() + "_" + safeName;
 
     const { error: uploadError } = await supabaseClient
-        .storage
-        .from("materials")
-        .upload(filePath, file);
+        .storage.from("materials").upload(path, file);
 
     if (uploadError) {
-        console.error("Błąd uploadu:", uploadError);
-        message.textContent = "❌ Błąd przesyłania: " + uploadError.message;
+        message.textContent = "Błąd przesyłania: " + uploadError.message;
         message.style.color = "red";
         return;
     }
 
-    message.textContent = "⏳ Zapisywanie materiału...";
-
-    const { error: databaseError } = await supabaseClient
+    const { error: dbError } = await supabaseClient
         .from("materials")
-        .insert({
-            title: title,
-            subject: subject,
-            file_url: filePath
-        });
+        .insert({ title, subject, file_url: path });
 
-    if (databaseError) {
-        console.error("Błąd bazy:", databaseError);
-
-        await supabaseClient
-            .storage
-            .from("materials")
-            .remove([filePath]);
-
-        message.textContent = "❌ Błąd bazy danych: " + databaseError.message;
+    if (dbError) {
+        await supabaseClient.storage.from("materials").remove([path]);
+        message.textContent = "Błąd bazy danych: " + dbError.message;
         message.style.color = "red";
         return;
     }
 
-    message.textContent = "✅ Materiał został dodany!";
+    message.textContent = "Materiał został dodany.";
     message.style.color = "green";
-
-    document.getElementById("title").value = "";
-    document.getElementById("file").value = "";
-
+    $("title").value = "";
+    $("file").value = "";
     await loadMaterials();
 });
 
-// ==========================================
-// START
-// ==========================================
+/* =========================
+   START PANELU
+========================= */
 
 async function start() {
-    const isAdmin = await checkUser();
+    if (!(await checkUser())) return;
 
-    if (!isAdmin) {
-        return;
-    }
-
-    await loadNews();
-    await loadMaterials();
+    await Promise.all([
+        loadApplications(),
+        loadNews(),
+        loadMaterials()
+    ]);
 }
 
 start();
 </script>
-
 </body>
 </html>
