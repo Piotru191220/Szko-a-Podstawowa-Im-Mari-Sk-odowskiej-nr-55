@@ -1,818 +1,889 @@
 <!DOCTYPE html>
-
 <html lang="pl">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Szkoła Podstawowa nr 55 im. Marii Skłodowskiej</title>
-
-<!-- SUPABASE — tylko jeden raz -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-:root{
-    --blue:#1769e0;
-    --dark:#0d2342;
-    --light:#f5f8fd;
-    --text:#536176;
-    --white:#fff;
+:root {
+    --blue: #1769e0;
+    --dark: #0d2342;
+    --light: #f5f8fd;
+    --text: #536176;
+    --white: #fff;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
 }
 
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    color:var(--dark);
-    background:var(--light);
-    line-height:1.6;
-    overflow-x:hidden;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--dark);
+    background: var(--light);
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-a{
-    text-decoration:none;
-    color:inherit;
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.container{
-    width:min(1200px,92%);
-    margin:auto;
+.container {
+    width: min(1200px, 92%);
+    margin: auto;
 }
 
-/* NAVBAR */
+/* =========================
+   GÓRNY PASEK I MENU WIĘCEJ
+========================= */
 
-.navbar{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:76px;
-    z-index:1000;
-    background:rgba(255,255,255,.92);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid rgba(0,0,0,.06);
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 76px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
 }
 
-.nav-inner{
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 }
 
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    font-weight:800;
-    color:var(--dark);
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    color: var(--dark);
+    min-width: 0;
 }
 
-.logo img{
-    width:48px;
-    height:48px;
-    object-fit:contain;
-    border-radius:10px;
+.logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+    flex-shrink: 0;
 }
 
-.logo-text{
-    line-height:1.15;
+.logo-text {
+    line-height: 1.15;
 }
 
-.logo-text small{
-    display:block;
-    font-size:11px;
-    color:#718096;
-    margin-top:3px;
+.logo-text small {
+    display: block;
+    font-size: 11px;
+    color: #718096;
+    margin-top: 3px;
 }
 
-.nav-links{
-    display:flex;
-    align-items:center;
-    gap:25px;
-    list-style:none;
+/* Przycisk trzech kresek */
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #e2eaf4;
+    background: white;
+    border-radius: 12px;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--dark);
+    transition: .25s;
+    flex-shrink: 0;
 }
 
-.nav-links a{
-    font-size:14px;
-    font-weight:700;
-    color:#33415c;
-    transition:.25s;
+.menu-button:hover,
+.menu-button[aria-expanded="true"] {
+    background: #edf5ff;
+    color: var(--blue);
+    border-color: #cbdcf7;
 }
 
-.nav-links a:hover{
-    color:var(--blue);
+/* Rozwijane menu */
+
+.nav-links {
+    position: absolute;
+    top: 66px;
+    right: 0;
+    width: 300px;
+    max-width: 92vw;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    padding: 12px;
+    list-style: none;
+    background: white;
+    border: 1px solid #e5ebf4;
+    border-radius: 16px;
+    box-shadow: 0 18px 45px rgba(13, 35, 66, .16);
 }
 
-.login{
-    background:var(--blue)!important;
-    color:white!important;
-    padding:11px 17px;
-    border-radius:10px;
-    box-shadow:0 7px 20px rgba(23,105,224,.25);
+.nav-links.open {
+    display: flex;
+    animation: menuAppear .2s ease;
 }
 
-.menu-button{
-    display:none;
-    border:0;
-    background:none;
-    font-size:29px;
-    cursor:pointer;
-    color:var(--dark);
+.nav-links li {
+    display: block;
+    width: 100%;
 }
 
-/* HERO */
+.nav-links a {
+    display: block;
+    padding: 11px 13px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #33415c;
+    transition: .2s;
+}
 
-.hero{
-    min-height:800px;
-    padding-top:76px;
-    display:flex;
-    align-items:center;
+.nav-links a:hover {
+    background: #edf5ff;
+    color: var(--blue);
+}
+
+.nav-links .login {
+    background: var(--blue);
+    color: white !important;
+    text-align: center;
+    box-shadow: 0 7px 20px rgba(23, 105, 224, .2);
+}
+
+.nav-links .login:hover {
+    background: #1057bd;
+}
+
+.nav-links li[style*="display: none"] {
+    display: none !important;
+}
+
+@keyframes menuAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 800px;
+    padding-top: 76px;
+    display: flex;
+    align-items: center;
     background:
-        radial-gradient(circle at 80% 20%,rgba(23,105,224,.18),transparent 32%),
-        radial-gradient(circle at 10% 80%,rgba(67,210,190,.15),transparent 30%),
-        linear-gradient(135deg,#edf5ff,#fff);
+        radial-gradient(circle at 80% 20%, rgba(23, 105, 224, .18), transparent 32%),
+        radial-gradient(circle at 10% 80%, rgba(67, 210, 190, .15), transparent 30%),
+        linear-gradient(135deg, #edf5ff, #fff);
 }
 
-.hero-grid{
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:70px;
-    align-items:center;
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 70px;
+    align-items: center;
 }
 
-.hero-content{
-    animation:fadeUp .9s ease both;
+.hero-content {
+    animation: fadeUp .9s ease both;
 }
 
-.badge{
-    display:inline-block;
-    padding:8px 15px;
-    border-radius:30px;
-    background:#e7f0ff;
-    color:var(--blue);
-    font-size:12px;
-    font-weight:800;
-    margin-bottom:20px;
+.badge {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 30px;
+    background: #e7f0ff;
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 20px;
 }
 
-.hero h1{
-    font-size:clamp(45px,6vw,76px);
-    line-height:1.02;
-    letter-spacing:-3px;
-    margin-bottom:25px;
+.hero h1 {
+    font-size: clamp(45px, 6vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -3px;
+    margin-bottom: 25px;
 }
 
-.hero h1 span{
-    color:var(--blue);
+.hero h1 span {
+    color: var(--blue);
 }
 
-.hero-description{
-    max-width:650px;
-    color:var(--text);
-    font-size:19px;
-    margin-bottom:32px;
+.hero-description {
+    max-width: 650px;
+    color: var(--text);
+    font-size: 19px;
+    margin-bottom: 32px;
 }
 
-.buttons{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.button{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:14px 21px;
-    border-radius:12px;
-    font-weight:800;
-    font-size:14px;
-    transition:.25s;
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 21px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 14px;
+    transition: .25s;
 }
 
-.button:hover{
-    transform:translateY(-3px);
+.button:hover {
+    transform: translateY(-3px);
 }
 
-.primary{
-    background:var(--blue);
-    color:white;
-    box-shadow:0 12px 25px rgba(23,105,224,.25);
+.primary {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 12px 25px rgba(23, 105, 224, .25);
 }
 
-.secondary{
-    background:white;
-    color:var(--blue);
-    border:1px solid #dce6f5;
+.secondary {
+    background: white;
+    color: var(--blue);
+    border: 1px solid #dce6f5;
 }
 
-.hero-visual{
-    animation:float 5s ease-in-out infinite;
+.hero-visual {
+    animation: float 5s ease-in-out infinite;
 }
 
-.school-card{
-    min-height:450px;
-    border-radius:35px;
-    padding:45px;
-    color:white;
+.school-card {
+    min-height: 450px;
+    border-radius: 35px;
+    padding: 45px;
+    color: white;
     background:
-        linear-gradient(145deg,rgba(13,35,66,.2),rgba(13,35,66,.8)),
-        linear-gradient(135deg,#3987ef,#12366d);
-    box-shadow:0 30px 70px rgba(13,35,66,.25);
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    position:relative;
-    overflow:hidden;
+        linear-gradient(145deg, rgba(13, 35, 66, .2), rgba(13, 35, 66, .8)),
+        linear-gradient(135deg, #3987ef, #12366d);
+    box-shadow: 0 30px 70px rgba(13, 35, 66, .25);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
 }
 
-.school-card::before{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    top:-100px;
-    right:-100px;
+.school-card::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+    top: -100px;
+    right: -100px;
 }
 
-.school-symbol{
-    font-size:85px;
-    margin-bottom:auto;
+.school-symbol {
+    font-size: 85px;
+    margin-bottom: auto;
 }
 
-.school-card h2{
-    font-size:31px;
-    margin-bottom:10px;
+.school-card h2 {
+    font-size: 31px;
+    margin-bottom: 10px;
 }
 
-.school-card p{
-    color:rgba(255,255,255,.8);
+.school-card p {
+    color: rgba(255, 255, 255, .8);
 }
 
-/* SEKCJE */
+/* =========================
+   SEKCJE
+========================= */
 
-section{
-    padding:100px 0;
+section {
+    padding: 100px 0;
 }
 
-.section-heading{
-    text-align:center;
-    margin-bottom:55px;
+.section-heading {
+    text-align: center;
+    margin-bottom: 55px;
 }
 
-.section-heading span{
-    color:var(--blue);
-    font-size:12px;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:2px;
+.section-heading span {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.section-heading h2{
-    font-size:43px;
-    margin-top:8px;
+.section-heading h2 {
+    font-size: 43px;
+    margin-top: 8px;
 }
 
-.section-heading p{
-    max-width:650px;
-    margin:12px auto 0;
-    color:var(--text);
+.section-heading p {
+    max-width: 650px;
+    margin: 12px auto 0;
+    color: var(--text);
 }
 
 /* AKTUALNOŚCI */
 
-.news{
-    background:white;
+.news {
+    background: white;
 }
 
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
 }
 
-.news-card{
-    padding:30px;
-    border-radius:20px;
-    background:#f8faff;
-    border:1px solid #e7edf6;
-    transition:.3s;
+.news-card {
+    padding: 30px;
+    border-radius: 20px;
+    background: #f8faff;
+    border: 1px solid #e7edf6;
+    transition: .3s;
 }
 
-.news-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 20px 40px rgba(15,43,80,.09);
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(15, 43, 80, .09);
 }
 
-.news-icon{
-    font-size:30px;
-    margin-bottom:15px;
+.news-icon {
+    font-size: 30px;
+    margin-bottom: 15px;
 }
 
-.news-date{
-    color:var(--blue);
-    font-size:11px;
-    font-weight:900;
-    text-transform:uppercase;
+.news-date {
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
-.news-card h3{
-    font-size:20px;
-    margin:8px 0;
+.news-card h3 {
+    font-size: 20px;
+    margin: 8px 0;
 }
 
-.news-card p{
-    color:var(--text);
-    font-size:14px;
+.news-card p {
+    color: var(--text);
+    font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
-/* DLA UCZNIA / RODZICA */
+/* UCZEŃ I RODZIC */
 
-.audience{
-    background:#f1f6fc;
+.audience {
+    background: #f1f6fc;
 }
 
-.audience-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
+.audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
-.audience-card{
-    background:white;
-    border-radius:25px;
-    padding:40px;
-    border:1px solid #e2eaf4;
-    transition:.3s;
+.audience-card {
+    background: white;
+    border-radius: 25px;
+    padding: 40px;
+    border: 1px solid #e2eaf4;
+    transition: .3s;
 }
 
-.audience-card:hover{
-    transform:translateY(-7px);
-    box-shadow:0 20px 45px rgba(15,43,80,.08);
+.audience-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 45px rgba(15, 43, 80, .08);
 }
 
-.audience-card.student{
-    border-top:5px solid #1769e0;
+.audience-card.student {
+    border-top: 5px solid #1769e0;
 }
 
-.audience-card.parent{
-    border-top:5px solid #18a88b;
+.audience-card.parent {
+    border-top: 5px solid #18a88b;
 }
 
-.audience-card h3{
-    font-size:28px;
-    margin-bottom:12px;
+.audience-card h3 {
+    font-size: 28px;
+    margin-bottom: 12px;
 }
 
-.audience-card p{
-    color:var(--text);
-    margin-bottom:22px;
+.audience-card p {
+    color: var(--text);
+    margin-bottom: 22px;
 }
 
-.audience-list{
-    list-style:none;
+.audience-list {
+    list-style: none;
 }
 
-.audience-list li{
-    padding:10px 0;
-    border-bottom:1px solid #edf1f6;
-    font-weight:600;
+.audience-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #edf1f6;
+    font-weight: 600;
 }
 
-.audience-list li::before{
-    content:"✓";
-    color:var(--blue);
-    font-weight:900;
-    margin-right:10px;
+.audience-list li::before {
+    content: "✓";
+    color: var(--blue);
+    font-weight: 900;
+    margin-right: 10px;
 }
 
 /* GALERIA */
 
-.gallery{
-    background:white;
+.gallery {
+    background: white;
 }
 
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-auto-rows:220px;
-    gap:15px;
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    gap: 15px;
 }
 
-.gallery-item{
-    overflow:hidden;
-    border-radius:18px;
-    position:relative;
-    background:#dfe8f4;
+.gallery-item {
+    overflow: hidden;
+    border-radius: 18px;
+    position: relative;
+    background: #dfe8f4;
 }
 
-.gallery-item:first-child{
-    grid-column:span 2;
-    grid-row:span 2;
+.gallery-item:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
 }
 
-.gallery-item img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.5s;
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .5s;
 }
 
-.gallery-item:hover img{
-    transform:scale(1.08);
+.gallery-item:hover img {
+    transform: scale(1.08);
 }
 
-.gallery-overlay{
-    position:absolute;
-    inset:auto 0 0;
-    padding:20px;
-    color:white;
-    background:linear-gradient(transparent,rgba(0,0,0,.7));
-    opacity:0;
-    transition:.3s;
+.gallery-overlay {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 20px;
+    color: white;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .7));
+    opacity: 0;
+    transition: .3s;
 }
 
-.gallery-item:hover .gallery-overlay{
-    opacity:1;
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
 }
 
 /* O SZKOLE */
 
-.about-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:70px;
-    align-items:center;
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items: center;
 }
 
-.about-image{
-    min-height:430px;
-    border-radius:28px;
-    overflow:hidden;
-    background:#dfe8f4;
+.about-image {
+    min-height: 430px;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #dfe8f4;
 }
 
-.about-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.about-content h2{
-    font-size:43px;
-    margin-bottom:20px;
+.about-content h2 {
+    font-size: 43px;
+    margin-bottom: 20px;
 }
 
-.about-content p{
-    color:var(--text);
-    margin-bottom:15px;
+.about-content p {
+    color: var(--text);
+    margin-bottom: 15px;
 }
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-top:30px;
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 30px;
 }
 
-.stat{
-    background:white;
-    padding:20px 10px;
-    text-align:center;
-    border-radius:15px;
-    border:1px solid #e3eaf4;
+.stat {
+    background: white;
+    padding: 20px 10px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid #e3eaf4;
 }
 
-.stat strong{
-    display:block;
-    font-size:25px;
-    color:var(--blue);
+.stat strong {
+    display: block;
+    font-size: 25px;
+    color: var(--blue);
 }
 
-.stat span{
-    color:#718096;
-    font-size:12px;
+.stat span {
+    color: #718096;
+    font-size: 12px;
 }
 
 /* KONTAKT */
 
-.contact{
-    background:#f1f6fc;
+.contact {
+    background: #f1f6fc;
 }
 
-.contact-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
-.contact-card{
-    background:white;
-    padding:35px;
-    border-radius:22px;
+.contact-card {
+    background: white;
+    padding: 35px;
+    border-radius: 22px;
 }
 
-.contact-row{
-    padding:14px 0;
-    border-bottom:1px solid #edf1f5;
+.contact-row {
+    padding: 14px 0;
+    border-bottom: 1px solid #edf1f5;
 }
 
-.contact-row strong{
-    display:block;
-    font-size:13px;
-    color:#33415c;
+.contact-row strong {
+    display: block;
+    font-size: 13px;
+    color: #33415c;
 }
 
-.contact-row span{
-    color:var(--text);
+.contact-row span {
+    color: var(--text);
+    overflow-wrap: anywhere;
 }
 
-.map{
-    min-height:350px;
-    border-radius:22px;
-    background:linear-gradient(135deg,#dce9f8,#eef5fc);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:30px;
+.map {
+    min-height: 350px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #dce9f8, #eef5fc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
 }
 
-.map-icon{
-    font-size:65px;
+.map-icon {
+    font-size: 65px;
 }
 
-/* FOOTER */
+/* STOPKA */
 
-footer{
-    background:#0b203d;
-    color:white;
-    padding:50px 0;
+footer {
+    background: #0b203d;
+    color: white;
+    padding: 50px 0;
 }
 
-.footer-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr;
-    gap:40px;
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
 }
 
-footer h3{
-    margin-bottom:12px;
+footer h3 {
+    margin-bottom: 12px;
 }
 
 footer p,
-footer a{
-    color:rgba(255,255,255,.65);
-    font-size:13px;
+footer a {
+    color: rgba(255, 255, 255, .65);
+    font-size: 13px;
 }
 
-.footer-links{
-    list-style:none;
+.footer-links {
+    list-style: none;
 }
 
-.footer-links li{
-    margin-bottom:8px;
+.footer-links li {
+    margin-bottom: 8px;
 }
 
-.copyright{
-    margin-top:40px;
-    padding-top:20px;
-    border-top:1px solid rgba(255,255,255,.1);
-    text-align:center;
+.copyright {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    text-align: center;
 }
 
 /* ANIMACJE */
 
-@keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(30px);
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes float{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-12px);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.reveal{
-    opacity:0;
-    transform:translateY(30px);
-    transition:opacity .7s,transform .7s;
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
 }
 
-.reveal.visible{
-    opacity:1;
-    transform:translateY(0);
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .7s, transform .7s;
 }
 
-/* MOBILE */
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-@media(max-width:900px){
+/* =========================
+   TELEFONY I TABLETY
+========================= */
 
-    .menu-button{
-        display:block;
-    }
-
-    .nav-links{
-        position:absolute;
-        top:76px;
-        left:0;
-        width:100%;
-        background:white;
-        flex-direction:column;
-        align-items:stretch;
-        gap:0;
-        padding:10px 5%;
-        box-shadow:0 15px 30px rgba(0,0,0,.08);
-        display:none;
-    }
-
-    .nav-links.open{
-        display:flex;
-    }
-
-    .nav-links li{
-        padding:13px 0;
-    }
-
-    .nav-links .login{
-        display:block;
-        text-align:center;
-    }
-
+@media (max-width: 900px) {
     .hero-grid,
     .about-grid,
-    .contact-grid{
-        grid-template-columns:1fr;
+    .contact-grid {
+        grid-template-columns: 1fr;
     }
 
-    .news-grid{
-        grid-template-columns:1fr 1fr;
+    .hero-grid {
+        gap: 40px;
     }
 
-    .gallery-grid{
-        grid-template-columns:1fr 1fr;
+    .news-grid {
+        grid-template-columns: 1fr 1fr;
     }
 
-    .footer-grid{
-        grid-template-columns:1fr 1fr;
+    .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
-@media(max-width:600px){
-
-    section{
-        padding:70px 0;
+@media (max-width: 600px) {
+    section {
+        padding: 70px 0;
     }
 
-    .hero{
-        min-height:auto;
-        padding-top:130px;
-        padding-bottom:70px;
+    .hero {
+        min-height: auto;
+        padding-top: 130px;
+        padding-bottom: 70px;
     }
 
-    .hero h1{
-        font-size:48px;
+    .hero h1 {
+        font-size: 48px;
     }
 
-    .hero-description{
-        font-size:16px;
+    .hero-description {
+        font-size: 16px;
     }
 
-    .school-card{
-        min-height:340px;
-        padding:30px;
+    .school-card {
+        min-height: 340px;
+        padding: 30px;
     }
 
     .news-grid,
     .audience-grid,
     .gallery-grid,
-    .footer-grid{
-        grid-template-columns:1fr;
+    .footer-grid {
+        grid-template-columns: 1fr;
     }
 
-    .gallery-item:first-child{
-        grid-column:span 1;
-        grid-row:span 1;
+    .audience-card {
+        padding: 28px;
     }
 
-    .gallery-grid{
-        grid-auto-rows:250px;
+    .gallery-item:first-child {
+        grid-column: span 1;
+        grid-row: span 1;
     }
 
-    .stats{
-        grid-template-columns:1fr;
+    .gallery-grid {
+        grid-auto-rows: 250px;
+    }
+
+    .gallery-overlay {
+        opacity: 1;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
     }
 
     .section-heading h2,
-    .about-content h2{
-        font-size:32px;
+    .about-content h2 {
+        font-size: 32px;
+    }
+
+    .logo {
+        gap: 8px;
+        font-size: 13px;
+    }
+
+    .logo img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-text small {
+        font-size: 10px;
+    }
+
+    .menu-button {
+        width: 44px;
+        height: 44px;
+    }
+
+    .contact-card {
+        padding: 25px;
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- MENU -->
+<!-- =========================
+     NAGŁÓWEK
+========================= -->
 
 <header class="navbar">
+    <div class="container nav-inner">
 
-<div class="container nav-inner">
+        <a href="#start" class="logo">
+            <img src="logo.png" alt="Logo szkoły">
 
-<a href="#start" class="logo">
+            <div class="logo-text">
+                Szkoła Podstawowa nr 55
+                <small>im. Marii Skłodowskiej</small>
+            </div>
+        </a>
 
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Otwórz menu"
+            aria-expanded="false"
+            aria-controls="navLinks"
+        >☰</button>
 
-<img src="logo.png" alt="Logo szkoły">
+        <ul class="nav-links" id="navLinks">
 
-<div class="logo-text">
-    Szkoła Podstawowa nr 55
-    <small>im. Marii Skłodowskiej</small>
-</div>
+            <li><a href="#start">🏠 Start</a></li>
+            <li><a href="#aktualnosci">📰 Aktualności</a></li>
+            <li><a href="#szkola">🏫 O szkole</a></li>
+            <li><a href="#rodzic">👨‍👩‍👧 Dla rodzica/ucznia</a></li>
+            <li><a href="dokumenty.html">📄 Dokumenty</a></li>
+            <li><a href="#galeria">📷 Galeria</a></li>
+            <li><a href="#kontakt">📍 Kontakt</a></li>
 
+            <li id="loginMenu">
+                <a class="login" href="logowanie.html">🔐 Logowanie</a>
+            </li>
 
-</a>
+            <li id="materialsMenu" style="display:none;">
+                <a href="materiały.html">📚 Materiały</a>
+            </li>
 
-<button class="menu-button" onclick="toggleMenu()" aria-label="Otwórz menu">
-    ☰
-</button>
+            <li id="adminMenu" style="display:none;">
+                <a href="admin.html">⚙️ Panel administratora</a>
+            </li>
 
-<ul class="nav-links" id="navLinks">
+            <li id="logoutMenu" style="display:none;">
+                <a href="#" id="logoutButton">🚪 Wyloguj</a>
+            </li>
 
+            <li>
+                <a
+                    href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >📒 E-dziennik</a>
+            </li>
 
-<li><a href="#start">Start</a></li>
-<li><a href="#aktualnosci">Aktualności</a></li>
-<li><a href="#szkola">O szkole</a></li>
-<li><a href="#rodzic">Dla rodzica/ucznia</a></li>
-<li><a href="dokumenty.html">Dokumenty</a></li>
-<li><a href="#galeria">Galeria</a></li>
-<li><a href="#kontakt">Kontakt</a></li>
-
-<li id="loginMenu">
-    <a class="login" href="logowanie.html">
-        🔐 Logowanie
-    </a>
-</li>
-
-<li id="materialsMenu" style="display:none;">
-    <a href="materiały.html">
-        📚 Materiały
-    </a>
-</li>
-
-<li id="adminMenu" style="display:none;">
-    <a href="admin.html">
-        ⚙️ Panel administratora
-    </a>
-</li>
-
-<li id="logoutMenu" style="display:none;">
-    <a href="#" id="logoutButton">
-        🚪 Wyloguj
-    </a>
-</li>
-
-<li>
-    <a
-        href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        E-dziennik
-    </a>
-</li>
-
-
-</ul>
-
-</div>
-
+        </ul>
+    </div>
 </header>
 
 <main>
@@ -820,1012 +891,587 @@ footer a{
 <!-- HERO -->
 
 <section class="hero" id="start">
+    <div class="container hero-grid">
 
-<div class="container hero-grid">
+        <div class="hero-content">
+            <span class="badge">WITAMY NA STRONIE SZKOŁY</span>
 
-<div class="hero-content">
+            <h1>
+                Wiedza.<br>
+                <span>Pasja.</span><br>
+                Przyszłość.
+            </h1>
 
-<span class="badge">
-    WITAMY NA STRONIE SZKOŁY
-</span>
+            <p class="hero-description">
+                Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
+                — miejsce, w którym uczniowie rozwijają wiedzę,
+                talenty i ciekawość świata.
+            </p>
 
-<h1>
-    Wiedza.<br>
-    <span>Pasja.</span><br>
-    Przyszłość.
-</h1>
+            <div class="buttons">
+                <a href="#aktualnosci" class="button primary">📰 Aktualności</a>
+                <a href="#galeria" class="button secondary">📷 Galeria</a>
 
-<p class="hero-description">
-    Szkoła Podstawowa nr 55 im. Marii Skłodowskiej
-    — miejsce, w którym uczniowie rozwijają wiedzę,
-    talenty i ciekawość świata.
-</p>
+                <a
+                    href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button secondary"
+                >🔐 E-dziennik</a>
+            </div>
+        </div>
 
-<div class="buttons">
+        <div class="hero-visual">
+            <div class="school-card">
+                <div class="school-symbol">⚛️</div>
+                <h2>Odkrywamy świat</h2>
+                <p>Uczymy się, eksperymentujemy i rozwijamy swoje pasje.</p>
+            </div>
+        </div>
 
-<a href="#aktualnosci" class="button primary">
-    📰 Aktualności
-</a>
-
-<a href="#galeria" class="button secondary">
-    📷 Galeria
-</a>
-
-<a
-href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-target="_blank"
-rel="noopener noreferrer"
-class="button secondary"
-
->
-
-
-🔐 E-dziennik
-
-
-</a>
-
-</div>
-
-</div>
-
-<div class="hero-visual">
-
-<div class="school-card">
-
-<div class="school-symbol">
-    ⚛️
-</div>
-
-<h2>
-    Odkrywamy świat
-</h2>
-
-<p>
-    Uczymy się, eksperymentujemy
-    i rozwijamy swoje pasje.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
+    </div>
 </section>
 
 <!-- AKTUALNOŚCI -->
 
 <section class="news" id="aktualnosci">
+    <div class="container">
 
-<div class="container">
+        <div class="section-heading reveal">
+            <span>Co nowego?</span>
+            <h2>Aktualności</h2>
+            <p>Najważniejsze wydarzenia i informacje z życia szkoły.</p>
+        </div>
 
-<div class="section-heading reveal">
+        <div class="news-grid">
 
-<span>Co nowego?</span>
+            <article class="news-card reveal">
+                <div class="news-icon">📚</div>
+                <div class="news-date">Informacja</div>
+                <h3>Nowy rok szkolny</h3>
+                <p>Najważniejsze informacje dotyczące rozpoczęcia roku szkolnego.</p>
+            </article>
 
-<h2>Aktualności</h2>
+            <article class="news-card reveal">
+                <div class="news-icon">🔬</div>
+                <div class="news-date">Wydarzenie</div>
+                <h3>Dzień Nauki</h3>
+                <p>Eksperymenty, doświadczenia i ciekawostki naukowe przygotowane dla uczniów.</p>
+            </article>
 
-<p>
-    Najważniejsze wydarzenia i informacje
-    z życia szkoły.
-</p>
+            <article class="news-card reveal">
+                <div class="news-icon">🏆</div>
+                <div class="news-date">Sukces</div>
+                <h3>Konkursy szkolne</h3>
+                <p>Informacje o konkursach, zawodach i sukcesach naszych uczniów.</p>
+            </article>
 
-</div>
-
-<div class="news-grid">
-
-<article class="news-card reveal">
-
-<div class="news-icon">📚</div>
-
-<div class="news-date">
-    Informacja
-</div>
-
-<h3>
-    Nowy rok szkolny
-</h3>
-
-<p>
-    Najważniejsze informacje dotyczące
-    rozpoczęcia roku szkolnego.
-</p>
-
-</article>
-
-<article class="news-card reveal">
-
-<div class="news-icon">🔬</div>
-
-<div class="news-date">
-    Wydarzenie
-</div>
-
-<h3>
-    Dzień Nauki
-</h3>
-
-<p>
-    Eksperymenty, doświadczenia i ciekawostki
-    naukowe przygotowane dla uczniów.
-</p>
-
-</article>
-
-<article class="news-card reveal">
-
-<div class="news-icon">🏆</div>
-
-<div class="news-date">
-    Sukces
-</div>
-
-<h3>
-    Konkursy szkolne
-</h3>
-
-<p>
-    Informacje o konkursach, zawodach
-    i sukcesach naszych uczniów.
-</p>
-
-</article>
-
-</div>
-
-</div>
-
+        </div>
+    </div>
 </section>
 
 <!-- O SZKOLE -->
 
 <section id="szkola">
+    <div class="container about-grid">
 
-<div class="container about-grid">
+        <div class="about-image reveal">
+            <img src="szkoła.png" alt="Budynek szkoły">
+        </div>
 
-<div class="about-image reveal">
+        <div class="about-content reveal">
+            <span class="badge">O NAS</span>
+            <h2>Szkoła, która inspiruje</h2>
 
-<img
-src="szkoła.png"
-alt="Budynek szkoły"
+            <p>
+                Nasza szkoła to przestrzeń do nauki,
+                rozwijania zainteresowań i poznawania świata.
+            </p>
 
->
+            <p>
+                Stawiamy na bezpieczeństwo, współpracę,
+                kreatywność oraz nowoczesną edukację.
+            </p>
 
-</div>
+            <div class="stats">
+                <div class="stat">
+                    <strong>📚</strong>
+                    <span>Nowoczesna edukacja</span>
+                </div>
 
-<div class="about-content reveal">
+                <div class="stat">
+                    <strong>🔬</strong>
+                    <span>Nauka przez doświadczenie</span>
+                </div>
 
-<span class="badge">
-    O NAS
-</span>
+                <div class="stat">
+                    <strong>🤝</strong>
+                    <span>Współpraca</span>
+                </div>
+            </div>
+        </div>
 
-<h2>
-    Szkoła, która inspiruje
-</h2>
-
-<p>
-    Nasza szkoła to przestrzeń do nauki,
-    rozwijania zainteresowań i poznawania świata.
-</p>
-
-<p>
-    Stawiamy na bezpieczeństwo, współpracę,
-    kreatywność oraz nowoczesną edukację.
-</p>
-
-<div class="stats">
-
-<div class="stat">
-    <strong>📚</strong>
-    <span>Nowoczesna edukacja</span>
-</div>
-
-<div class="stat">
-    <strong>🔬</strong>
-    <span>Nauka przez doświadczenie</span>
-</div>
-
-<div class="stat">
-    <strong>🤝</strong>
-    <span>Współpraca</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+    </div>
 </section>
 
-<!-- UCZEŃ / RODZIC -->
+<!-- UCZEŃ I RODZIC -->
 
 <section class="audience">
+    <div class="container">
 
-<div class="container">
+        <div class="section-heading reveal">
+            <span>Strefa szkoły</span>
+            <h2>Dla ucznia i rodzica</h2>
+            <p>Najważniejsze informacje w jednym miejscu.</p>
+        </div>
 
-<div class="section-heading reveal">
+        <div class="audience-grid">
 
-<span>Strefa szkoły</span>
+            <div class="audience-card student reveal" id="uczen">
+                <h3>🎒 Dla ucznia</h3>
+                <p>Informacje przydatne podczas roku szkolnego.</p>
 
-<h2>
-    Dla ucznia i rodzica
-</h2>
+                <ul class="audience-list">
+                    <li>Plan lekcji</li>
+                    <li>Ogłoszenia</li>
+                    <li>Konkursy i wydarzenia</li>
+                    <li>Koła zainteresowań</li>
+                    <li>E-dziennik</li>
+                </ul>
 
-<p>
-    Najważniejsze informacje w jednym miejscu.
-</p>
+                <a href="pomoc.html" class="button primary" style="margin-top:20px;">
+                    🆘 Potrzebuję pomocy!
+                </a>
+            </div>
 
-</div>
+            <div class="audience-card parent reveal" id="rodzic">
+                <h3>👨‍👩‍👧 Dla rodzica</h3>
+                <p>Najważniejsze informacje dla rodziców i opiekunów uczniów.</p>
 
-<div class="audience-grid">
+                <ul class="audience-list">
+                    <li>Informacje szkolne</li>
+                    <li>Dokumenty i regulaminy</li>
+                    <li>Terminy spotkań</li>
+                    <li>Ważne komunikaty</li>
+                    <li>E-dziennik</li>
+                </ul>
 
-<div class="audience-card student reveal" id="uczen">
+                <a href="dokumenty.html" class="button primary" style="margin-top:20px;">
+                    📄 Zobacz dokumenty
+                </a>
+            </div>
 
-<h3>
-    🎒 Dla ucznia
-</h3>
-
-<p>
-    Informacje przydatne
-    podczasz roku szkolnego
-</p>
-
-<ul class="audience-list">
-
-<li>Plan lekcji</li>
-<li>Ogłoszenia</li>
-<li>Konkursy i wydarzenia</li>
-<li>Koła zainteresowań</li>
-<li>E-dziennik</li>
-
-        <a href="pomoc.html" class="button primary">
-    🆘 Potrzebuję pomocy!
-</a>
-
-</ul>
-
-</div>
-
-<div class="audience-card parent reveal" id="rodzic">
-
-<h3>
-    👨‍👩‍👧 Dla rodzica
-</h3>
-
-<p>
-    Najważniejsze informacje dla rodziców
-    i opiekunów uczniów.
-</p>
-
-<ul class="audience-list">
-
-<li>Informacje szkolne</li>
-<li>Dokumenty i regulaminy</li>
-<li>Terminy spotkań</li>
-<li>Ważne komunikaty</li>
-<li>E-dziennik</li>
-
-<li>Dokumenty i regulaminy</li>
-
-<a href="dokumenty.html" class="button primary"
-   style="margin-top:20px;">
-    📄 Zobacz dokumenty
-</a>
-
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
+        </div>
+    </div>
 </section>
 
 <!-- GALERIA -->
 
 <section class="gallery" id="galeria">
+    <div class="container">
 
-<div class="container">
+        <div class="section-heading reveal">
+            <span>Zobacz naszą szkołę</span>
+            <h2>Galeria</h2>
+            <p>Zdjęcia z życia szkoły, wydarzeń i zajęć.</p>
+        </div>
 
-<div class="section-heading reveal">
+        <div class="gallery-grid">
 
-<span>Zobacz naszą szkołę</span>
+            <div class="gallery-item reveal">
+                <img src="szkoła.png" alt="Zdjęcie szkoły">
+                <div class="gallery-overlay">Nasza szkoła</div>
+            </div>
 
-<h2>
-    Galeria
-</h2>
+            <div class="gallery-item reveal">
+                <img src="galeria2.jpg" alt="Wydarzenie szkolne">
+                <div class="gallery-overlay">Wydarzenia</div>
+            </div>
 
-<p>
-    Zdjęcia z życia szkoły, wydarzeń i zajęć.
-</p>
+            <div class="gallery-item reveal">
+                <img src="galeria3.png" alt="Uczniowie">
+                <div class="gallery-overlay">Uczniowie</div>
+            </div>
 
-</div>
+            <div class="gallery-item reveal">
+                <img src="galeria4.png" alt="Zajęcia">
+                <div class="gallery-overlay">Zajęcia</div>
+            </div>
 
-<div class="gallery-grid">
+            <div class="gallery-item reveal">
+                <img src="galeria5.jpg" alt="Szkolne wydarzenie">
+                <div class="gallery-overlay">Szkolne wydarzenia</div>
+            </div>
 
-<div class="gallery-item reveal">
+            <div class="gallery-item reveal">
+                <img src="galeria6.png" alt="Życie szkoły">
+                <div class="gallery-overlay">Życie szkoły</div>
+            </div>
 
-<img src="szkoła.png" alt="Zdjęcie szkoły">
-
-<div class="gallery-overlay">
-    Nasza szkoła
-</div>
-
-</div>
-
-<div class="gallery-item reveal">
-
-<img src="galeria2.jpg" alt="Wydarzenie szkolne">
-
-<div class="gallery-overlay">
-    Wydarzenia
-</div>
-
-</div>
-
-<div class="gallery-item reveal">
-
-<img src="galeria3.png" alt="Uczniowie">
-
-<div class="gallery-overlay">
-    Uczniowie
-</div>
-
-</div>
-
-<div class="gallery-item reveal">
-
-<img src="galeria4.png" alt="Zajęcia">
-
-<div class="gallery-overlay">
-    Zajęcia
-</div>
-
-</div>
-
-<div class="gallery-item reveal">
-
-<img src="galeria5.jpg" alt="Szkolne wydarzenie">
-
-<div class="gallery-overlay">
-    Szkolne wydarzenia
-</div>
-
-</div>
-
-<div class="gallery-item reveal">
-
-<img src="galeria6.png" alt="Życie szkoły">
-
-<div class="gallery-overlay">
-    Życie szkoły
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+        </div>
+    </div>
 </section>
 
 <!-- KONTAKT -->
 
 <section class="contact" id="kontakt">
+    <div class="container">
 
-<div class="container">
+        <div class="section-heading reveal">
+            <span>Skontaktuj się z nami</span>
+            <h2>Kontakt</h2>
+            <p>Informacje kontaktowe szkoły.</p>
+        </div>
 
-<div class="section-heading reveal">
+        <div class="contact-grid">
 
-<span>Skontaktuj się z nami</span>
+            <div class="contact-card reveal">
+                <h3>Szkoła Podstawowa nr 55</h3>
 
-<h2>
-    Kontakt
-</h2>
+                <div class="contact-row">
+                    <strong>📍 Adres</strong>
+                    <span>Brak</span>
+                </div>
 
-<p>
-    Informacje:
-</p>
+                <div class="contact-row">
+                    <strong>☎ Telefon</strong>
+                    <span>Brak</span>
+                </div>
 
-</div>
+                <div class="contact-row">
+                    <strong>✉ E-mail</strong>
+                    <span>szkolapodstawowaimmarisklodowskiejnr55@op.pl</span>
+                </div>
 
-<div class="contact-grid">
+                <div class="contact-row">
+                    <strong>🕐 Sekretariat</strong>
+                    <span>Brak</span>
+                </div>
+            </div>
 
-<div class="contact-card reveal">
+            <div class="map reveal">
+                <div>
+                    <div class="map-icon">📍</div>
+                    <h3>Lokalizacja szkoły</h3>
+                    <p>W tym miejscu można później dodać Google Maps.</p>
+                </div>
+            </div>
 
-<h3>
-    Szkoła Podstawowa nr 55
-</h3>
-
-<div class="contact-row">
-<strong>📍 Adres</strong>
-<span>Brak</span>
-</div>
-
-<div class="contact-row">
-<strong>☎ Telefon</strong>
-<span>Brak</span>
-</div>
-
-<div class="contact-row">
-<strong>✉ E-mail</strong>
-<span>szkolapodstawowaimmarisklodowskiejnr55@op.pl</span>
-</div>
-
-<div class="contact-row">
-<strong>🕐 Sekretariat</strong>
-<span>Brak</span>
-</div>
-
-</div>
-
-<div class="map reveal">
-
-<div>
-
-<div class="map-icon">
-    📍
-</div>
-
-<h3>
-    Lokalizacja szkoły
-</h3>
-
-<p>
-    W tym miejscu można później
-    dodać Google Maps.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+        </div>
+    </div>
 </section>
 
 </main>
 
-<!-- FOOTER -->
+<!-- STOPKA -->
 
 <footer>
+    <div class="container">
 
-<div class="container">
+        <div class="footer-grid">
 
-<div class="footer-grid">
+            <div>
+                <h3>Szkoła Podstawowa nr 55</h3>
+                <p>im. Marii Skłodowskiej</p>
+                <p style="margin-top:10px;">Wiedza • Pasja • Przyszłość</p>
+            </div>
 
-<div>
+            <div>
+                <h3>Menu</h3>
+                <ul class="footer-links">
+                    <li><a href="#start">Start</a></li>
+                    <li><a href="#aktualnosci">Aktualności</a></li>
+                    <li><a href="#szkola">O szkole</a></li>
+                    <li><a href="#galeria">Galeria</a></li>
+                    <li><a href="#kontakt">Kontakt</a></li>
+                </ul>
+            </div>
 
-<h3>
-    Szkoła Podstawowa nr 55
-</h3>
+            <div>
+                <h3>Dla społeczności</h3>
+                <ul class="footer-links">
+                    <li><a href="#uczen">Dla ucznia</a></li>
+                    <li><a href="#rodzic">Dla rodzica</a></li>
+                    <li><a href="dokumenty.html">📄 Dokumenty</a></li>
+                    <li>
+                        <a
+                            href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >E-dziennik</a>
+                    </li>
+                </ul>
+            </div>
 
-<p>
-    im. Marii Skłodowskiej
-</p>
+        </div>
 
-<p style="margin-top:10px">
-    Wiedza • Pasja • Przyszłość
-</p>
+        <div class="copyright">
+            <p>© 2026 Szkoła Podstawowa nr 55. Wszystkie prawa zastrzeżone.</p>
+        </div>
 
-</div>
-
-<div>
-
-<h3>
-    Menu
-</h3>
-
-<ul class="footer-links">
-
-<li><a href="#start">Start</a></li>
-<li><a href="#aktualnosci">Aktualności</a></li>
-<li><a href="#szkola">O szkole</a></li>
-<li><a href="#galeria">Galeria</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h3>
-    Dla społeczności
-</h3>
-
-<ul class="footer-links">
-
-<li><a href="#uczen">Dla ucznia</a></li>
-<li><a href="#rodzic">Dla rodzica</a></li>
-<li><a href="dokumenty.html">📄 Dokumenty</a></li>
-
-<li>
-<a
-href="https://szkolapodstawowanr56imjanapawla2.sma.premeena.com/login"
-target="_blank"
-rel="noopener noreferrer"
->
-E-dziennik
-</a>
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-<div class="copyright">
-
-<p>
-© 2026 Szkoła Podstawowa nr 55. Wszystkie prawa zastrzeżone.
-</p>
-
-</div>
-
-</div>
-
+    </div>
 </footer>
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-
 <script>
-
 /* =========================
-   MENU TELEFONICZNE
+   MENU WIĘCEJ
 ========================= */
 
-function toggleMenu(){
+const menuButton = document.getElementById("menuButton");
+const navLinks = document.getElementById("navLinks");
 
-    const menu = document.getElementById("navLinks");
+function closeMenu() {
+    if (!menuButton || !navLinks) return;
 
-    if(menu){
-        menu.classList.toggle("open");
-    }
-
+    navLinks.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Otwórz menu");
 }
 
+function toggleMenu() {
+    if (!menuButton || !navLinks) return;
 
-/* ZAMYKANIE MENU */
+    const isOpen = navLinks.classList.toggle("open");
 
-document.querySelectorAll(".nav-links a").forEach(link => {
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+    menuButton.setAttribute(
+        "aria-label",
+        isOpen ? "Zamknij menu" : "Otwórz menu"
+    );
+}
 
-    link.addEventListener("click", () => {
+if (menuButton) {
+    menuButton.addEventListener("click", toggleMenu);
+}
 
-        const menu = document.getElementById("navLinks");
-
-        if(menu){
-            menu.classList.remove("open");
-        }
-
-    });
-
+document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", closeMenu);
 });
 
+document.addEventListener("click", event => {
+    if (!navLinks || !menuButton) return;
+
+    if (
+        !navLinks.contains(event.target) &&
+        !menuButton.contains(event.target)
+    ) {
+        closeMenu();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeMenu();
+    }
+});
+
+window.addEventListener("resize", closeMenu);
 
 /* =========================
    ANIMACJE
 ========================= */
 
-if("IntersectionObserver" in window){
+if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: .12
+    });
 
-    const observer = new IntersectionObserver(
-
-        entries => {
-
-            entries.forEach(entry => {
-
-                if(entry.isIntersecting){
-
-                    entry.target.classList.add("visible");
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold:.12
-        }
-
-    );
-
-    document
-        .querySelectorAll(".reveal")
-        .forEach(element => observer.observe(element));
-
+    document.querySelectorAll(".reveal").forEach(element => {
+        observer.observe(element);
+    });
+} else {
+    document.querySelectorAll(".reveal").forEach(element => {
+        element.classList.add("visible");
+    });
 }
-
 
 /* =========================
    SUPABASE
 ========================= */
 
-const SUPABASE_URL =
-    "https://vqilsuvpinnfmngrczlj.supabase.co";
+const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_cm_bvcrH6LCOaPz790GfTg_hwobP-3I";
 
 let supabaseClient = null;
 
-
-/* Sprawdzenie biblioteki */
-
-if(typeof supabase === "undefined"){
-
+if (typeof supabase === "undefined") {
     console.error("Supabase nie został załadowany.");
-
-}else{
-
+} else {
     supabaseClient = supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
-
 }
 
-
 /* =========================
-   LOGOWANIE — MENU
+   LOGOWANIE I MENU
 ========================= */
 
-async function checkLogin(){
+async function checkLogin() {
+    if (!supabaseClient) return;
 
-    if(!supabaseClient){
-        return;
-    }
+    const loginMenu = document.getElementById("loginMenu");
+    const materialsMenu = document.getElementById("materialsMenu");
+    const logoutMenu = document.getElementById("logoutMenu");
+    const adminMenu = document.getElementById("adminMenu");
 
-    const loginMenu =
-        document.getElementById("loginMenu");
+    try {
+        const { data, error } = await supabaseClient.auth.getSession();
 
-    const materialsMenu =
-        document.getElementById("materialsMenu");
-
-    const logoutMenu =
-        document.getElementById("logoutMenu");
-
-    const adminMenu =
-        document.getElementById("adminMenu");
-
-
-    try{
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if(error){
-
-            console.error(
-                "Błąd pobierania sesji:",
-                error
-            );
-
-        }
-
-
-        const session =
-            data?.session;
-
-
-        if(session && session.user){
-
-            if(loginMenu){
-                loginMenu.style.display = "none";
-            }
-
-            if(materialsMenu){
-                materialsMenu.style.display = "block";
-            }
-
-            if(logoutMenu){
-                logoutMenu.style.display = "block";
-            }
-
-
-            if(
-                session.user.email ===
-                "pi.pu2@op.pl"
-            ){
-
-                if(adminMenu){
-                    adminMenu.style.display = "block";
-                }
-
-            }else{
-
-                if(adminMenu){
-                    adminMenu.style.display = "none";
-                }
-
-            }
-
-        }else{
-
-            if(loginMenu){
-                loginMenu.style.display = "block";
-            }
-
-            if(materialsMenu){
-                materialsMenu.style.display = "none";
-            }
-
-            if(logoutMenu){
-                logoutMenu.style.display = "none";
-            }
-
-            if(adminMenu){
-                adminMenu.style.display = "none";
-            }
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "Błąd sprawdzania logowania:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   AKTUALNOŚCI
-========================= */
-
-async function loadNews(){
-
-    if(!supabaseClient){
-        return;
-    }
-
-
-    const newsGrid =
-        document.querySelector(".news-grid");
-
-
-    if(!newsGrid){
-        return;
-    }
-
-
-    try{
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("news")
-                .select(
-                    "id,title,content,created_at"
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending:false
-                    }
-                );
-
-
-        if(error){
-
-            console.error(
-                "Błąd pobierania aktualności:",
-                error
-            );
-
+        if (error) {
+            console.error("Błąd pobierania sesji:", error);
             return;
-
         }
 
+        const session = data?.session;
 
-        if(
-            !data ||
-            data.length === 0
-        ){
+        if (session && session.user) {
+            if (loginMenu) loginMenu.style.display = "none";
+            if (materialsMenu) materialsMenu.style.display = "block";
+            if (logoutMenu) logoutMenu.style.display = "block";
 
+            if (adminMenu) {
+                adminMenu.style.display =
+                    session.user.email === "pi.pu2@op.pl"
+                        ? "block"
+                        : "none";
+            }
+        } else {
+            if (loginMenu) loginMenu.style.display = "block";
+            if (materialsMenu) materialsMenu.style.display = "none";
+            if (logoutMenu) logoutMenu.style.display = "none";
+            if (adminMenu) adminMenu.style.display = "none";
+        }
+    } catch (error) {
+        console.error("Błąd sprawdzania logowania:", error);
+    }
+}
+
+/* =========================
+   AKTUALNOŚCI Z SUPABASE
+========================= */
+
+async function loadNews() {
+    if (!supabaseClient) return;
+
+    const newsGrid = document.querySelector(".news-grid");
+    if (!newsGrid) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("news")
+            .select("id,title,content,created_at")
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("Błąd pobierania aktualności:", error);
+            return;
+        }
+
+        if (!data || data.length === 0) {
             newsGrid.innerHTML = `
-
                 <article class="news-card reveal visible">
-
-                    <div class="news-icon">
-                        📢
-                    </div>
-
-                    <div class="news-date">
-                        Informacja
-                    </div>
-
-                    <h3>
-                        Brak nowych aktualności
-                    </h3>
-
-                    <p>
-                        W tej chwili nie ma żadnych nowych informacji.
-                    </p>
-
+                    <div class="news-icon">📢</div>
+                    <div class="news-date">Informacja</div>
+                    <h3>Brak nowych aktualności</h3>
+                    <p>W tej chwili nie ma żadnych nowych informacji.</p>
                 </article>
-
             `;
-
             return;
-
         }
 
+        newsGrid.innerHTML = data.map(news => {
+            const date = news.created_at
+                ? new Date(news.created_at)
+                : null;
 
-        newsGrid.innerHTML =
-            data.map(news => {
+            const formattedDate = date
+                ? date.toLocaleDateString("pl-PL", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                })
+                : "";
 
-                const date =
-                    news.created_at
-                    ? new Date(news.created_at)
-                    : null;
+            return `
+                <article class="news-card reveal visible">
+                    <div class="news-icon">📢</div>
+                    <div class="news-date">${escapeHtml(formattedDate)}</div>
+                    <h3>${escapeHtml(news.title)}</h3>
+                    <p>${escapeHtml(news.content)}</p>
+                </article>
+            `;
+        }).join("");
 
-
-                const formattedDate =
-                    date
-                    ? date.toLocaleDateString(
-                        "pl-PL",
-                        {
-                            day:"2-digit",
-                            month:"2-digit",
-                            year:"numeric"
-                        }
-                    )
-                    : "";
-
-
-                return `
-
-                    <article class="news-card reveal visible">
-
-                        <div class="news-icon">
-                            📢
-                        </div>
-
-                        <div class="news-date">
-                            ${escapeHtml(formattedDate)}
-                        </div>
-
-                        <h3>
-                            ${escapeHtml(news.title)}
-                        </h3>
-
-                        <p>
-                            ${escapeHtml(news.content)}
-                        </p>
-
-                    </article>
-
-                `;
-
-            }).join("");
-
-
-    }catch(error){
-
-        console.error(
-            "Błąd aktualności:",
-            error
-        );
-
+    } catch (error) {
+        console.error("Błąd aktualności:", error);
     }
-
 }
-
 
 /* =========================
-   BEZPIECZNY TEKST
+   ZABEZPIECZENIE TEKSTU
 ========================= */
 
-function escapeHtml(text){
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        text ?? "";
-
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text ?? "";
     return div.innerHTML;
-
 }
-
 
 /* =========================
    WYLOGOWANIE
 ========================= */
 
-const logoutButton =
-    document.getElementById("logoutButton");
+const logoutButton = document.getElementById("logoutButton");
 
+if (logoutButton) {
+    logoutButton.addEventListener("click", async event => {
+        event.preventDefault();
 
-if(logoutButton){
+        if (!supabaseClient) return;
 
-    logoutButton.addEventListener(
-        "click",
-        async function(event){
+        try {
+            const { error } = await supabaseClient.auth.signOut();
 
-            event.preventDefault();
-
-
-            if(!supabaseClient){
+            if (error) {
+                console.error("Błąd wylogowania:", error);
                 return;
             }
 
-
-            try{
-
-                await supabaseClient.auth.signOut();
-
-                window.location.href =
-                    "index.html";
-
-            }catch(error){
-
-                console.error(
-                    "Błąd wylogowania:",
-                    error
-                );
-
-            }
-
+            window.location.href = "index.html";
+        } catch (error) {
+            console.error("Błąd wylogowania:", error);
         }
-    );
-
+    });
 }
-
 
 /* =========================
-   START
+   URUCHOMIENIE STRONY
 ========================= */
 
-async function startPage(){
-
+async function startPage() {
     await checkLogin();
-
     await loadNews();
-
 }
-
-
-/* Uruchomienie strony */
 
 startPage();
 
+/* Aktualizacja menu po zmianie stanu logowania */
 
-/* =========================
-   REAKCJA NA LOGOWANIE
-========================= */
-
-if(supabaseClient){
-
-    supabaseClient.auth.onAuthStateChange(
-        function(){
-
-            checkLogin();
-
-        }
-    );
-
+if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange(() => {
+        checkLogin();
+    });
 }
-
 </script>
 
 </body>
