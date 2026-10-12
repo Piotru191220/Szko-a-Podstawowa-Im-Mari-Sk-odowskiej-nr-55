@@ -46,9 +46,7 @@ a {
     margin: auto;
 }
 
-/* =========================
-   GÓRNY PASEK I MENU WIĘCEJ
-========================= */
+/* GÓRNY PASEK I MENU */
 
 .navbar {
     position: fixed;
@@ -98,8 +96,6 @@ a {
     margin-top: 3px;
 }
 
-/* Przycisk trzech kresek */
-
 .menu-button {
     display: flex;
     align-items: center;
@@ -123,8 +119,6 @@ a {
     color: var(--blue);
     border-color: #cbdcf7;
 }
-
-/* Rozwijane menu */
 
 .nav-links {
     position: absolute;
@@ -197,9 +191,7 @@ a {
     }
 }
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 
 .hero {
     min-height: 800px;
@@ -331,9 +323,7 @@ a {
     color: rgba(255, 255, 255, .8);
 }
 
-/* =========================
-   SEKCJE
-========================= */
+/* SEKCJE */
 
 section {
     padding: 100px 0;
@@ -700,9 +690,7 @@ footer a {
     transform: translateY(0);
 }
 
-/* =========================
-   TELEFONY I TABLETY
-========================= */
+/* TELEFONY I TABLETY */
 
 @media (max-width: 900px) {
     .hero-grid,
@@ -823,9 +811,7 @@ footer a {
 
 <body>
 
-<!-- =========================
-     NAGŁÓWEK
-========================= -->
+<!-- NAGŁÓWEK -->
 
 <header class="navbar">
     <div class="container nav-inner">
@@ -877,7 +863,7 @@ footer a {
                     rel="noopener noreferrer"
                 >📒 E-dziennik</a>
             </li>
-            
+
             <li id="loginMenu">
                 <a class="login" href="logowanie.html">🔐 Logowanie</a>
             </li>
@@ -1148,9 +1134,10 @@ footer a {
                     <strong>🕐 Sekretariat</strong>
                     <span>Poniedziałek 00:00 - 00:00
                         <p>Wtorek 00:00 - 00:00</p>
-                            <p>Środa 00:00 - 00:00</p>
-                            <p>Czwartek 00:00 - 00:00</p>
-                            <p>Piątek 00:00 - 00:00</p></span>
+                        <p>Środa 00:00 - 00:00</p>
+                        <p>Czwartek 00:00 - 00:00</p>
+                        <p>Piątek 00:00 - 00:00</p>
+                    </span>
                 </div>
             </div>
 
@@ -1218,9 +1205,7 @@ footer a {
 </footer>
 
 <script>
-/* =========================
-   MENU WIĘCEJ
-========================= */
+/* MENU WIĘCEJ */
 
 const menuButton = document.getElementById("menuButton");
 const navLinks = document.getElementById("navLinks");
@@ -1272,9 +1257,7 @@ document.addEventListener("keydown", event => {
 
 window.addEventListener("resize", closeMenu);
 
-/* =========================
-   ANIMACJE
-========================= */
+/* ANIMACJE */
 
 if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
@@ -1297,9 +1280,7 @@ if ("IntersectionObserver" in window) {
     });
 }
 
-/* =========================
-   SUPABASE
-========================= */
+/* SUPABASE */
 
 const SUPABASE_URL = "https://vqilsuvpinnfmngrczlj.supabase.co";
 
@@ -1317,9 +1298,7 @@ if (typeof supabase === "undefined") {
     );
 }
 
-/* =========================
-   LOGOWANIE I MENU
-========================= */
+/* LOGOWANIE I MENU */
 
 async function checkLogin() {
     if (!supabaseClient) return;
@@ -1361,9 +1340,7 @@ async function checkLogin() {
     }
 }
 
-/* =========================
-   AKTUALNOŚCI Z SUPABASE
-========================= */
+/* AKTUALNOŚCI Z SUPABASE */
 
 async function loadNews() {
     if (!supabaseClient) return;
@@ -1394,37 +1371,72 @@ async function loadNews() {
             return;
         }
 
-        newsGrid.innerHTML = data.map(news => {
-            const date = news.created_at
-                ? new Date(news.created_at)
-                : null;
-
-            const formattedDate = date
-                ? date.toLocaleDateString("pl-PL", {
+        newsGrid.innerHTML = data.map((news, index) => {
+            const formattedDate = news.created_at
+                ? new Date(news.created_at).toLocaleDateString("pl-PL", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric"
                 })
                 : "";
 
+            const contentId = `news-content-${index}`;
+
             return `
                 <article class="news-card reveal visible">
                     <div class="news-icon">📢</div>
                     <div class="news-date">${escapeHtml(formattedDate)}</div>
                     <h3>${escapeHtml(news.title)}</h3>
-                    <p>${escapeHtml(news.content)}</p>
+                    <p
+                        id="${contentId}"
+                        style="line-height:1.6; max-height:4.8em; overflow:hidden;"
+                    >${escapeHtml(news.content)}</p>
+                    <button
+                        type="button"
+                        data-target="${contentId}"
+                        data-expanded="false"
+                        style="margin-top:12px; padding:9px 14px; border:0; border-radius:8px; background:#1769e0; color:white; cursor:pointer; font-weight:bold;"
+                    >Czytaj więcej</button>
                 </article>
             `;
         }).join("");
+
+        // Ukryj przycisk, jeżeli tekst mieści się w trzech liniach.
+        newsGrid.querySelectorAll("button[data-target]").forEach(button => {
+            const paragraph = document.getElementById(button.dataset.target);
+
+            if (
+                !paragraph ||
+                paragraph.scrollHeight <= paragraph.clientHeight + 1
+            ) {
+                button.hidden = true;
+            }
+        });
+
+        // Rozwijanie i zwijanie treści bez dodatkowego CSS.
+        newsGrid.onclick = function (event) {
+            const button = event.target.closest("button[data-target]");
+
+            if (!button || !newsGrid.contains(button)) return;
+
+            const paragraph = document.getElementById(button.dataset.target);
+            if (!paragraph) return;
+
+            const expanded = button.dataset.expanded === "true";
+
+            paragraph.style.maxHeight = expanded ? "4.8em" : "none";
+            paragraph.style.overflow = expanded ? "hidden" : "visible";
+
+            button.dataset.expanded = String(!expanded);
+            button.textContent = expanded ? "Czytaj więcej" : "Czytaj mniej";
+        };
 
     } catch (error) {
         console.error("Błąd aktualności:", error);
     }
 }
 
-/* =========================
-   ZABEZPIECZENIE TEKSTU
-========================= */
+/* ZABEZPIECZENIE TEKSTU */
 
 function escapeHtml(text) {
     const div = document.createElement("div");
@@ -1432,9 +1444,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-/* =========================
-   WYLOGOWANIE
-========================= */
+/* WYLOGOWANIE */
 
 const logoutButton = document.getElementById("logoutButton");
 
@@ -1459,9 +1469,7 @@ if (logoutButton) {
     });
 }
 
-/* =========================
-   URUCHOMIENIE STRONY
-========================= */
+/* URUCHOMIENIE STRONY */
 
 async function startPage() {
     await checkLogin();
